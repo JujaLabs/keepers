@@ -16,11 +16,11 @@ group = 'ua.com.juja'
 version = '1.0-SNAPSHOT'
 
 jar {
-    baseName = "keepers-microservice"
+    baseName = "keepers-service"
     version = "0.1.0"
 }
 
-description = "keepers-microservices"
+description = "keepers-services"
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -41,7 +41,7 @@ test.testLogging {
 
 test {
     filter{
-        includeTestsMatching "juja.microservices.keepers-microservice.*"
+        includeTestsMatching "juja.microservices.keepers-service.*"
     }
     afterTest { desc, result ->
         println "Executing test ${desc.name} [${desc.className}] with result: ${result.resultType}"
