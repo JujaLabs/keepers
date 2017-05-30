@@ -1,0 +1,73 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        mavenLocal()
+    }
+    dependencies {
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.4.1.RELEASE'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'spring-boot'
+
+group = 'ua.com.juja'
+version = '1.0-SNAPSHOT'
+
+jar {
+    baseName = "keepers-microservice"
+    version = "0.1.0"
+}
+
+description = "keepers-microservices"
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+test.testLogging {
+    events "skipped", "failed"
+    exceptionFormat "SHORT"
+    showStandardStreams = true
+}
+
+test {
+    filter{
+        includeTestsMatching "juja.microservices.keepers-microservice.*"
+    }
+    afterTest { desc, result ->
+        println "Executing test ${desc.name} [${desc.className}] with result: ${result.resultType}"
+    }
+}
+dependencies {
+    compile("org.springframework.boot:spring-boot-starter-web") {
+        exclude module: 'spring-boot-starter-tomcat'
+    }
+    compile 'org.apache.httpcomponents:httpclient:4.5.3'
+    compile 'org.springframework.boot:spring-boot-starter-jetty'
+    compile 'org.springframework.boot:spring-boot-starter-data-mongodb'
+    compile 'commons-lang:commons-lang:2.6'
+    compile 'javax.inject:javax.inject:1'
+    compile 'org.projectlombok:lombok:1.16.10'
+    compile 'io.springfox:springfox-swagger2:2.6.1'
+    compile 'io.springfox:springfox-swagger-ui:2.6.1'
+
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
+    testCompile 'com.github.fakemongo:fongo:2.0.10'
+    testCompile 'com.lordofthejars:nosqlunit-mongodb:0.8.1'
+    testCompile 'io.rest-assured:rest-assured:3.0.2'
+    testCompile 'net.javacrumbs.json-unit:json-unit-fluent:1.19.0'
+    testCompile 'org.skyscreamer:jsonassert:1.4.0'
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.3'
+}
