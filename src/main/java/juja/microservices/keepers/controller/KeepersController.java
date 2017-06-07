@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Vadim Dyachenko
@@ -21,7 +23,8 @@ public class KeepersController {
     @PostMapping(value = "/keepers", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> addKeeper(@Valid @RequestBody KeeperRequest request) {
         //TODO Should be implemented feature KPR-F1
-        return null;
+        List<String> ids = new ArrayList<>();
+        return ResponseEntity.ok(ids);
     }
 
     @PutMapping(value = "/keepers/end", consumes = "application/json", produces = "application/json")
