@@ -27,8 +27,8 @@ public class KeepersController {
         return ResponseEntity.ok(ids);
     }
 
-    @PutMapping(value = "/keepers/end", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<?> endKeeper(@Valid @RequestBody KeeperRequest request) {
+    @PutMapping(value = "/keepers", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<?> updateKeeper(@Valid @RequestBody KeeperRequest request) {
         //TODO Should be implemented feature KPR-F2
         return null;
     }
