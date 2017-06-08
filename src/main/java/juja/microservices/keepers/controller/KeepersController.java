@@ -13,7 +13,6 @@ import java.util.List;
 /**
  * @author Vadim Dyachenko
  */
-
 @RestController
 public class KeepersController {
 

@@ -6,11 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Message to send client when program throws an exception
+ * Message to send to client when program throws an exception
  *
- * @author Danil Kuznetsov
+ * @author Vadim Dyachenko
  */
-
 @Getter
 class ApiErrorMessage {
     /**

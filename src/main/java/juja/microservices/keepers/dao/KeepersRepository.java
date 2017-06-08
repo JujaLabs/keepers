@@ -8,7 +8,6 @@ import javax.inject.Inject;
 /**
  * @author Vadim Dyachenko
  */
-
 @Repository
 public class KeepersRepository {
 
