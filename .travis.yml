@@ -13,3 +13,7 @@ cache:
 before_script:
   - sleep 15
   - mongo keepers --eval 'db.createUser({user:"root", pwd:"root", roles:[{role:"dbAdmin", db:"keepers"}]});'
+
+script:
+  - ./gradlew test
+  - ./gradlew test --tests "juja.microservices.integration.*"
