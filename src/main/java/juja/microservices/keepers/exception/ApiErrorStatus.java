@@ -63,6 +63,11 @@ public enum ApiErrorStatus {
             "108",
             "404 response",
             "The exception is Spring exceptions: NoHandlerFoundException"
+    ),
+    UNSUPPORTED_KEEPERS_EXCEPTION(
+            "KPR_D11",
+            "Sorry, but you're not a keeper",
+            "Exception - UnsupportedKeeperException"
     );
 
     private String developerMessage;

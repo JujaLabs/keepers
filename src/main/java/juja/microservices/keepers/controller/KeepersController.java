@@ -2,17 +2,22 @@ package juja.microservices.keepers.controller;
 
 import juja.microservices.keepers.entity.KeeperRequest;
 import juja.microservices.keepers.service.KeepersService;
+
 import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
+
 import javax.validation.Valid;
-import java.util.ArrayList;
+
+import java.util.Collections;
 import java.util.List;
 
 /**
  * @author Vadim Dyachenko
  */
+
 @RestController
 public class KeepersController {
 
@@ -21,8 +26,8 @@ public class KeepersController {
 
     @PostMapping(value = "/keepers", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> addKeeper(@Valid @RequestBody KeeperRequest request) {
-        //TODO Should be implemented feature KPR-F1
-        List<String> ids = new ArrayList<>();
+        String keeperId = keepersService.addKeeper(request);
+        List<String> ids = Collections.singletonList(keeperId);
         return ResponseEntity.ok(ids);
     }
 
