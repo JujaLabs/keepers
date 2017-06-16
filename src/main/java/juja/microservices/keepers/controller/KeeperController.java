@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import juja.microservices.keepers.entity.Keeper;
+import juja.microservices.keepers.exceptions.UserMicroserviceExchangeException;
 import juja.microservices.keepers.service.KeeperService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,7 +32,7 @@ public class KeeperController {
             @ApiResponse(code = HttpURLConnection.HTTP_BAD_REQUEST, message = "Bad request"),
             @ApiResponse(code = HttpURLConnection.HTTP_BAD_METHOD, message = "Bad method")
     })
-    public ResponseEntity<?> getAllActiveKeepers() {
+    public ResponseEntity<?> getAllActiveKeepers() throws UserMicroserviceExchangeException {
         List<Keeper> keepers = keeperService.getAllActiveKeepers();
 
         return ResponseEntity.ok(keepers);
