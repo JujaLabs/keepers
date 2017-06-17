@@ -19,7 +19,7 @@ public class KeepersService {
     private KeepersRepository keepersRepository;
 
     public String addKeeper(KeeperRequest keeperRequest){
-        if(keepersRepository.findOneById(keeperRequest.getFrom()) == null){
+        if(keepersRepository.findOneByUUId(keeperRequest.getFrom()) == null){
             throw new UnsupportedKeeperException("Only the keeper can appoint another keeper");
         }
 

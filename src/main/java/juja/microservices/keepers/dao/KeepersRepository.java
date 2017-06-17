@@ -34,7 +34,7 @@ public class KeepersRepository {
         return keeper.getId();
     }
 
-    public Keeper findOneById(String id){
+    public Keeper findOneByUUId(String id){
         return mongoTemplate.findOne(new Query(Criteria.where("uuid").is(id)), Keeper.class);
     }
 

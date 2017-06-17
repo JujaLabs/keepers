@@ -34,9 +34,9 @@ public class KeepersRepositoryTest {
         Keeper keeper = new Keeper("123qwe", "asdqwe", "teems", "2017-05-25");
 
         //When
-        when(repository.findOneById("456rty")).thenReturn(keeper);
+        when(repository.findOneByUUId("456rty")).thenReturn(keeper);
 
         //Then
-        Assert.assertEquals(keeper, repository.findOneById("456rty"));
+        Assert.assertEquals(keeper, repository.findOneByUUId("456rty"));
     }
 }

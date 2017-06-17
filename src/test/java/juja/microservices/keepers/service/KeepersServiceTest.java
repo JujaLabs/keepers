@@ -39,7 +39,7 @@ public class KeepersServiceTest {
     @Test(expected = UnsupportedKeeperException.class)
     public void addKeeperNotExist(){
         //Given
-        when(repository.findOneById(anyString())).thenReturn(null);
+        when(repository.findOneByUUId(anyString())).thenReturn(null);
 
         //When
         service.addKeeper(new KeeperRequest("123qwe", "asdqwe", "teems"));
@@ -50,7 +50,7 @@ public class KeepersServiceTest {
         //Given
         KeeperRequest keeperRequest = new KeeperRequest("123qwe", "asdqwe", "teems");
         Keeper keeper = new Keeper("123qwe", "asdqwe", "teems", "2017-05-25");
-        when(repository.findOneById(anyString())).thenReturn(keeper);
+        when(repository.findOneByUUId(anyString())).thenReturn(keeper);
         when(repository.save(keeperRequest)).thenReturn("SomeID");
         String expected = "SomeID";
 

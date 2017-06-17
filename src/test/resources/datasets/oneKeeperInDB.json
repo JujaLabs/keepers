@@ -1,0 +1,12 @@
+{
+  "keeper": [
+     {
+      "id":"oop",
+      "from":"123qwe",
+      "uuid":"asdqwe",
+      "direction":"teems",
+      "startDate":"1917-02-09",
+      "isActive":true
+     }
+  ]
+}
