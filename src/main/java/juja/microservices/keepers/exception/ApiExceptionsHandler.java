@@ -60,6 +60,7 @@ public class ApiExceptionsHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ApiErrorMessage> handleUnsupportedKeeperException(UnsupportedKeeperException ex) {
         ApiErrorMessage message =
                 ApiErrorMessage.builder(ApiErrorStatus.UNSUPPORTED_KEEPERS_EXCEPTION)
+                        .httpStatus(HttpStatus.BAD_REQUEST.value())
                         .exceptionMessage(ex.getMessage())
                         .build();
         return new ResponseEntity<>(message,HttpStatus.BAD_REQUEST);

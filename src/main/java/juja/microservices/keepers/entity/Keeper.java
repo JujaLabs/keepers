@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Getter;
-import lombok.Setter;
 
 import org.springframework.data.annotation.Id;
 
@@ -22,7 +21,6 @@ public class Keeper {
     private String uuid;
     private String direction;
     private String startDate;
-    @Setter
     private String dismissDate;
     private boolean isActive;
 
@@ -36,6 +34,11 @@ public class Keeper {
         this.direction = direction;
         this.startDate = startDate;
         this.isActive = true;
+    }
+
+    public void setDismissDate(String dismissDate) {
+        this.dismissDate = dismissDate;
+        this.isActive = false;
     }
 
     @Override
