@@ -3,7 +3,7 @@ package juja.microservices.keepers.service;
 import juja.microservices.keepers.dao.KeepersRepository;
 import juja.microservices.keepers.entity.Keeper;
 import juja.microservices.keepers.entity.KeeperRequest;
-import juja.microservices.keepers.exception.UnsupportedKeeperException;
+import juja.microservices.keepers.exception.AddKeeperException;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -17,6 +17,11 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.inject.Inject;
+
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.time.ZoneId;
+import java.util.Date;
 
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
@@ -36,7 +41,7 @@ public class KeepersServiceTest {
     @MockBean
     private KeepersRepository repository;
 
-    @Test(expected = UnsupportedKeeperException.class)
+    @Test(expected = AddKeeperException.class)
     public void addKeeperNotExist(){
         //Given
         when(repository.findOneByUUId(anyString())).thenReturn(null);
@@ -48,8 +53,9 @@ public class KeepersServiceTest {
     @Test
     public void addKeeper(){
         //Given
+        Date startDate = Date.from(LocalDateTime.of(2017, Month.APRIL, 1, 12,0).atZone(ZoneId.systemDefault()).toInstant());
         KeeperRequest keeperRequest = new KeeperRequest("123qwe", "asdqwe", "teems");
-        Keeper keeper = new Keeper("123qwe", "asdqwe", "teems", "2017-05-25");
+        Keeper keeper = new Keeper("123qwe", "asdqwe", "teems", startDate);
         when(repository.findOneByUUId(anyString())).thenReturn(keeper);
         when(repository.save(keeperRequest)).thenReturn("SomeID");
         String expected = "SomeID";

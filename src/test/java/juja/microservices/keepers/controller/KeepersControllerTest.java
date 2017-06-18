@@ -1,7 +1,7 @@
 package juja.microservices.keepers.controller;
 
 import juja.microservices.keepers.entity.KeeperRequest;
-import juja.microservices.keepers.exception.UnsupportedKeeperException;
+import juja.microservices.keepers.exception.AddKeeperException;
 import juja.microservices.keepers.service.KeepersService;
 
 import org.junit.Assert;
@@ -79,12 +79,12 @@ public class KeepersControllerTest {
         Assert.assertEquals(expected, result);
     }
 
-    @Test(expected = UnsupportedKeeperException.class)
+    @Test(expected = AddKeeperException.class)
     public void addKeeperBadRequest(){
         //Given
         KeeperRequest keeperRequest = new KeeperRequest("123qwe", "asdqwe", "teems");
         when(service.addKeeper(keeperRequest)).thenThrow(
-                new UnsupportedKeeperException("Only the keeper can appoint another keeper"));
+                new AddKeeperException("Only the keeper can appoint another keeper"));
 
         //When
         keepersController.addKeeper(keeperRequest);

@@ -11,7 +11,8 @@ import org.springframework.stereotype.Repository;
 
 import javax.inject.Inject;
 
-import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 import java.util.Date;
 
@@ -26,22 +27,17 @@ public class KeepersRepository {
     private MongoTemplate mongoTemplate;
 
     public String save(KeeperRequest keeperRequest) {
+        Date startDate = Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant());
         Keeper keeper = new Keeper(keeperRequest.getFrom(),
                                     keeperRequest.getUuid(),
                                     keeperRequest.getDirection(),
-                                    getFormattedCurrentDate());
+                                    startDate);
         mongoTemplate.save(keeper);
         return keeper.getId();
     }
 
     public Keeper findOneByUUId(String id){
         return mongoTemplate.findOne(new Query(Criteria.where("uuid").is(id)), Keeper.class);
-    }
-
-    private String getFormattedCurrentDate() {
-        Date currentDate = new Date(System.currentTimeMillis());
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        return dateFormat.format(currentDate);
     }
 
     //TODO Should be implemented work with MongoDB

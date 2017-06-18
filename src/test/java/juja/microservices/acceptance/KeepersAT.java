@@ -12,10 +12,7 @@ import org.eclipse.jetty.http.HttpMethod;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import javax.inject.Inject;
 
 import java.io.IOException;
 
@@ -28,9 +25,6 @@ import static net.javacrumbs.jsonunit.fluent.JsonFluentAssert.assertThatJson;
 
 @RunWith(SpringRunner.class)
 public class KeepersAT extends BaseAcceptanceTest{
-
-    @Inject
-    private MongoTemplate mongoTemplate;
 
     @UsingDataSet(locations = "/datasets/initEmptyDb.json", loadStrategy = LoadStrategyEnum.CLEAN_INSERT)
     @Test

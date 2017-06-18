@@ -6,6 +6,12 @@ import juja.microservices.keepers.entity.KeeperRequest;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.time.ZoneId;
+
+import java.util.Date;
+
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
@@ -31,7 +37,8 @@ public class KeepersRepositoryTest {
     @Test
     public void findOneById(){
         //Given
-        Keeper keeper = new Keeper("123qwe", "asdqwe", "teems", "2017-05-25");
+        Date startDate = Date.from(LocalDateTime.of(2017, Month.APRIL, 1, 12,0).atZone(ZoneId.systemDefault()).toInstant());
+        Keeper keeper = new Keeper("123qwe", "asdqwe", "teems", startDate);
 
         //When
         when(repository.findOneByUUId("456rty")).thenReturn(keeper);

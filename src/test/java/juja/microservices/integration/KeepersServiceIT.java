@@ -4,7 +4,7 @@ import com.lordofthejars.nosqlunit.annotation.UsingDataSet;
 
 import juja.microservices.keepers.dao.KeepersRepository;
 import juja.microservices.keepers.entity.KeeperRequest;
-import juja.microservices.keepers.exception.UnsupportedKeeperException;
+import juja.microservices.keepers.exception.AddKeeperException;
 import juja.microservices.keepers.service.KeepersService;
 
 import org.junit.Assert;
@@ -33,7 +33,7 @@ public class KeepersServiceIT extends BaseIntegrationTest {
     @Inject
     private KeepersService service;
 
-    @Test(expected = UnsupportedKeeperException.class)
+    @Test(expected = AddKeeperException.class)
     @UsingDataSet(locations = "/datasets/oneKeeperInDB.json")
     public void addKeeperNotExistKeeper() {
         //Given

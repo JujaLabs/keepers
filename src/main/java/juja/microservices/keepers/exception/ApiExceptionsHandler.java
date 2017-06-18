@@ -22,8 +22,6 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import springfox.documentation.spring.web.json.Json;
-import springfox.documentation.spring.web.json.JsonSerializer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,10 +54,10 @@ public class ApiExceptionsHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(message,HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(UnsupportedKeeperException.class)
-    public ResponseEntity<ApiErrorMessage> handleUnsupportedKeeperException(UnsupportedKeeperException ex) {
+    @ExceptionHandler(AddKeeperException.class)
+    public ResponseEntity<ApiErrorMessage> handleUnsupportedKeeperException(AddKeeperException ex) {
         ApiErrorMessage message =
-                ApiErrorMessage.builder(ApiErrorStatus.UNSUPPORTED_KEEPERS_EXCEPTION)
+                ApiErrorMessage.builder(ApiErrorStatus.ADD_KEEPERS_EXCEPTION)
                         .httpStatus(HttpStatus.BAD_REQUEST.value())
                         .exceptionMessage(ex.getMessage())
                         .build();

@@ -3,7 +3,7 @@ package juja.microservices.keepers.service;
 import juja.microservices.keepers.dao.KeepersRepository;
 import juja.microservices.keepers.entity.KeeperRequest;
 
-import juja.microservices.keepers.exception.UnsupportedKeeperException;
+import juja.microservices.keepers.exception.AddKeeperException;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -20,7 +20,7 @@ public class KeepersService {
 
     public String addKeeper(KeeperRequest keeperRequest){
         if(keepersRepository.findOneByUUId(keeperRequest.getFrom()) == null){
-            throw new UnsupportedKeeperException("Only the keeper can appoint another keeper");
+            throw new AddKeeperException("Only the keeper can appoint another keeper");
         }
 
         return keepersRepository.save(keeperRequest);
