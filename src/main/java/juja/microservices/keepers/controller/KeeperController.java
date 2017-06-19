@@ -39,37 +39,5 @@ public class KeeperController {
 
         return ResponseEntity.ok(keepers);
     }
-    @GetMapping(value = "/test", produces = "application/json")
-    @ApiOperation(
-            value = "Get all active keepers",
-            notes = "This method returns all active keepers"
-    )
-    @ApiResponses(value = {
-            @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "Returns all active keepers"),
-            @ApiResponse(code = HttpURLConnection.HTTP_BAD_REQUEST, message = "Bad request"),
-            @ApiResponse(code = HttpURLConnection.HTTP_BAD_METHOD, message = "Bad method")
-    })
-    public ResponseEntity<?> getAllActiveKeepersTest() throws UserMicroserviceExchangeException {
-        System.out.println("Controller: getAllActiveKeepersTest()");
-        List<Keeper> keepers = keeperService.getAllActiveKeepersTest();
-        return ResponseEntity.ok(keepers);
-    }
-
-    @GetMapping(value = "/testActive", produces = "application/json")
-    public Keeper getActiveKeepersTest() throws UserMicroserviceExchangeException {
-        System.out.println("Мы попали в getActiveKeepersTest()");
-
-        return  keeperService.getActiveKeepersTest();
-    }
-
-    @GetMapping(value = "/testInActive", produces = "application/json")
-    public Keeper getInActiveKeepersTest() throws UserMicroserviceExchangeException {
-        System.out.println("Мы попали в getInActiveKeepersTest()");
-
-        return  keeperService.getInActiveKeepersTest();
-    }
-
-
-
 }
 
