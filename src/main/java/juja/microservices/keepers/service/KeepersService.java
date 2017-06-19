@@ -18,13 +18,12 @@ public class KeepersService {
     private KeepersRepository keepersRepository;
 
     public List<KeeperDirectionRequest> getDirections(String uuid) {
-        List<KeeperDirectionRequest> directions = keepersRepository.getDirections(uuid);
+        List<KeeperDirectionRequest> result  = keepersRepository.getDirections(uuid);
 
-        if (directions.isEmpty()) {
+        if (result.isEmpty()) {
             return new ArrayList<>();
-        } else {
-            return keepersRepository.getDirections(uuid);
         }
+        return result;
     }
     //TODO Should be implemented internal service logic
 }
