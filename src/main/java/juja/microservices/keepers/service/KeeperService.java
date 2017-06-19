@@ -17,4 +17,15 @@ public class KeeperService {
     public List<Keeper> getAllActiveKeepers() throws UserMicroserviceExchangeException {
         return keeperRepository.getAllActiveKeepers();
     }
+
+
+    public List<Keeper> getAllActiveKeepersTest() throws UserMicroserviceExchangeException {
+        return keeperRepository.getAllActiveKeepersTest();
+    }
+    public Keeper getActiveKeepersTest() throws UserMicroserviceExchangeException {
+        return keeperRepository.getActiveKeepersTest();
+    }
+    public Keeper getInActiveKeepersTest() throws UserMicroserviceExchangeException {
+        return keeperRepository.getInActiveKeepersTest();
+    }
 }
