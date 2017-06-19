@@ -10,6 +10,12 @@ public enum ApiErrorStatus {
             "The exception is general in gamification"
     ),
 
+    ADD_KEEPERS_EXCEPTION(
+            "KPR-F1-D4",
+            "Sorry, but you're not a keeper",
+            "Exception - AddKeeperException"
+    ),
+
     OTHER_EXCEPTION(
             "2",
             "Oops something went wrong :(",
@@ -63,11 +69,6 @@ public enum ApiErrorStatus {
             "108",
             "404 response",
             "The exception is Spring exceptions: NoHandlerFoundException"
-    ),
-    ADD_KEEPERS_EXCEPTION(
-            "KPR-F1-D4",
-            "Sorry, but you're not a keeper",
-            "Exception - AddKeeperException"
     );
 
     private String developerMessage;
