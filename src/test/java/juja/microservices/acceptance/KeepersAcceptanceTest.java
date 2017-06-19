@@ -24,7 +24,7 @@ import static net.javacrumbs.jsonunit.fluent.JsonFluentAssert.assertThatJson;
  */
 
 @RunWith(SpringRunner.class)
-public class KeepersAT extends BaseAcceptanceTest{
+public class KeepersAcceptanceTest extends BaseAcceptanceTest{
 
     @UsingDataSet(locations = "/datasets/initEmptyDb.json", loadStrategy = LoadStrategyEnum.CLEAN_INSERT)
     @Test

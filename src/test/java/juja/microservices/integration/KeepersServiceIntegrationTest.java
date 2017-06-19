@@ -22,7 +22,7 @@ import javax.inject.Inject;
  */
 
 @RunWith(SpringRunner.class)
-public class KeepersServiceIT extends BaseIntegrationTest {
+public class KeepersServiceIntegrationTest extends BaseIntegrationTest {
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();

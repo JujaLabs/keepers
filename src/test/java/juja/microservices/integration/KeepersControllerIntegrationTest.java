@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 
 @RunWith(SpringRunner.class)
-public class KeepersControllerIT extends BaseIntegrationTest{
+public class KeepersControllerIntegrationTest extends BaseIntegrationTest{
 
     private MockMvc mockMvc;
 
