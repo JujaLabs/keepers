@@ -31,10 +31,6 @@ public class RestKeeperRepository implements KeeperRepository {
     @Override
     public List<Keeper> getAllActiveKeepers() throws UserMicroserviceExchangeException {
         String urlTemplate = urlBase + urlGetKeepers;
-//        System.out.println("-------------------------------------------------------");
-//        System.out.println("count true = " + mongoTemplate.count(new Query( Criteria.where("isActive").is(true)),"keepers"));
-//        System.out.println("count false = " + mongoTemplate.count(new Query( Criteria.where("isActive").is(false)), Keeper.class));
-//        System.out.println("-------------------------------------------------------");
 //        mongoTemplate.insert(new Keeper("dima", "den","dir2", new Date(),  new Date(),true),"keepers");
 //        mongoTemplate.insert(new Keeper("fedor", "vadim","dir3", new Date(),  new Date(),true),"keepers");
 //        mongoTemplate.insert(new Keeper("sollyk", "sanek","dir4", new Date(),  new Date(),true),"keepers");
