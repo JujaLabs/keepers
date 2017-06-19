@@ -55,7 +55,7 @@ public class ApiExceptionsHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(AddKeeperException.class)
-    public ResponseEntity<ApiErrorMessage> handleUnsupportedKeeperException(AddKeeperException ex) {
+    public ResponseEntity<ApiErrorMessage> handleAddKeeperException(AddKeeperException ex) {
         ApiErrorMessage message =
                 ApiErrorMessage.builder(ApiErrorStatus.ADD_KEEPERS_EXCEPTION)
                         .httpStatus(HttpStatus.BAD_REQUEST.value())
