@@ -34,6 +34,7 @@ public class RestKeeperRepository implements KeeperRepository {
 //        mongoTemplate.insert(new Keeper("dima", "den","dir2", new Date(),  new Date(),true),"keepers");
 //        mongoTemplate.insert(new Keeper("fedor", "vadim","dir3", new Date(),  new Date(),true),"keepers");
 //        mongoTemplate.insert(new Keeper("sollyk", "sanek","dir4", new Date(),  new Date(),true),"keepers");
+        // todo логика расчета и формирования исходящего набора данных
 
         return mongoTemplate.find(new Query(Criteria.where("isActive").is(true)), Keeper.class,"keepers");
     }
