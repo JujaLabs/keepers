@@ -3,7 +3,6 @@ package juja.microservices.keepers.controller;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import juja.microservices.keepers.entity.KeeperDirectionRequest;
 import juja.microservices.keepers.service.KeepersService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +31,7 @@ public class KeepersController {
             @ApiResponse(code = HttpURLConnection.HTTP_BAD_METHOD, message = "Bad method")
     })
     public ResponseEntity<?> getDirections(@PathVariable String uuid) {
-        List<KeeperDirectionRequest> result = keepersService.getDirections(uuid);
+        List result = keepersService.getDirections(uuid);
 
         return ResponseEntity.ok(result);
     }

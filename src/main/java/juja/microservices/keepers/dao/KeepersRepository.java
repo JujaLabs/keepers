@@ -1,6 +1,5 @@
 package juja.microservices.keepers.dao;
 
-import juja.microservices.keepers.entity.KeeperDirectionRequest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -18,13 +17,12 @@ public class KeepersRepository {
     @Inject
     private MongoTemplate mongoTemplate;
 
-    public List<KeeperDirectionRequest> getDirections(String uuid) {
+    public List getDirections(String uuid) {
+
         Query query = new Query();
         query.addCriteria(Criteria.where("uuid").is(uuid).and("isActive").is(Boolean.TRUE));
-        query.fields().include("direction");
 
-        return mongoTemplate.find(query, KeeperDirectionRequest.class);
+        return mongoTemplate.getCollection("keepers")
+                .distinct("direction", query.getQueryObject());
     }
-
-    //TODO Should be implemented work with MongoDB
 }
