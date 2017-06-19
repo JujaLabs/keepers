@@ -54,16 +54,6 @@ public class ApiExceptionsHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(message,HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(GetDirectionsException.class)
-    public ResponseEntity<ApiErrorMessage> handleGetDirectionsException(GetDirectionsException ex) {
-        ApiErrorMessage message =
-                ApiErrorMessage.builder(ApiErrorStatus.GET_DIRECTIONS_EXCEPTION)
-                        .httpStatus(HttpStatus.BAD_REQUEST.value())
-                        .exceptionMessage(ex.getMessage())
-                        .build();
-        return new ResponseEntity<>(message,HttpStatus.BAD_REQUEST);
-    }
-
     @Override
     protected ResponseEntity<Object> handleExceptionInternal(Exception ex,
                                                              Object body, HttpHeaders headers,

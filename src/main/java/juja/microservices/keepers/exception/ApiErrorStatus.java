@@ -63,11 +63,6 @@ public enum ApiErrorStatus {
             "108",
             "404 response",
             "The exception is Spring exceptions: NoHandlerFoundException"
-    ),
-    GET_DIRECTIONS_EXCEPTION(
-            "KPR-F3-D5",
-            "Sorry, but you're not a keeper",
-            "Exception - GetDirectionsException"
     );
 
     private String developerMessage;
