@@ -41,5 +41,4 @@ public class RestKeeperRepository implements KeeperRepository {
         }
         return outMap;
     }
-
 }
