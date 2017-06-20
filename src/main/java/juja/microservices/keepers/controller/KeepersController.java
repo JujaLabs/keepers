@@ -1,6 +1,7 @@
 package juja.microservices.keepers.controller;
 
 import juja.microservices.keepers.entity.KeeperRequest;
+import juja.microservices.keepers.exceptions.UserMicroserviceExchangeException;
 import juja.microservices.keepers.service.KeepersService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,6 +42,6 @@ public class KeepersController {
     @GetMapping(value = "/keepers", produces = "application/json")
     public ResponseEntity<?> getKeepers() {
         //TODO Should be implemented feature KPR-F4
-        return null;
+        return ResponseEntity.ok(keepersService.getAllActiveKeepers());
     }
 }
