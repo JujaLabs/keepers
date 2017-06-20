@@ -3,6 +3,7 @@ package juja.microservices.keepers.controller;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+
 import juja.microservices.keepers.entity.KeeperRequest;
 import juja.microservices.keepers.service.KeepersService;
 
@@ -15,6 +16,7 @@ import javax.inject.Inject;
 import javax.validation.Valid;
 
 import java.net.HttpURLConnection;
+
 import java.util.Collections;
 import java.util.List;
 

@@ -2,6 +2,7 @@ package juja.microservices.integration;
 
 import com.lordofthejars.nosqlunit.annotation.UsingDataSet;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -41,6 +42,14 @@ public class KeepersControllerIntegrationTest extends BaseIntegrationTest{
     @UsingDataSet(locations = "/datasets/oneKeeperInDB.json")
     public void addKeeperNotExistUUID() throws Exception {
         //Given
+        String expected = "{" +
+                "\"httpStatus\":400," +
+                "\"internalErrorCode\":\"KPR-F1-D4\"," +
+                "\"clientMessage\":\"Sorry, but you're not a keeper\"," +
+                "\"developerMessage\":\"Exception - KeeperAccessException\"," +
+                "\"exceptionMessage\":\"Only the keeper can appoint another keeper\"," +
+                "\"detailErrors\":[]}";
+
         String json = "{" +
                 "  \"from\":\"bill\"," +
                 "  \"uuid\":\"max\"," +
@@ -48,11 +57,12 @@ public class KeepersControllerIntegrationTest extends BaseIntegrationTest{
                 "}";
 
         //Then
-        mockMvc.perform(post("/keepers")
+        Assert.assertEquals( expected, mockMvc.perform(post("/keepers")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andReturn().getResponse().getContentAsString());
     }
 
     @Test
@@ -90,6 +100,5 @@ public class KeepersControllerIntegrationTest extends BaseIntegrationTest{
                 .content(json))
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
                 .andExpect(status().isBadRequest());
-
     }
 }

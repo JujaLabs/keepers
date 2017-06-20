@@ -10,10 +10,10 @@ public enum ApiErrorStatus {
             "The exception is general in gamification"
     ),
 
-    ADD_KEEPERS_EXCEPTION(
+    KEEPERS_ACCESS_EXCEPTION(
             "KPR-F1-D4",
             "Sorry, but you're not a keeper",
-            "Exception - AddKeeperException"
+            "Exception - KeeperAccessException"
     ),
 
     OTHER_EXCEPTION(

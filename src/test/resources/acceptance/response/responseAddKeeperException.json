@@ -2,7 +2,7 @@
   "httpStatus": 400,
   "internalErrorCode": "KPR-F1-D4",
   "clientMessage": "Sorry, but you're not a keeper",
-  "developerMessage": "Exception - AddKeeperException",
+  "developerMessage": "Exception - KeeperAccessException",
   "exceptionMessage": "Only the keeper can appoint another keeper",
   "detailErrors": [
 

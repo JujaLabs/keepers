@@ -22,16 +22,8 @@ public class KeeperTest {
         Keeper keeper = new Keeper("123qwe", "asdqwe", "teems", startDate);
 
         //Then
-        String lineSeparator = System.lineSeparator();
-        String expected = "Keeper{".concat(lineSeparator)
-                .concat("   id = ").concat(lineSeparator)
-                .concat("   from = 123qwe").concat(lineSeparator)
-                .concat("   uuid = asdqwe").concat(lineSeparator)
-                .concat("   direction = teems").concat(lineSeparator)
-                .concat("   startDate = 2017-04-01").concat(lineSeparator)
-                .concat("   dismissDate = ").concat(lineSeparator)
-                .concat("   isActive = true").concat(lineSeparator)
-                .concat("}");
+        String expected = "Keeper(id=null, from=123qwe, uuid=asdqwe, direction=teems, " +
+                "startDate=Sat Apr 01 12:00:00 EEST 2017, dismissDate=null, isActive=true)";
         Assert.assertEquals(expected, keeper.toString());
     }
 
@@ -45,16 +37,8 @@ public class KeeperTest {
         keeper.setDismissDate(LocalDateTime.of(2017, Month.MAY, 1, 12,0));
 
         //Then
-        String lineSeparator = System.lineSeparator();
-        String expected = "Keeper{".concat(lineSeparator)
-                .concat("   id = ").concat(lineSeparator)
-                .concat("   from = 123qwe").concat(lineSeparator)
-                .concat("   uuid = asdqwe").concat(lineSeparator)
-                .concat("   direction = teems").concat(lineSeparator)
-                .concat("   startDate = 2017-04-01").concat(lineSeparator)
-                .concat("   dismissDate = 2017-05-01").concat(lineSeparator)
-                .concat("   isActive = false").concat(lineSeparator)
-                .concat("}");
+        String expected = "Keeper(id=null, from=123qwe, uuid=asdqwe, direction=teems, " +
+                "startDate=Sat Apr 01 12:00:00 EEST 2017, dismissDate=Mon May 01 12:00:00 EEST 2017, isActive=false)";
         Assert.assertEquals(expected, keeper.toString());
     }
 }

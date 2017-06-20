@@ -1,7 +1,7 @@
 package juja.microservices.keepers.controller;
 
 import juja.microservices.keepers.entity.KeeperRequest;
-import juja.microservices.keepers.exception.AddKeeperException;
+import juja.microservices.keepers.exception.KeeperAccessException;
 import juja.microservices.keepers.service.KeepersService;
 
 import org.junit.Assert;
@@ -12,16 +12,13 @@ import org.mockito.InjectMocks;
 
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import javax.inject.Inject;
 
-import java.util.Collections;
-
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8;
@@ -46,7 +43,7 @@ public class KeepersControllerTest {
 
     @Inject
     @InjectMocks
-    KeepersController keepersController = new KeepersController();
+    private KeepersController controller;
 
     @Test
     public void addKeeperTest() throws Exception {
@@ -66,27 +63,35 @@ public class KeepersControllerTest {
     }
 
     @Test
-    public void addKeeper(){
+    public void addKeeper() throws Exception {
         //Given
-        KeeperRequest keeperRequest = new KeeperRequest("123qwe", "asdqwe", "teems");
-        when(service.addKeeper(keeperRequest)).thenReturn("SomeId");
-        ResponseEntity<?> expected = new ResponseEntity<>(Collections.singletonList("SomeId"), HttpStatus.OK);
+        String jsonContentRequest = "{\"from\":\"asdqwe\",\"uuid\":\"max\", \"direction\":\"SomeDirection\"}";
 
         //When
-        ResponseEntity<?> result = keepersController.addKeeper(keeperRequest);
+        when(service.addKeeper(any(KeeperRequest.class))).thenReturn("SomeId");
+        String result = getResult("/keepers", jsonContentRequest);
 
         //Then
-        Assert.assertEquals(expected, result);
+        Assert.assertEquals("[\"SomeId\"]", result);
     }
 
-    @Test(expected = AddKeeperException.class)
+    private String getResult(String uri, String jsonContentRequest) throws Exception {
+        return mockMvc.perform(post(uri)
+                .contentType(APPLICATION_JSON_UTF8)
+                .content(jsonContentRequest))
+                .andExpect(content().contentType(APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+    }
+
+    @Test(expected = KeeperAccessException.class)
     public void addKeeperBadRequest(){
         //Given
         KeeperRequest keeperRequest = new KeeperRequest("123qwe", "asdqwe", "teems");
         when(service.addKeeper(keeperRequest)).thenThrow(
-                new AddKeeperException("Only the keeper can appoint another keeper"));
+                new KeeperAccessException("Only the keeper can appoint another keeper"));
 
         //When
-        keepersController.addKeeper(keeperRequest);
+        controller.addKeeper(keeperRequest);
     }
 }

@@ -3,7 +3,7 @@ package juja.microservices.keepers.service;
 import juja.microservices.keepers.dao.KeepersRepository;
 import juja.microservices.keepers.entity.Keeper;
 import juja.microservices.keepers.entity.KeeperRequest;
-import juja.microservices.keepers.exception.AddKeeperException;
+import juja.microservices.keepers.exception.KeeperAccessException;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -41,8 +41,8 @@ public class KeepersServiceTest {
     @MockBean
     private KeepersRepository repository;
 
-    @Test(expected = AddKeeperException.class)
-    public void addKeeperNotExist(){
+    @Test(expected = KeeperAccessException.class)
+    public void addKeeperWithKeeperAccessException(){
         //Given
         when(repository.findOneByUUId(anyString())).thenReturn(null);
 

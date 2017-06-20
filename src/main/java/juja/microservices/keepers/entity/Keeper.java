@@ -5,10 +5,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Getter;
+import lombok.ToString;
 
 import org.springframework.data.annotation.Id;
-
-import java.text.SimpleDateFormat;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -20,6 +19,7 @@ import java.util.Date;
  */
 
 @Getter
+@ToString
 public class Keeper {
 
     @Id
@@ -51,23 +51,5 @@ public class Keeper {
     public void setDismissDate(LocalDateTime dismissDate) {
         this.dismissDate = Date.from(dismissDate.atZone(ZoneId.systemDefault()).toInstant());
         this.isActive = false;
-    }
-
-    @Override
-    public String toString(){
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String startDate = this.startDate != null ? dateFormat.format(this.startDate.getTime()): "";
-        String dismissDate = this.dismissDate != null ? dateFormat.format(this.dismissDate.getTime()): "";
-
-        String lineSeparator = System.lineSeparator();
-        return "Keeper{".concat(lineSeparator)
-                .concat("   id = ").concat(id != null ? id : "").concat(lineSeparator)
-                .concat("   from = ").concat(from != null ? from : "").concat(lineSeparator)
-                .concat("   uuid = ").concat(uuid != null ? uuid : "").concat(lineSeparator)
-                .concat("   direction = ").concat(direction != null ? direction : "").concat(lineSeparator)
-                .concat("   startDate = ").concat(startDate).concat(lineSeparator)
-                .concat("   dismissDate = ").concat(dismissDate).concat(lineSeparator)
-                .concat("   isActive = ").concat(String.valueOf(isActive)).concat(lineSeparator)
-                .concat("}");
     }
 }
