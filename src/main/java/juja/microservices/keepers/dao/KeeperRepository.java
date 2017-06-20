@@ -1,12 +1,8 @@
 package juja.microservices.keepers.dao;
 
-import juja.microservices.keepers.entity.Keeper;
 import juja.microservices.keepers.exceptions.UserMicroserviceExchangeException;
-import org.springframework.http.ResponseEntity;
-
-import java.util.List;
+import java.util.*;
 
 public interface KeeperRepository {
-    List<Keeper> getAllActiveKeepers() throws UserMicroserviceExchangeException;
-
+    Map<String, List<String>> getAllActiveKeepers() throws UserMicroserviceExchangeException;
 }

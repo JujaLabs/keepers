@@ -13,9 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
 import java.net.HttpURLConnection;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/keepers", produces = "application/json")
@@ -35,9 +32,7 @@ public class KeeperController {
             @ApiResponse(code = HttpURLConnection.HTTP_BAD_METHOD, message = "Bad method")
     })
     public ResponseEntity<?> getAllActiveKeepers() throws UserMicroserviceExchangeException {
-        List<Keeper> keepers = keeperService.getAllActiveKeepers();
-
-        return ResponseEntity.ok(keepers);
+        return ResponseEntity.ok(keeperService.getAllActiveKeepers());
     }
 }
 

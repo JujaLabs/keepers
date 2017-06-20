@@ -5,10 +5,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import org.springframework.data.annotation.Id;
-
 import java.util.Date;
 
 @Data
@@ -28,23 +24,27 @@ public class Keeper {
     @JsonProperty("dismissDate")
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
     private Date dismissDate;
-    @JsonProperty("isActive")
-    private boolean isActive;
 
     @JsonCreator
     public Keeper (String uuid,
                    String from,
                    String direction,
                    Date startDate,
-                   Date dismissDate,
-                   boolean isActive
+                   Date dismissDate
     ) {
         this.uuid = uuid;
         this.from = from;
         this.direction = direction;
         this.startDate = startDate;
         this.dismissDate = dismissDate;
-        this.isActive = isActive;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public String getDirection() {
+        return direction;
     }
 
     @Override
@@ -55,8 +55,7 @@ public class Keeper {
                 ", from='" + from + '\'' + "\n" +
                 ", direction='" + direction + '\'' + "\n" +
                 ", startDate=" + startDate + "\n" +
-                ", dismissDate=" + dismissDate + "\n" +
-                ", isActive=" + isActive +
+                ", dismissDate=" + dismissDate +
                 '}';
     }
 }

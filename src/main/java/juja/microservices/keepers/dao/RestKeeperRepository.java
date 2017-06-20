@@ -6,16 +6,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestTemplate;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Repository
 public class RestKeeperRepository implements KeeperRepository {
@@ -29,14 +23,23 @@ public class RestKeeperRepository implements KeeperRepository {
     private String urlGetKeepers;
 
     @Override
-    public List<Keeper> getAllActiveKeepers() throws UserMicroserviceExchangeException {
+    public Map<String, List<String>> getAllActiveKeepers() throws UserMicroserviceExchangeException {
         String urlTemplate = urlBase + urlGetKeepers;
-//        mongoTemplate.insert(new Keeper("dima", "den","dir2", new Date(),  new Date(),true),"keepers");
-//        mongoTemplate.insert(new Keeper("fedor", "vadim","dir3", new Date(),  new Date(),true),"keepers");
-//        mongoTemplate.insert(new Keeper("sollyk", "sanek","dir4", new Date(),  new Date(),true),"keepers");
-        // todo логика расчета и формирования исходящего набора данных
+        Map<String, List<String>> outMap = new HashMap<>();
 
-        return mongoTemplate.find(new Query(Criteria.where("isActive").is(true)), Keeper.class,"keepers");
+        List<Keeper> keepers = mongoTemplate.find(new Query(Criteria.where("dismissDate").exists(false)), Keeper.class,"keepers");
+        for (Keeper k:keepers) {
+            List<String> tmpList = new ArrayList<>();
+            if(outMap.containsKey(k.getUuid())) {
+                tmpList = outMap.get(k.getUuid());
+                tmpList.add(k.getDirection());
+                outMap.replace(k.getUuid(),tmpList);
+            }else{
+                tmpList.add(k.getDirection());
+                outMap.put(k.getUuid(), tmpList);
+            }
+        }
+        return outMap;
     }
 
 }

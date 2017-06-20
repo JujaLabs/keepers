@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class KeeperService {
@@ -14,7 +15,7 @@ public class KeeperService {
     @Inject
     private KeeperRepository keeperRepository;
 
-    public List<Keeper> getAllActiveKeepers() throws UserMicroserviceExchangeException {
+    public Map<String, List<String>> getAllActiveKeepers() throws UserMicroserviceExchangeException {
         return keeperRepository.getAllActiveKeepers();
     }
 
