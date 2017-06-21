@@ -24,19 +24,28 @@ public class Keeper {
     @JsonProperty("dismissDate")
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
     private Date dismissDate;
+    @JsonProperty("isActive")
+    private boolean isActive;
+
+    @JsonCreator
+    public Keeper() {
+
+    }
 
     @JsonCreator
     public Keeper (String uuid,
                    String from,
                    String direction,
                    Date startDate,
-                   Date dismissDate
+                   Date dismissDate,
+                   boolean isActive
     ) {
         this.uuid = uuid;
         this.from = from;
         this.direction = direction;
         this.startDate = startDate;
         this.dismissDate = dismissDate;
+        this.isActive = isActive;
     }
 
     public String getUuid() {
@@ -50,12 +59,13 @@ public class Keeper {
     @Override
     public String toString() {
         return "Keeper{" +
-                "id='" + id + '\'' + "\n" +
-                ", uuid='" + uuid + '\'' + "\n" +
-                ", from='" + from + '\'' + "\n" +
-                ", direction='" + direction + '\'' + "\n" +
-                ", startDate=" + startDate + "\n" +
+                "id='" + id + '\'' +
+                ", uuid='" + uuid + '\'' +
+                ", from='" + from + '\'' +
+                ", direction='" + direction + '\'' +
+                ", startDate=" + startDate +
                 ", dismissDate=" + dismissDate +
+                ", isActive=" + isActive +
                 '}';
     }
 }

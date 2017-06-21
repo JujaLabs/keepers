@@ -9,10 +9,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Vadim Dyachenko
@@ -33,8 +30,18 @@ public class KeepersRepository {
     public Map<String, List<String>> getAllActiveKeepers(){
         String urlTemplate = urlBase + urlGetKeepers;
         Map<String, List<String>> outMap = new HashMap<>();
+//        mongoTemplate.insert(new Keeper("111", "den","dir11", new Date(),  new Date(), false));
+//        mongoTemplate.insert(new Keeper("222", "vadim","dir12", new Date(),  new Date(), false));
+//        mongoTemplate.insert(new Keeper("333", "sanek","dir13", new Date(),  new Date(), false));
+//        mongoTemplate.insert(new Keeper("444", "vadim","dir22", new Date(),  new Date(), false));
+//        mongoTemplate.insert(new Keeper("dima", "den","dir11", new Date(),  null, true));
+//        mongoTemplate.insert(new Keeper("fedor", "vadim","dir12", new Date(),  null, true));
+//        mongoTemplate.insert(new Keeper("sollyk", "sanek","dir13", new Date(),  null, true));
+//        mongoTemplate.insert(new Keeper("fedor", "vadim","dir22", new Date(),  null, true));
+//        mongoTemplate.insert(new Keeper("sollyk", "sanek","dir23", new Date(),  null, true));
+//        mongoTemplate.insert(new Keeper("sollyk", "sanek","dir33", new Date(),  null, true));
 
-        List<Keeper> keepers = mongoTemplate.find(new Query(Criteria.where("dismissDate").exists(false)), Keeper.class,"keepers");
+        List<Keeper> keepers = mongoTemplate.find(new Query(Criteria.where("isActive").is(true)), Keeper.class,"keeper");
         for (Keeper k:keepers) {
             List<String> tmpList = new ArrayList<>();
             if(outMap.containsKey(k.getUuid())) {
