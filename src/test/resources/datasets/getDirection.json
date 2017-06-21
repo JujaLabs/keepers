@@ -1,0 +1,39 @@
+{
+  "keepers": [
+    {
+      "uuid": "0000c9999",
+      "direction": "First active direction",
+      "startDate": "2017-06-15",
+      "isActive": true
+    },
+    {
+      "uuid": "0000c9999",
+      "direction": "Second active direction",
+      "startDate": "2017-06-19",
+      "isActive": true
+    },
+    {
+      "uuid": "0000c9999",
+      "direction": "Not active direction",
+      "startDate": "2017-06-21",
+      "isActive": false
+    },
+    {
+      "uuid": "0000c9999",
+      "direction": "Not active direction and no isActive field",
+      "startDate": "2017-06-21"
+    },
+    {
+      "uuid": "1111a9999",
+      "direction": "Not active direction",
+      "startDate": "2017-06-21",
+      "isActive": false
+    },
+    {
+      "uuid": "1111a9999",
+      "direction": "Not active direction",
+      "startDate": "2017-06-21",
+      "isActive": false
+    }
+  ]
+}
