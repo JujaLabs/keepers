@@ -11,6 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import javax.inject.Inject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -34,10 +35,7 @@ public class KeepersServiceTest {
 
     @Test
     public void getDirectionsTest() {
-        List<String> expectedList = new ArrayList<>();
-        expectedList.add("direction1");
-        expectedList.add("direction2");
-        expectedList.add("direction3");
+        List<String> expectedList = Arrays.asList("direction1", "direction2", "direction3");
         when(repository.getDirections(UUID)).thenReturn(expectedList);
         List<String> actualList = service.getDirections(UUID);
         assertEquals(expectedList, actualList);

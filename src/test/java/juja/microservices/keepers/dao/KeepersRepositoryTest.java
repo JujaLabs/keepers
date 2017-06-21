@@ -20,18 +20,18 @@ public class KeepersRepositoryTest extends BaseIntegrationTest {
     private KeepersRepository repository;
 
     @Test
-    @UsingDataSet(locations = "/datasets/getDirection.json")
+    @UsingDataSet(locations = "/datasets/getKeeperDirections.json")
     public void shouldReturnDirections() {
-        List<String> expected = Arrays.asList("First active direction", "Second active direction");
-        List<String> actual = repository.getDirections("0000c9999");
-        assertEquals(2, expected.size());
-        assertEquals(expected, actual);
+        List<String> expectedList = Arrays.asList("First active direction", "Second active direction");
+        List<String> actualList = repository.getDirections("0000c9999");
+        assertEquals(2, expectedList.size());
+        assertEquals(expectedList, actualList);
     }
 
     @Test
-    @UsingDataSet(locations = "/datasets/getDirection.json")
+    @UsingDataSet(locations = "/datasets/getKeeperDirections.json")
     public void shouldReturnEmptyList() {
-        List<String> actual = repository.getDirections("1111a9999");
-        assertEquals(0, actual.size());
+        List<String> actualList = repository.getDirections("1111a9999");
+        assertEquals(0, actualList.size());
     }
 }
