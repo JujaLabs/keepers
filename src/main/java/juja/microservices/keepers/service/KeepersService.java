@@ -26,7 +26,7 @@ public class KeepersService {
         if (result.isEmpty()) {
             return new ArrayList<>();
         }
-        logger.info("Request for active directions for keeper with uuid ", uuid);
+        logger.info("Request for active directions for keeper with uuid " + uuid);
         return result;
     }
 }
