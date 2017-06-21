@@ -7,6 +7,9 @@ import io.swagger.annotations.ApiResponses;
 import juja.microservices.keepers.entity.KeeperRequest;
 import juja.microservices.keepers.service.KeepersService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +30,8 @@ import java.util.List;
 @RestController
 public class KeepersController {
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Inject
     private KeepersService keepersService;
 
@@ -44,6 +49,7 @@ public class KeepersController {
     public ResponseEntity<?> addKeeper(@Valid @RequestBody KeeperRequest request) {
         String keeperId = keepersService.addKeeper(request);
         List<String> ids = Collections.singletonList(keeperId);
+        logger.info("Added new 'Keeper', ids = {}", ids.toString());
         return ResponseEntity.ok(ids);
     }
 
