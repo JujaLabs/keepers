@@ -1,6 +1,8 @@
 package juja.microservices.keepers.service;
 
 import juja.microservices.keepers.dao.KeepersRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -13,6 +15,8 @@ import java.util.List;
 @Service
 public class KeepersService {
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Inject
     private KeepersRepository keepersRepository;
 
@@ -22,6 +26,7 @@ public class KeepersService {
         if (result.isEmpty()) {
             return new ArrayList<>();
         }
+        logger.info("Request for active directions for keeper with uuid ", uuid);
         return result;
     }
 }

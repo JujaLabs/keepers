@@ -4,6 +4,8 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import juja.microservices.keepers.service.KeepersService;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +18,8 @@ import java.util.List;
  */
 @RestController
 public class KeepersController {
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Inject
     private KeepersService keepersService;
@@ -32,7 +36,7 @@ public class KeepersController {
     })
     public ResponseEntity<?> getDirections(@PathVariable String uuid) {
         List result = keepersService.getDirections(uuid);
-
+        logger.info("Request for active directions for keeper with uuid ", uuid);
         return ResponseEntity.ok(result);
     }
 }
