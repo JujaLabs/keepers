@@ -1,13 +1,10 @@
 package juja.microservices.keepers.entity;
 
 import org.junit.Test;
-
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.ZoneId;
-
 import java.util.Date;
-
 import static org.junit.Assert.*;
 
 /**

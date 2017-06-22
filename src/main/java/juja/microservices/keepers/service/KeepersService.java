@@ -3,12 +3,9 @@ package juja.microservices.keepers.service;
 import juja.microservices.keepers.dao.KeepersRepository;
 import juja.microservices.keepers.entity.KeeperRequest;
 import juja.microservices.keepers.exception.KeeperAccessException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.stereotype.Service;
-
 import javax.inject.Inject;
 
 /**

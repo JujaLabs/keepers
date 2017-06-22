@@ -3,15 +3,11 @@ package juja.microservices.keepers.entity;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import lombok.Getter;
 import lombok.ToString;
-
 import org.springframework.data.annotation.Id;
-
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-
 import java.util.Date;
 
 /**

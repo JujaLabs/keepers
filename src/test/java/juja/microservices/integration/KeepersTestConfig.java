@@ -1,9 +1,7 @@
 package juja.microservices.integration;
 
 import com.github.fakemongo.Fongo;
-
 import com.mongodb.MongoClient;
-
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration;

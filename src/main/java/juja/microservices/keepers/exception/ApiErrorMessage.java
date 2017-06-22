@@ -1,7 +1,6 @@
 package juja.microservices.keepers.exception;
 
 import lombok.Getter;
-
 import java.util.ArrayList;
 import java.util.List;
 

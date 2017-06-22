@@ -1,23 +1,16 @@
 package juja.microservices.integration;
 
 import com.github.fakemongo.Fongo;
-
 import com.lordofthejars.nosqlunit.mongodb.MongoDbConfiguration;
 import com.lordofthejars.nosqlunit.mongodb.MongoDbRule;
 import com.lordofthejars.nosqlunit.mongodb.SpringMongoDbRule;
-
 import com.mongodb.MockMongoClient;
 import com.mongodb.MongoClient;
-
 import juja.microservices.keepers.Keepers;
-
 import org.junit.Rule;
-
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.web.context.WebApplicationContext;
-
 import javax.inject.Inject;
-
 import static juja.microservices.integration.KeepersTestConfig.TEST_DATABASE_NAME;
 
 /**

@@ -4,27 +4,19 @@ import juja.microservices.keepers.dao.KeepersRepository;
 import juja.microservices.keepers.entity.Keeper;
 import juja.microservices.keepers.entity.KeeperRequest;
 import juja.microservices.keepers.exception.KeeperAccessException;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import org.mockito.InjectMocks;
-
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-
 import org.springframework.test.context.junit4.SpringRunner;
-
 import javax.inject.Inject;
-
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.ZoneId;
 import java.util.Date;
-
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
-
 import static org.junit.Assert.*;
 
 /**
