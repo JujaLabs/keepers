@@ -16,7 +16,9 @@ public class KeeperTest {
     @Test
     public void newKeeper(){
         //Given
-        Date startDate = Date.from(LocalDateTime.of(2017, Month.APRIL, 1, 12,0).atZone(ZoneId.systemDefault()).toInstant());
+        Date startDate = Date.from(LocalDateTime.of(2017, Month.APRIL, 1, 12,0)
+                .atZone(ZoneId.of("Europe/Paris")).minusHours(1).toInstant());
+
         Keeper keeper = new Keeper("123qwe", "asdqwe", "teems", startDate);
 
         //Then
@@ -28,7 +30,9 @@ public class KeeperTest {
     @Test
     public void newKeeperSetDismiss(){
         //Given
-        Date startDate = Date.from(LocalDateTime.of(2017, Month.APRIL, 1, 12,0).atZone(ZoneId.systemDefault()).toInstant());
+        Date startDate = Date.from(LocalDateTime.of(2017, Month.APRIL, 1, 12,0).
+                atZone(ZoneId.of("Europe/Paris")).minusHours(1).toInstant());
+
         Keeper keeper = new Keeper("123qwe", "asdqwe", "teems", startDate);
 
         //When
