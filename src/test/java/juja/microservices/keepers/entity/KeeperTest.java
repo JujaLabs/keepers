@@ -1,6 +1,5 @@
 package juja.microservices.keepers.entity;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
@@ -8,6 +7,8 @@ import java.time.Month;
 import java.time.ZoneId;
 
 import java.util.Date;
+
+import static org.junit.Assert.*;
 
 /**
  * @author Dmitriy Lyashenko
@@ -24,7 +25,7 @@ public class KeeperTest {
         //Then
         String expected = "Keeper(id=null, from=123qwe, uuid=asdqwe, direction=teems, " +
                 "startDate=Sat Apr 01 12:00:00 EEST 2017, dismissDate=null, isActive=true)";
-        Assert.assertEquals(expected, keeper.toString());
+        assertEquals(expected, keeper.toString());
     }
 
     @Test
@@ -39,6 +40,6 @@ public class KeeperTest {
         //Then
         String expected = "Keeper(id=null, from=123qwe, uuid=asdqwe, direction=teems, " +
                 "startDate=Sat Apr 01 12:00:00 EEST 2017, dismissDate=Mon May 01 12:00:00 EEST 2017, isActive=false)";
-        Assert.assertEquals(expected, keeper.toString());
+        assertEquals(expected, keeper.toString());
     }
 }

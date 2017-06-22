@@ -5,7 +5,6 @@ import juja.microservices.keepers.entity.Keeper;
 import juja.microservices.keepers.entity.KeeperRequest;
 import juja.microservices.keepers.exception.KeeperAccessException;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -25,6 +24,8 @@ import java.util.Date;
 
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
+
+import static org.junit.Assert.*;
 
 /**
  * @author Dmitriy Lyashenko
@@ -64,6 +65,6 @@ public class KeepersServiceTest {
         String result = service.addKeeper(keeperRequest);
 
         //Then
-        Assert.assertEquals(expected, result);
+        assertEquals(expected, result);
     }
 }

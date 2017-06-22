@@ -3,7 +3,6 @@ package juja.microservices.keepers.dao;
 import juja.microservices.keepers.entity.Keeper;
 import juja.microservices.keepers.entity.KeeperRequest;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -29,6 +28,8 @@ import java.util.Date;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
+import static org.junit.Assert.*;
+
 /**
  * @author Dmitriy Lyashenko
  */
@@ -50,7 +51,7 @@ public class KeepersRepositoryTest {
         doNothing().when(mongoTemplate).save(any(Keeper.class));
 
         //Then
-        Assert.assertEquals(null,
+        assertEquals(null,
                 repository.save(new KeeperRequest("123qwe", "asdqwe", "teems")));
     }
 
@@ -64,6 +65,6 @@ public class KeepersRepositoryTest {
         when(mongoTemplate.findOne(new Query(Criteria.where("uuid").is("456rty")), Keeper.class)).thenReturn(keeper);
 
         //Then
-        Assert.assertEquals(keeper, repository.findOneByUUId("456rty"));
+        assertEquals(keeper, repository.findOneByUUId("456rty"));
     }
 }

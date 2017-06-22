@@ -7,7 +7,6 @@ import juja.microservices.keepers.entity.KeeperRequest;
 import juja.microservices.keepers.exception.KeeperAccessException;
 import juja.microservices.keepers.service.KeepersService;
 
-import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -16,6 +15,8 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.inject.Inject;
+
+import static org.junit.Assert.*;
 
 /**
  * @author Dmitriy Lyashenko
@@ -52,7 +53,7 @@ public class KeepersServiceIntegrationTest extends BaseIntegrationTest {
         String result2 = repository.findOneByUUId("123qwe").getUuid();
 
         //Then
-        Assert.assertNotNull(result);
-        Assert.assertNotNull(result2);
+        assertNotNull(result);
+        assertNotNull(result2);
     }
 }

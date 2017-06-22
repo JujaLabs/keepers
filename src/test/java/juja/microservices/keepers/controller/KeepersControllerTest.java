@@ -4,7 +4,6 @@ import juja.microservices.keepers.entity.KeeperRequest;
 import juja.microservices.keepers.exception.KeeperAccessException;
 import juja.microservices.keepers.service.KeepersService;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -26,6 +25,8 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import static org.junit.Assert.*;
 
 /**
  * @author Vadim Dyachenko
@@ -72,7 +73,7 @@ public class KeepersControllerTest {
         String result = getResult("/keepers", jsonContentRequest);
 
         //Then
-        Assert.assertEquals("[\"SomeId\"]", result);
+        assertEquals("[\"SomeId\"]", result);
     }
 
     private String getResult(String uri, String jsonContentRequest) throws Exception {

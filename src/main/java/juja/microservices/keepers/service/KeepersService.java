@@ -25,12 +25,13 @@ public class KeepersService {
 
     public String addKeeper(KeeperRequest keeperRequest){
         if(keepersRepository.findOneByUUId(keeperRequest.getFrom()) == null){
-            logger.warn("User '{}' tried to add new 'Keeper' but he is no Keeper", keeperRequest.getFrom());
+            logger.warn("User '{}' tried to add new 'Keeper' but he is not a Keeper", keeperRequest.getFrom());
             throw new KeeperAccessException("Only the keeper can appoint another keeper");
         }
 
+        String newKeeperId = keepersRepository.save(keeperRequest);
         logger.info("Added new 'Keeper' with uuid {}, from user '{}'", keeperRequest.getUuid(), keeperRequest.getFrom());
-        return keepersRepository.save(keeperRequest);
+        return newKeeperId;
     }
 
     //TODO Should be implemented internal service logic

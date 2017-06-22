@@ -55,14 +55,16 @@ public class KeepersControllerIntegrationTest extends BaseIntegrationTest{
                 "  \"uuid\":\"max\"," +
                 "  \"direction\":\"SomeDirection\"" +
                 "}";
-
-        //Then
-        Assert.assertEquals( expected, mockMvc.perform(post("/keepers")
+        //When
+        String result = mockMvc.perform(post("/keepers")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
                 .andExpect(status().isBadRequest())
-                .andReturn().getResponse().getContentAsString());
+                .andReturn().getResponse().getContentAsString();
+
+        //Then
+        Assert.assertEquals(expected, result);
     }
 
     @Test
