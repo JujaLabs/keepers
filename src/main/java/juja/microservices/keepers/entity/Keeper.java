@@ -30,33 +30,4 @@ public class Keeper {
     @JsonProperty("isActive")
     private boolean isActive;
 
-//    @JsonCreator
-//    public Keeper() {
-//
-//    }
-
-//    @JsonCreator
-//    public Keeper (String uuid,
-//                   String from,
-//                   String direction,
-//                   Date startDate,
-//                   Date dismissDate,
-//                   boolean isActive
-//    ) {
-//        this.uuid = uuid;
-//        this.from = from;
-//        this.direction = direction;
-//        this.startDate = startDate;
-//        this.dismissDate = dismissDate;
-//        this.isActive = isActive;
-//    }
-
-//    public String getUuid() {
-//        return uuid;
-//    }
-//
-//    public String getDirection() {
-//        return direction;
-//    }
-
 }
