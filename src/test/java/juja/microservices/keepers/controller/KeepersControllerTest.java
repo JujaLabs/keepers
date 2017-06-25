@@ -35,6 +35,23 @@ public class KeepersControllerTest {
     private KeepersService service;
 
     @Test
+    public void addKeeperTest() throws Exception {
+        //given
+        String jsonContentRequest ="{\"from\":\"admin\",\"direction\":\"LMS\"}";
+
+        //then
+        checkBadRequest("/keepers", jsonContentRequest);
+    }
+
+    private void checkBadRequest(String uri, String jsonContentRequest) throws Exception {
+        mockMvc.perform(post(uri)
+                .contentType(APPLICATION_JSON_UTF8)
+                .content(jsonContentRequest))
+                .andExpect(content().contentType(APPLICATION_JSON_UTF8))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     public void getKeeperDirections() throws Exception {
         final String expectedString = "[\"direction1\",\"direction2\",\"direction3\"]";
         List<String> expectedList = Arrays.asList("direction1", "direction2", "direction3");
