@@ -8,9 +8,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import javax.inject.Inject;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Vadim Dyachenko
+ * @author Dmitriy Roy
  */
 
 @Service
@@ -36,4 +39,8 @@ public class KeepersService {
     }
 
     //TODO Should be implemented internal service logic
+
+    public Map<String, List<String>> getAllActiveKeepers() {
+        return keepersRepository.getAllActiveKeepers();
+    }
 }
