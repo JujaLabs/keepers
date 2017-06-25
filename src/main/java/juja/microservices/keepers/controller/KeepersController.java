@@ -12,6 +12,7 @@ import java.util.List;
 
 /**
  * @author Vadim Dyachenko
+ * @author Dmitriy Roy
  */
 @RestController
 public class KeepersController {
@@ -40,7 +41,6 @@ public class KeepersController {
 
     @GetMapping(value = "/keepers", produces = "application/json")
     public ResponseEntity<?> getKeepers() {
-        //TODO Should be implemented feature KPR-F4
-        return null;
+        return ResponseEntity.ok(keepersService.getAllActiveKeepers());
     }
 }
