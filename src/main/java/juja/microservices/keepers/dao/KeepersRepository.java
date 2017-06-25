@@ -2,7 +2,6 @@ package juja.microservices.keepers.dao;
 
 import juja.microservices.keepers.entity.Keeper;
 import juja.microservices.keepers.entity.KeeperRequest;
-import juja.microservices.keepers.entity.Keeper;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -38,7 +37,6 @@ public class KeepersRepository {
         return mongoTemplate.findOne(new Query(Criteria.where("uuid").is(uuid)), Keeper.class);
     }
 
-    //TODO Should be implemented work with MongoDB
     public Map<String, List<String>> getAllActiveKeepers(){
         Map<String, List<String>> outMap = new HashMap<>();
 
@@ -56,4 +54,6 @@ public class KeepersRepository {
         }
         return outMap;
     }
+
+    //TODO Should be implemented work with MongoDB
 }

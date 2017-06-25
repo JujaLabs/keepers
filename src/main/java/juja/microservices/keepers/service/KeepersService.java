@@ -38,9 +38,9 @@ public class KeepersService {
         return newKeeperId;
     }
 
-    //TODO Should be implemented internal service logic
-
     public Map<String, List<String>> getAllActiveKeepers() {
         return keepersRepository.getAllActiveKeepers();
     }
+
+    //TODO Should be implemented internal service logic
 }
