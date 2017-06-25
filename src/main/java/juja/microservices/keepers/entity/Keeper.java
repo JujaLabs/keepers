@@ -8,7 +8,7 @@ import java.util.Date;
 
 /**
  * @author Vadim Dyachenko
- *         Dmitriy Roy
+ * @author Dmitriy Roy
  */
 @Data
 @AllArgsConstructor

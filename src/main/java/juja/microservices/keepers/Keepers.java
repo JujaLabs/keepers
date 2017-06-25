@@ -21,7 +21,7 @@ import java.util.List;
 
 /**
  * @author Vadim Dyachenko
- *         Dmitriy Roy
+ * @author Dmitriy Roy
  */
 @SpringBootApplication
 public class Keepers {
