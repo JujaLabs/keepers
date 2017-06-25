@@ -22,9 +22,17 @@ public class KeeperTest {
         Keeper keeper = new Keeper("123qwe", "asdqwe", "teems", startDate);
 
         //Then
-        String expected = "Keeper(id=null, from=123qwe, uuid=asdqwe, direction=teems, " +
-                "startDate=Sat Apr 01 12:00:00 EEST 2017, dismissDate=null, isActive=true)";
-        assertEquals(expected, keeper.toString());
+        String expectedFrom = "123qwe";
+        String expectedUUiD = "asdqwe";
+        String expectedDirection = "teems";
+
+        assertEquals(null, keeper.getId());
+        assertEquals(expectedFrom, keeper.getFrom());
+        assertEquals(expectedUUiD, keeper.getUuid());
+        assertEquals(expectedDirection, keeper.getDirection());
+        assertEquals(startDate, keeper.getStartDate());
+        assertEquals(null, keeper.getDismissDate());
+        assertEquals(true, keeper.isActive());
     }
 
     @Test
@@ -39,8 +47,16 @@ public class KeeperTest {
         keeper.setDismissDate(LocalDateTime.of(2017, Month.MAY, 1, 12,0));
 
         //Then
-        String expected = "Keeper(id=null, from=123qwe, uuid=asdqwe, direction=teems, " +
-                "startDate=Sat Apr 01 12:00:00 EEST 2017, dismissDate=Mon May 01 12:00:00 EEST 2017, isActive=false)";
-        assertEquals(expected, keeper.toString());
+        String expectedFrom = "123qwe";
+        String expectedUUiD = "asdqwe";
+        String expectedDirection = "teems";
+
+        assertEquals(null, keeper.getId());
+        assertEquals(expectedFrom, keeper.getFrom());
+        assertEquals(expectedUUiD, keeper.getUuid());
+        assertEquals(expectedDirection, keeper.getDirection());
+        assertEquals(startDate, keeper.getStartDate());
+        assertNotNull(keeper.getDismissDate());
+        assertEquals(false, keeper.isActive());
     }
 }
