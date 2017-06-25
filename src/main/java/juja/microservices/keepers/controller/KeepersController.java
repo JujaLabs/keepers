@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.inject.Inject;
 import javax.validation.Valid;
 import java.net.HttpURLConnection;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +22,6 @@ import java.util.List;
  */
 @RestController
 public class KeepersController {
-
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Inject
@@ -51,8 +51,13 @@ public class KeepersController {
             @ApiResponse(code = HttpURLConnection.HTTP_BAD_METHOD, message = "Bad method")
     })
     public ResponseEntity<?> getDirections(@PathVariable String uuid) {
+        logger.debug(LocalDateTime.now() + " Invoke of KeepersController.getDirections()");
+
         List result = keepersService.getDirections(uuid);
-        logger.info("Request for active directions for keeper with uuid ", uuid);
+
+        logger.info("Number of returned keepers directions is ", result.size());
+        logger.debug(LocalDateTime.now() + "Request for active directions for keeper with uuid " + uuid +
+        " returned: " + result.toString());
         return ResponseEntity.ok(result);
     }
 

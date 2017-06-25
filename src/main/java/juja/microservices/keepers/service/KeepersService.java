@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,19 +15,19 @@ import java.util.List;
  */
 @Service
 public class KeepersService {
-
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Inject
     private KeepersRepository keepersRepository;
 
     public List getDirections(String uuid) {
+        logger.debug(LocalDateTime.now() + " Invoke of KeepersService.getDirections()");
+
         List result  = keepersRepository.getDirections(uuid);
 
-        if (result.isEmpty()) {
-            return new ArrayList<>();
-        }
-        logger.info("Request for active directions for keeper with uuid " + uuid);
+        logger.info("Number of returned keepers directions is ", result.size());
+        logger.debug(LocalDateTime.now() + "Request for active directions for keeper with uuid " + uuid +
+                " returned: " + result.toString());
         return result;
     }
 }
