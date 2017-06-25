@@ -11,7 +11,7 @@ import java.util.*;
 
 /**
  * @author Vadim Dyachenko
- * KPR-F4 Dmitriy Roy
+ *         Dmitriy Roy
  */
 @Repository
 public class KeepersRepository {

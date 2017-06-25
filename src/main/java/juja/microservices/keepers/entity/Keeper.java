@@ -8,7 +8,7 @@ import java.util.Date;
 
 /**
  * @author Vadim Dyachenko
- * KPR-F4 Dmitriy Roy
+ *         Dmitriy Roy
  */
 @Data
 @AllArgsConstructor

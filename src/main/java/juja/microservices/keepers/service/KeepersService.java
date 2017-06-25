@@ -9,7 +9,7 @@ import java.util.Map;
 
 /**
  * @author Vadim Dyachenko
- * KPR-F4 Dmitriy Roy
+ *         Dmitriy Roy
  */
 @Service
 public class KeepersService {
