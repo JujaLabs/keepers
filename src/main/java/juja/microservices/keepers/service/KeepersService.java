@@ -20,10 +20,10 @@ public class KeepersService {
     @Inject
     private KeepersRepository keepersRepository;
 
-    public List getDirections(String uuid) {
+    public List<String> getDirections(String uuid) {
         logger.debug(LocalDateTime.now() + " Invoke of KeepersService.getDirections()");
 
-        List result  = keepersRepository.getDirections(uuid);
+        List<String> result  = keepersRepository.getDirections(uuid);
 
         logger.info("Number of returned keepers directions is ", result.size());
         logger.debug(LocalDateTime.now() + "Request for active directions for keeper with uuid " + uuid +
