@@ -1,38 +1,38 @@
 {
-  "keepers": [
+  "keeper": [
     {
       "uuid": "0000c9999",
       "direction": "First active direction",
-      "startDate": "2017-06-15",
+      "startDate":{ "$date" : "2017-04-01T00:00:00.000Z"},
       "isActive": true
     },
     {
       "uuid": "0000c9999",
       "direction": "Second active direction",
-      "startDate": "2017-06-19",
+      "startDate":{ "$date" : "2017-04-01T00:00:00.000Z"},
       "isActive": true
     },
     {
       "uuid": "0000c9999",
       "direction": "Not active direction",
-      "startDate": "2017-06-21",
+      "startDate":{ "$date" : "2017-04-01T00:00:00.000Z"},
       "isActive": false
     },
     {
       "uuid": "0000c9999",
       "direction": "Not active direction and no isActive field",
-      "startDate": "2017-06-21"
+      "startDate":{ "$date" : "2017-04-01T00:00:00.000Z"}
     },
     {
       "uuid": "1111a9999",
       "direction": "Not active direction",
-      "startDate": "2017-06-21",
+      "startDate":{ "$date" : "2017-04-01T00:00:00.000Z"},
       "isActive": false
     },
     {
       "uuid": "1111a9999",
       "direction": "Not active direction",
-      "startDate": "2017-06-21",
+      "startDate":{ "$date" : "2017-04-01T00:00:00.000Z"},
       "isActive": false
     }
   ]
