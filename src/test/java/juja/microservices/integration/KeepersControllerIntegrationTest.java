@@ -64,6 +64,35 @@ public class KeepersControllerIntegrationTest extends BaseIntegrationTest{
 
     @Test
     @UsingDataSet(locations = "/datasets/oneKeeperInDB.json")
+    public void addKeeperAlreadyKeepDirectionIsActive() throws Exception {
+        //Given
+        String expected = "{" +
+                "\"httpStatus\":400," +
+                "\"internalErrorCode\":\"KPR-F1-D4\"," +
+                "\"clientMessage\":\"Sorry, but keeper with the requested uuid already keep the requested direction and he is active\"," +
+                "\"developerMessage\":\"Exception - KeeperDirectionActiveException\"," +
+                "\"exceptionMessage\":\"Keeper with uuid asdqwe already keep direction teems and he is active\"," +
+                "\"detailErrors\":[]}";
+
+        String json = "{" +
+                "  \"from\":\"asdqwe\"," +
+                "  \"uuid\":\"asdqwe\"," +
+                "  \"direction\":\"teems\"" +
+                "}";
+        //When
+        String result = mockMvc.perform(post("/keepers")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andExpect(content().contentType(APPLICATION_JSON_UTF8))
+                .andExpect(status().isBadRequest())
+                .andReturn().getResponse().getContentAsString();
+
+        //Then
+        assertEquals(expected, result);
+    }
+
+    @Test
+    @UsingDataSet(locations = "/datasets/oneKeeperInDB.json")
     public void addKeeperOk() throws Exception {
         //Given
         String json = "{" +

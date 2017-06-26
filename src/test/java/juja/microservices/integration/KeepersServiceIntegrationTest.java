@@ -5,6 +5,7 @@ import com.lordofthejars.nosqlunit.annotation.UsingDataSet;
 import juja.microservices.keepers.dao.KeepersRepository;
 import juja.microservices.keepers.entity.KeeperRequest;
 import juja.microservices.keepers.exception.KeeperAccessException;
+import juja.microservices.keepers.exception.KeeperDirectionActiveException;
 import juja.microservices.keepers.service.KeepersService;
 
 import org.junit.Rule;
@@ -39,6 +40,16 @@ public class KeepersServiceIntegrationTest extends BaseIntegrationTest {
     public void addKeeperNotExistKeeper() {
         //Given
         KeeperRequest request = new KeeperRequest("123qwe", "asdqwe", "teems");
+
+        //When
+        service.addKeeper(request);
+    }
+
+    @Test(expected = KeeperDirectionActiveException.class)
+    @UsingDataSet(locations = "/datasets/oneKeeperInDB.json")
+    public void addKeeperWhichKeeperAlreadyKeepDirectionIsAlive() {
+        //Given
+        KeeperRequest request = new KeeperRequest("asdqwe", "asdqwe", "teems");
 
         //When
         service.addKeeper(request);

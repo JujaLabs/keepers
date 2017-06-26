@@ -4,6 +4,7 @@ import juja.microservices.keepers.dao.KeepersRepository;
 import juja.microservices.keepers.entity.Keeper;
 import juja.microservices.keepers.entity.KeeperRequest;
 import juja.microservices.keepers.exception.KeeperAccessException;
+import juja.microservices.keepers.exception.KeeperDirectionActiveException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.ZoneId;
 import java.util.Date;
+
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.junit.Assert.*;
@@ -38,6 +40,17 @@ public class KeepersServiceTest {
     public void addKeeperWithKeeperAccessException(){
         //Given
         when(repository.findOneByUUId(anyString())).thenReturn(null);
+
+        //When
+        service.addKeeper(new KeeperRequest("123qwe", "asdqwe", "teems"));
+    }
+
+    @Test(expected = KeeperDirectionActiveException.class)
+    public void addKeeperWithKeeperDirectionActiveException(){
+        //Given
+        Keeper keeper = new Keeper("some", "some", "some", new Date());
+        when(repository.findOneByUUId(anyString())).thenReturn(keeper);
+        when(repository.findOneByUUIdAndDirectionIsActive(anyString(), anyString())).thenReturn(keeper);
 
         //When
         service.addKeeper(new KeeperRequest("123qwe", "asdqwe", "teems"));

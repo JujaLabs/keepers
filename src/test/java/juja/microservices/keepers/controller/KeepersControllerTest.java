@@ -2,6 +2,7 @@ package juja.microservices.keepers.controller;
 
 import juja.microservices.keepers.entity.KeeperRequest;
 import juja.microservices.keepers.exception.KeeperAccessException;
+import juja.microservices.keepers.exception.KeeperDirectionActiveException;
 import juja.microservices.keepers.service.KeepersService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -82,6 +83,18 @@ public class KeepersControllerTest {
         KeeperRequest keeperRequest = new KeeperRequest("123qwe", "asdqwe", "teems");
         when(service.addKeeper(keeperRequest)).thenThrow(
                 new KeeperAccessException("Only the keeper can appoint another keeper"));
+
+        //When
+        controller.addKeeper(keeperRequest);
+    }
+
+    @Test(expected = KeeperDirectionActiveException.class)
+    public void addKeeperBadRequestOther(){
+        //Given
+        KeeperRequest keeperRequest = new KeeperRequest("123qwe", "asdqwe", "teems");
+        when(service.addKeeper(keeperRequest)).thenThrow(
+            new KeeperDirectionActiveException("Keeper with uuid " + keeperRequest.getUuid() + " already keep direction "
+                + keeperRequest.getDirection() + " and he is active"));
 
         //When
         controller.addKeeper(keeperRequest);
