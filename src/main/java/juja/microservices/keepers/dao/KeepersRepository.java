@@ -1,5 +1,6 @@
 package juja.microservices.keepers.dao;
 
+import juja.microservices.keepers.entity.Keeper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.inject.Inject;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,13 +23,16 @@ public class KeepersRepository {
     @Inject
     private MongoTemplate mongoTemplate;
 
-    public List getDirections(String uuid) {
+    public List<String> getDirections(String uuid) {
         logger.debug(LocalDateTime.now() + " Invoke of KeepersRepository.getDirections()");
 
-        Query query = new Query();
-        query.addCriteria(Criteria.where("uuid").is(uuid).and("isActive").is(Boolean.TRUE));
-        List result = mongoTemplate.getCollection("keepers")
-                .distinct("direction", query.getQueryObject());
+        List<Keeper> queryResult = mongoTemplate.find(new Query(
+                Criteria.where("uuid").is(uuid).and("isActive").is(true)), Keeper.class);
+
+        List<String> result = new ArrayList<>();
+        for (Keeper item : queryResult) {
+            result.add(item.getDirection());
+        }
 
         logger.info("Number of returned keepers directions is ", result.size());
         logger.debug(LocalDateTime.now() + "Request for active directions for keeper with uuid " + uuid +

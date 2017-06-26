@@ -53,7 +53,7 @@ public class KeepersController {
     public ResponseEntity<?> getDirections(@PathVariable String uuid) {
         logger.debug(LocalDateTime.now() + " Invoke of KeepersController.getDirections()");
 
-        List result = keepersService.getDirections(uuid);
+        List<String> result = keepersService.getDirections(uuid);
 
         logger.info("Number of returned keepers directions is ", result.size());
         logger.debug(LocalDateTime.now() + "Request for active directions for keeper with uuid " + uuid +
