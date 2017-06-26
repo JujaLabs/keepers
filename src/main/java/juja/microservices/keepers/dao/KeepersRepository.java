@@ -37,6 +37,12 @@ public class KeepersRepository {
         return mongoTemplate.findOne(new Query(Criteria.where("uuid").is(uuid)), Keeper.class);
     }
 
+    public Keeper findOneByUUIdAndDirectionIsActive(String uuid, String direction){
+        return mongoTemplate.findOne(new Query(Criteria.where("uuid").is(uuid))
+                                                .addCriteria(Criteria.where("direction").is(direction))
+                                                .addCriteria(Criteria.where("isAlive").is(true)), Keeper.class);
+    }
+
     public Map<String, List<String>> getAllActiveKeepers(){
         Map<String, List<String>> outMap = new HashMap<>();
 

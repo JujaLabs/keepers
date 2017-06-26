@@ -3,6 +3,7 @@ package juja.microservices.keepers.service;
 import juja.microservices.keepers.dao.KeepersRepository;
 import juja.microservices.keepers.entity.KeeperRequest;
 import juja.microservices.keepers.exception.KeeperAccessException;
+import juja.microservices.keepers.exception.KeeperDirectionActiveException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,13 @@ public class KeepersService {
         if(keepersRepository.findOneByUUId(keeperRequest.getFrom()) == null){
             logger.warn("User '{}' tried to add new 'Keeper' but he is not a Keeper", keeperRequest.getFrom());
             throw new KeeperAccessException("Only the keeper can appoint another keeper");
+        }
+
+        if(keepersRepository.findOneByUUIdAndDirectionIsActive(keeperRequest.getUuid(), keeperRequest.getDirection()) != null){
+            logger.warn("Keeper with uuid '{}' already keep direction '{}' and he is active",
+                    keeperRequest.getUuid(), keeperRequest.getDirection());
+            throw new KeeperDirectionActiveException("Keeper with uuid " + keeperRequest.getUuid() + " already keep direction "
+                    + keeperRequest.getDirection() + " and he is active");
         }
 
         String newKeeperId = keepersRepository.save(keeperRequest);
