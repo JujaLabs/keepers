@@ -50,7 +50,11 @@ class ApiErrorMessage {
         this.detailErrors = new ArrayList<>();
     }
 
-     static class ApiErrorMessageBuilder {
+    public String getExceptionMessage() {
+        return exceptionMessage;
+    }
+
+    static class ApiErrorMessageBuilder {
 
         private ApiErrorMessage instance;
 

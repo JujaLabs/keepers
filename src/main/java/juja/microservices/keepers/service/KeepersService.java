@@ -9,9 +9,11 @@ import javax.inject.Inject;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Vadim Dyachenko
+ * @author Dmitriy Roy
  */
 @Service
 public class KeepersService {
@@ -29,5 +31,9 @@ public class KeepersService {
         logger.debug(LocalDateTime.now() + "Request for active directions for keeper with uuid " + uuid +
                 " returned: " + result.toString());
         return result;
+    }
+
+    public Map<String, List<String>> getAllActiveKeepers() {
+        return keepersRepository.getAllActiveKeepers();
     }
 }
