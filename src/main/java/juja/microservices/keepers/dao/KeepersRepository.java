@@ -54,6 +54,4 @@ public class KeepersRepository {
         }
         return outMap;
     }
-
-    //TODO Should be implemented work with MongoDB
 }

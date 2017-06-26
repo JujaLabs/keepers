@@ -41,6 +41,4 @@ public class KeepersService {
     public Map<String, List<String>> getAllActiveKeepers() {
         return keepersRepository.getAllActiveKeepers();
     }
-
-    //TODO Should be implemented internal service logic
 }
