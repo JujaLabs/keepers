@@ -22,7 +22,6 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,6 +50,28 @@ public class ApiExceptionsHandler extends ResponseEntityExceptionHandler {
                         .httpStatus(HttpStatus.BAD_REQUEST.value())
                         .exceptionMessage(ex.getMessage())
                         .build();
+        return new ResponseEntity<>(message,HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(KeeperAccessException.class)
+    public ResponseEntity<ApiErrorMessage> handleKeeperAccessException(KeeperAccessException ex) {
+        ApiErrorMessage message =
+                ApiErrorMessage.builder(ApiErrorStatus.KEEPER_ACCESS_EXCEPTION)
+                        .httpStatus(HttpStatus.BAD_REQUEST.value())
+                        .exceptionMessage(ex.getMessage())
+                        .build();
+        logger.warn("handleKeeperAccessException before out " + message);
+        return new ResponseEntity<>(message,HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(KeeperDirectionActiveException.class)
+    public ResponseEntity<ApiErrorMessage> handleKeeperDirectionActiveException(KeeperDirectionActiveException ex) {
+        ApiErrorMessage message =
+                ApiErrorMessage.builder(ApiErrorStatus.KEEPER_DIRECTION_ACTIVE_EXCEPTION)
+                        .httpStatus(HttpStatus.BAD_REQUEST.value())
+                        .exceptionMessage(ex.getMessage())
+                        .build();
+        logger.warn("handleKeeperDirectionActiveException before out " + message);
         return new ResponseEntity<>(message,HttpStatus.BAD_REQUEST);
     }
 

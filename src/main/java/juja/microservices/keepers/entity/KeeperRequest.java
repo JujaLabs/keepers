@@ -7,8 +7,8 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * @author Vadim Dyachenko
- * @author Dmitriy Roy
  */
+
 @Getter
 public class KeeperRequest {
 
