@@ -93,7 +93,7 @@ public class KeepersControllerTest {
         //Given
         KeeperRequest keeperRequest = new KeeperRequest("123qwe", "asdqwe", "teems");
         when(service.addKeeper(keeperRequest)).thenThrow(
-            new KeeperDirectionActiveException("Keeper with uuid " + keeperRequest.getUuid() + " already keep direction "
+            new KeeperDirectionActiveException("Keeper with uuid " + keeperRequest.getUuid() + " already keeps direction "
                 + keeperRequest.getDirection() + " and he is active"));
 
         //When

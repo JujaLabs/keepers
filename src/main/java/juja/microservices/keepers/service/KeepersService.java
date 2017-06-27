@@ -33,9 +33,9 @@ public class KeepersService {
         }
 
         if(keepersRepository.findOneByUUIdAndDirectionIsActive(keeperRequest.getUuid(), keeperRequest.getDirection()) != null){
-            logger.warn("Keeper with uuid '{}' already keep direction '{}' and he is active",
+            logger.warn("Keeper with uuid '{}' already keeps direction '{}' and he is active",
                     keeperRequest.getUuid(), keeperRequest.getDirection());
-            throw new KeeperDirectionActiveException("Keeper with uuid " + keeperRequest.getUuid() + " already keep direction "
+            throw new KeeperDirectionActiveException("Keeper with uuid " + keeperRequest.getUuid() + " already keeps direction "
                     + keeperRequest.getDirection() + " and he is active");
         }
 

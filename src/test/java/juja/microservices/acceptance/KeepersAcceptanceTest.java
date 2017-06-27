@@ -44,7 +44,7 @@ public class KeepersAcceptanceTest extends BaseAcceptanceTest{
         //Given
         String jsonContentRequest = convertToString(resource("acceptance/request/addKeeperOther.json"));
         String jsonContentControlResponse = convertToString(
-                resource("acceptance/response/responseAddKeeperAlreadyKeepDirectionIsAlive.json"));
+                resource("acceptance/response/responseAddKeeperAlreadyKeepsDirectionIsAlive.json"));
 
         //When
         Response actualResponse = getRealResponse("/keepers", jsonContentRequest, HttpMethod.POST);

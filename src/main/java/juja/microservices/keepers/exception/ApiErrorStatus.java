@@ -18,7 +18,7 @@ public enum ApiErrorStatus {
 
     KEEPER_DIRECTION_ACTIVE_EXCEPTION(
             "KPR-F1-D4",
-            "Sorry, but keeper with the requested uuid already keep the requested direction and he is active",
+            "Sorry, but keeper with the requested uuid already keeps the requested direction and he is active",
             "Exception - KeeperDirectionActiveException"
     ),
 
