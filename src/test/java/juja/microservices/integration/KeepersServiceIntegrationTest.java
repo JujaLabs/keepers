@@ -17,6 +17,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.inject.Inject;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 /**
@@ -66,5 +69,36 @@ public class KeepersServiceIntegrationTest extends BaseIntegrationTest {
         //Then
         assertNotNull(result);
         assertNotNull(result2);
+    }
+
+    @Test
+    @UsingDataSet(locations = "/datasets/getKeeperDirections.json")
+    public void shouldReturnDirections() {
+        //Given
+        List<String> expectedList = Arrays.asList("First active direction", "Second active direction");
+        //When
+        List<String> actualList = repository.getDirections("0000c9999");
+        //Then
+        assertEquals(expectedList, actualList);
+    }
+
+    @Test
+    @UsingDataSet(locations = "/datasets/getKeeperDirections.json")
+    public void shouldReturnCorrectSize() {
+        //Given
+        List<String> expectedList = Arrays.asList("First active direction", "Second active direction");
+        //When
+        List<String> actualList = repository.getDirections("0000c9999");
+        //Then
+        assertEquals(2, actualList.size());
+    }
+
+    @Test
+    @UsingDataSet(locations = "/datasets/getKeeperDirections.json")
+    public void shouldReturnEmptyList() {
+        //When
+        List<String> actualList = repository.getDirections("1111a9999");
+        //Then
+        assertEquals(0, actualList.size());
     }
 }
