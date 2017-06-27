@@ -1,7 +1,6 @@
 package juja.microservices.keepers.exception;
 
 import lombok.Getter;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,7 +49,11 @@ class ApiErrorMessage {
         this.detailErrors = new ArrayList<>();
     }
 
-     static class ApiErrorMessageBuilder {
+    public String getExceptionMessage() {
+        return exceptionMessage;
+    }
+
+    static class ApiErrorMessageBuilder {
 
         private ApiErrorMessage instance;
 

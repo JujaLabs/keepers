@@ -10,11 +10,11 @@ import juja.microservices.keepers.Keepers;
 import org.junit.Rule;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.web.context.WebApplicationContext;
-
 import javax.inject.Inject;
 import static juja.microservices.integration.KeepersTestConfig.TEST_DATABASE_NAME;
+
 /**
- * @author Vadim Dyachenko
+ * @author danil.kuznetsov
  */
 
 @SpringBootTest(classes = {KeepersTestConfig.class, Keepers.class})

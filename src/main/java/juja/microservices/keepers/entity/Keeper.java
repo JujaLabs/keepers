@@ -1,34 +1,51 @@
 package juja.microservices.keepers.entity;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-
+import lombok.Getter;
+import lombok.ToString;
+import org.springframework.data.annotation.Id;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 
 /**
- * @author Vadim Dyachenko
- * @author Dmitriy Roy
+ * @author Dmitriy Lyashenko
  */
-@Data
-@AllArgsConstructor
+
+@Getter
+@ToString
 public class Keeper {
-    @JsonProperty("id")
+
+    @Id
     private String id;
-    @JsonProperty("uuid")
-    private String uuid;
-    @JsonProperty("from")
+
     private String from;
-    @JsonProperty("direction")
+    private String uuid;
     private String direction;
-    @JsonProperty("startDate")
-    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
+
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
     private Date startDate;
-    @JsonProperty("dismissDate")
-    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
+
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
     private Date dismissDate;
-    @JsonProperty("isActive")
     private boolean isActive;
 
+    @JsonCreator
+    public Keeper(@JsonProperty("from") String from,
+                  @JsonProperty("uuid") String uuid,
+                  @JsonProperty("direction") String direction,
+                  @JsonProperty("startDate") Date startDate) {
+        this.from = from;
+        this.uuid = uuid;
+        this.direction = direction;
+        this.startDate = startDate;
+        this.isActive = true;
+    }
+
+    public void setDismissDate(LocalDateTime dismissDate) {
+        this.dismissDate = Date.from(dismissDate.atZone(ZoneId.systemDefault()).toInstant());
+        this.isActive = false;
+    }
 }

@@ -6,6 +6,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -20,14 +21,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
- * @author Vadim Dyachenko
+ * @author Dmitriy Lyashenko
  */
 
 @RunWith(SpringRunner.class)
-public class KeepersControllerIntegrationTest extends BaseIntegrationTest {
+public class KeepersControllerIntegrationTest extends BaseIntegrationTest{
 
     private static final String ADD_KEEPER_URL = "/keepers";
     private static final String GET_DIRECTIONS_URL = "/keepers/0000c9999";
+
     private MockMvc mockMvc;
 
     @Rule
@@ -39,30 +41,114 @@ public class KeepersControllerIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    @UsingDataSet(locations = "/datasets/initEmptyDb.json")
-    public void addKeeperTest() throws Exception {
+    @UsingDataSet(locations = "/datasets/oneKeeperInDB.json")
+    public void addKeeperNotExistUUID() throws Exception {
+        //Given
+        String expected = "{" +
+                "\"httpStatus\":400," +
+                "\"internalErrorCode\":\"KPR-F1-D4\"," +
+                "\"clientMessage\":\"Sorry, but you're not a keeper\"," +
+                "\"developerMessage\":\"Exception - KeeperAccessException\"," +
+                "\"exceptionMessage\":\"Only the keeper can appoint another keeper\"," +
+                "\"detailErrors\":[]}";
 
-        String jsonContentRequest = "{\"from\":\"admin\",\"uuid\":\"12345\",\"direction\":\"LMS\"}";
-        mockMvc.perform(post(ADD_KEEPER_URL)
-                .contentType(APPLICATION_JSON_UTF8)
-                .content(jsonContentRequest))
+        String json = "{" +
+                "  \"from\":\"bill\"," +
+                "  \"uuid\":\"max\"," +
+                "  \"direction\":\"SomeDirection\"" +
+                "}";
+        //When
+        String result = mockMvc.perform(post("/keepers")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andExpect(content().contentType(APPLICATION_JSON_UTF8))
+                .andExpect(status().isBadRequest())
+                .andReturn().getResponse().getContentAsString();
+
+        //Then
+        assertEquals(expected, result);
+    }
+
+    @Test
+    @UsingDataSet(locations = "/datasets/oneKeeperInDB.json")
+    public void addKeeperAlreadyKeepDirectionIsActive() throws Exception {
+        //Given
+        String expected = "{" +
+                "\"httpStatus\":400," +
+                "\"internalErrorCode\":\"KPR-F1-D4\"," +
+                "\"clientMessage\":\"Sorry, but keeper with the requested uuid already keeps the requested direction and he is active\"," +
+                "\"developerMessage\":\"Exception - KeeperDirectionActiveException\"," +
+                "\"exceptionMessage\":\"Keeper with uuid asdqwe already keeps direction teems and he is active\"," +
+                "\"detailErrors\":[]}";
+
+        String json = "{" +
+                "  \"from\":\"asdqwe\"," +
+                "  \"uuid\":\"asdqwe\"," +
+                "  \"direction\":\"teems\"" +
+                "}";
+        //When
+        String result = mockMvc.perform(post("/keepers")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andExpect(content().contentType(APPLICATION_JSON_UTF8))
+                .andExpect(status().isBadRequest())
+                .andReturn().getResponse().getContentAsString();
+
+        //Then
+        assertEquals(expected, result);
+    }
+
+    @Test
+    @UsingDataSet(locations = "/datasets/oneKeeperInDB.json")
+    public void addKeeperOk() throws Exception {
+        //Given
+        String json = "{" +
+                "  \"from\":\"asdqwe\"," +
+                "  \"uuid\":\"max\"," +
+                "  \"direction\":\"SomeDirection\"" +
+                "}";
+
+        //Then
+        mockMvc.perform(post("/keepers")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
     }
 
     @Test
+    @UsingDataSet(locations = "/datasets/initEmptyDb.json")
+    public void addKeeperInEmptyDb() throws Exception {
+        //Given
+        String json = "{" +
+                "  \"from\":\"bob\"," +
+                "  \"uuid\":\"max\"," +
+                "  \"direction\":\"SomeDirection\"" +
+                "}";
+
+        //Then
+        mockMvc.perform(post("/keepers")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andExpect(content().contentType(APPLICATION_JSON_UTF8))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     @UsingDataSet(locations = "/datasets/getKeeperDirections.json")
     public void getDirectionsAndReturnJson() throws Exception {
+        //Given
         String expected = "[\"First active direction\",\"Second active direction\"]";
         mockMvc.perform(get(GET_DIRECTIONS_URL)
                 .contentType(APPLICATION_JSON_UTF8))
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
-
+        //When
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get(GET_DIRECTIONS_URL)
                 .contentType(APPLICATION_JSON_UTF8))
                 .andReturn();
         String content = result.getResponse().getContentAsString();
+        //Then
         assertEquals(expected, content);
     }
 }
