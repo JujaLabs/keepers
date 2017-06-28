@@ -27,13 +27,12 @@ public class KeepersService {
     private KeepersRepository keepersRepository;
 
     public List<String> getDirections(String uuid) {
-        logger.debug(LocalDateTime.now() + " Invoke of KeepersService.getDirections()");
+        logger.debug("Invoke of KeepersService.getDirections()");
 
         List<String> result = keepersRepository.getDirections(uuid);
 
-        logger.info("Number of returned keepers directions is ", result.size());
-        logger.debug(LocalDateTime.now() + "Request for active directions for keeper with uuid " + uuid +
-                " returned: " + result.toString());
+        logger.info("Number of returned keepers directions is " + result.size());
+        logger.debug("Request for active directions for keeper with uuid " + uuid + " returned: " + result.toString());
         return result;
     }
 
