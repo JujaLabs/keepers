@@ -13,7 +13,6 @@ import java.util.Date;
 /**
  * @author Dmitriy Lyashenko
  */
-
 @Getter
 @ToString
 public class Keeper {

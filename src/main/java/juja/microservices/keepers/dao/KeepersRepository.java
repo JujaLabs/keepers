@@ -14,9 +14,9 @@ import java.util.*;
 
 /**
  * @author Vadim Dyachenko
+ * @author Dmitriy Lyashenko
  * @author Dmitriy Roy
  */
-
 @Repository
 public class KeepersRepository {
 

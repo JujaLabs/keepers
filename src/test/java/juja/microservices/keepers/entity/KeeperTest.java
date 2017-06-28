@@ -10,7 +10,6 @@ import static org.junit.Assert.*;
 /**
  * @author Dmitriy Lyashenko
  */
-
 public class KeeperTest {
 
     @Test

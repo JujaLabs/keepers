@@ -20,8 +20,8 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 
 /**
  * @author Danil Kuznetsov
+ * @author Dmitriy Lyashenko
  */
-
 @SpringBootTest(webEnvironment = RANDOM_PORT, classes = {Keepers.class})
 @DirtiesContext
 public class BaseAcceptanceTest {
