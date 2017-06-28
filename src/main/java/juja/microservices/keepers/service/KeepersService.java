@@ -26,7 +26,7 @@ public class KeepersService {
     private KeepersRepository keepersRepository;
 
     public String addKeeper(KeeperRequest keeperRequest){
-        logger.debug("Service.addKeeper after in, parameters: " + keeperRequest.toString());
+        logger.debug("Service.addKeeper after in, parameters: {}", keeperRequest.toString());
         if(keepersRepository.findOneByUUId(keeperRequest.getFrom()) == null){
             logger.warn("User '{}' tried to add new 'Keeper' but he is not a Keeper", keeperRequest.getFrom());
             throw new KeeperAccessException("Only the keeper can appoint another keeper");
@@ -42,7 +42,7 @@ public class KeepersService {
         String newKeeperId = keepersRepository.save(keeperRequest);
         logger.info("Added new 'Keeper' with DBId'{}', with uuid {}, from user '{}'",
                 newKeeperId, keeperRequest.getUuid(), keeperRequest.getFrom());
-        logger.debug("Service.addKeeper before out, parameters: " + newKeeperId);
+        logger.debug("Service.addKeeper before out, parameters: {}", newKeeperId);
         return newKeeperId;
     }
 

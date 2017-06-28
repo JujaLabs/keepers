@@ -41,11 +41,11 @@ public class KeepersController {
             @ApiResponse(code = HttpURLConnection.HTTP_UNSUPPORTED_TYPE, message = "Unsupported request media type")
     })
     public ResponseEntity<?> addKeeper(@Valid @RequestBody KeeperRequest request) {
-        logger.debug("Controller.addKeeper after in " + request.toString());
+        logger.debug("Controller.addKeeper after in, parameters: {}", request.toString());
         String keeperId = keepersService.addKeeper(request);
         List<String> ids = Collections.singletonList(keeperId);
         logger.info("Added new 'Keeper', ids = {}", ids.toString());
-        logger.debug("Controller.addKeeper before out "+ ids.toString());
+        logger.debug("Controller.addKeeper before out, parameters: {}", ids.toString());
         return ResponseEntity.ok(ids);
     }
 
