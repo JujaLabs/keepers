@@ -29,7 +29,7 @@ public class KeepersRepository {
     private MongoTemplate mongoTemplate;
 
     public List<String> getDirections(String uuid) {
-        logger.debug("Invoke of KeepersRepository.getDirections()");
+        logger.debug("Received get directions by uuid request. Requested uuid: {}", uuid);
 
         List<Keeper> queryResult = mongoTemplate.find(new Query(
                 Criteria.where("uuid").is(uuid).and("isActive").is(true)), Keeper.class);
@@ -39,8 +39,8 @@ public class KeepersRepository {
             result.add(item.getDirection());
         }
 
-        logger.info("Number of returned keepers directions is " + result.size());
-        logger.debug("Request for active directions for keeper with uuid " + uuid + " returned: " + result.toString());
+        logger.info("Number of returned keeper directions is {}", result.size());
+        logger.debug("Request for active directions for keeper returned {}", result.toString());
         return result;
     }
 

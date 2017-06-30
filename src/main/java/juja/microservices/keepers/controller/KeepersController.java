@@ -67,12 +67,12 @@ public class KeepersController {
             @ApiResponse(code = HttpURLConnection.HTTP_BAD_METHOD, message = "Bad method")
     })
     public ResponseEntity<?> getDirections(@PathVariable String uuid) {
-        logger.debug("Invoke of KeepersController.getDirections()");
+        logger.debug("Received get directions by uuid request. Requested uuid: {}", uuid);
 
         List<String> result = keepersService.getDirections(uuid);
 
-        logger.info("Number of returned keepers directions is " + result.size());
-        logger.debug("Request for active directions for keeper with uuid " + uuid + " returned: " + result.toString());
+        logger.info("Number of returned keeper directions is {}", result.size());
+        logger.debug("Request for active directions for keeper returned {}", result.toString());
         return ResponseEntity.ok(result);
     }
 
