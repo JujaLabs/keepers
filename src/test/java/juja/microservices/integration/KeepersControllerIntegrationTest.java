@@ -23,7 +23,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * @author Dmitriy Lyashenko
  */
-
 @RunWith(SpringRunner.class)
 public class KeepersControllerIntegrationTest extends BaseIntegrationTest{
 

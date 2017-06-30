@@ -15,7 +15,6 @@ import static net.javacrumbs.jsonunit.fluent.JsonFluentAssert.assertThatJson;
 /**
  * @author Dmitriy Lyashenko
  */
-
 @RunWith(SpringRunner.class)
 public class KeepersAcceptanceTest extends BaseAcceptanceTest{
 

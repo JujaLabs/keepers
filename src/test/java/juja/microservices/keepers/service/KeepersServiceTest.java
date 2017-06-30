@@ -32,7 +32,6 @@ import static org.mockito.Matchers.anyString;
 /**
  * @author Dmitriy Lyashenko
  */
-
 @RunWith(SpringRunner.class)
 @WebMvcTest(KeepersService.class)
 public class KeepersServiceTest {

@@ -26,7 +26,6 @@ import static org.mockito.Mockito.*;
 /**
  * @author Dmitriy Lyashenko
  */
-
 @RunWith(SpringRunner.class)
 @WebMvcTest(KeepersRepository.class)
 public class KeepersRepositoryTest {

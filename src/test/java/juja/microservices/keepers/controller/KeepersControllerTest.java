@@ -28,8 +28,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 /**
  * @author Vadim Dyachenko
+ * @author Dmitriy Lyashenko
  */
-
 @RunWith(SpringRunner.class)
 @WebMvcTest(KeepersController.class)
 public class KeepersControllerTest {

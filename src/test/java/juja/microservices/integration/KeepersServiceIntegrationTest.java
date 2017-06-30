@@ -14,7 +14,6 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
 import org.springframework.test.context.junit4.SpringRunner;
-
 import javax.inject.Inject;
 
 import java.util.Arrays;
@@ -25,7 +24,6 @@ import static org.junit.Assert.*;
 /**
  * @author Dmitriy Lyashenko
  */
-
 @RunWith(SpringRunner.class)
 public class KeepersServiceIntegrationTest extends BaseIntegrationTest {
 
