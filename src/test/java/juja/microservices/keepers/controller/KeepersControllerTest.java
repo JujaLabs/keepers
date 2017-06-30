@@ -22,8 +22,8 @@ import static org.junit.Assert.*;
 
 /**
  * @author Vadim Dyachenko
+ * @author Dmitriy Lyashenko
  */
-
 @RunWith(SpringRunner.class)
 @WebMvcTest(KeepersController.class)
 public class KeepersControllerTest {

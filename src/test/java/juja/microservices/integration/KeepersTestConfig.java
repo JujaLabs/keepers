@@ -11,7 +11,6 @@ import javax.inject.Inject;
 /**
  * @author danil.kuznetsov
  */
-
 @TestConfiguration
 public class KeepersTestConfig extends AbstractMongoConfiguration {
 

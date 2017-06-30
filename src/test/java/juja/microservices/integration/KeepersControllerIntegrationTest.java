@@ -19,7 +19,6 @@ import static org.junit.Assert.*;
 /**
  * @author Dmitriy Lyashenko
  */
-
 @RunWith(SpringRunner.class)
 public class KeepersControllerIntegrationTest extends BaseIntegrationTest{
 
