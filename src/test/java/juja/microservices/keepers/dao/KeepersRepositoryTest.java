@@ -15,7 +15,8 @@ import javax.inject.Inject;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.ZoneId;
-import java.util.Date;
+import java.util.*;
+
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
@@ -57,4 +58,39 @@ public class KeepersRepositoryTest {
         //Then
         assertEquals(keeper, repository.findOneByUUId("456rty"));
     }
+
+    @Test
+    public void getAllActiveKeepers(){
+        //Given
+        List<Keeper> listActiveKeepers = new ArrayList<>();
+        Keeper activeKeeper1 = new Keeper("uuidFrom1", "uuidTo1", "teems", new Date());
+        Keeper activeKeeper2 = new Keeper("uuidFrom2", "uuidTo1", "sqlcmd", new Date());
+        Keeper activeKeeper3 = new Keeper("uuidFrom1", "uuidTo2", "sqlcmd", new Date());
+        listActiveKeepers.add(activeKeeper1);
+        listActiveKeepers.add(activeKeeper2);
+        listActiveKeepers.add(activeKeeper3);
+
+        Map<String, List<String>> mapActiveKeepers = new HashMap(){};
+        for (Keeper keeper : listActiveKeepers) {
+            List<String> directions = new ArrayList<>();
+            if(mapActiveKeepers.containsKey(keeper.getUuid())) {
+                directions = mapActiveKeepers.get(keeper.getUuid());
+                directions.add(keeper.getDirection());
+                mapActiveKeepers.replace(keeper.getUuid(),directions);
+            }else{
+                directions.add(keeper.getDirection());
+                mapActiveKeepers.put(keeper.getUuid(), directions);
+            }
+        }
+
+        //When
+        when(mongoTemplate.find(new Query(Criteria.where("isActive").is(true)), Keeper.class))
+                .thenReturn(listActiveKeepers);
+
+        //Then
+        assertEquals(mapActiveKeepers, repository.getAllActiveKeepers());
+
+    }
+
+
 }

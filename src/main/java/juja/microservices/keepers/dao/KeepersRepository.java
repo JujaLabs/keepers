@@ -45,7 +45,7 @@ public class KeepersRepository {
     public Map<String, List<String>> getAllActiveKeepers(){
         Map<String, List<String>> outMap = new HashMap<>();
 
-        List<Keeper> keepers = mongoTemplate.find(new Query(Criteria.where("isActive").is(true)), Keeper.class,"keeper");
+        List<Keeper> keepers = mongoTemplate.find(new Query(Criteria.where("isActive").is(true)), Keeper.class);
         for (Keeper keeper : keepers) {
             List<String> directions = new ArrayList<>();
             if(outMap.containsKey(keeper.getUuid())) {
