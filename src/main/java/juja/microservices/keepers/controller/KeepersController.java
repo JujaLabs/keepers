@@ -12,15 +12,15 @@ import org.springframework.web.bind.annotation.*;
 import javax.inject.Inject;
 import javax.validation.Valid;
 import java.net.HttpURLConnection;
-import java.time.LocalDateTime;
+
 import java.util.Collections;
 import java.util.List;
 
 /**
  * @author Vadim Dyachenko
+ * @author Dmitriy Lyashenko
  * @author Dmitriy Roy
  */
-
 @RestController
 public class KeepersController {
 
@@ -41,11 +41,11 @@ public class KeepersController {
             @ApiResponse(code = HttpURLConnection.HTTP_UNSUPPORTED_TYPE, message = "Unsupported request media type")
     })
     public ResponseEntity<?> addKeeper(@Valid @RequestBody KeeperRequest request) {
-        logger.debug("Controller.addKeeper after in " + LocalDateTime.now() + " " + request.toString());
+        logger.debug("Controller.addKeeper after in, parameters: {}", request.toString());
         String keeperId = keepersService.addKeeper(request);
         List<String> ids = Collections.singletonList(keeperId);
         logger.info("Added new 'Keeper', ids = {}", ids.toString());
-        logger.debug("Controller.addKeeper before out " + LocalDateTime.now() + " " + ids.toString());
+        logger.debug("Controller.addKeeper before out, parameters: {}", ids.toString());
         return ResponseEntity.ok(ids);
     }
 

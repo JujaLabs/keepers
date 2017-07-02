@@ -16,7 +16,6 @@ import static juja.microservices.integration.KeepersTestConfig.TEST_DATABASE_NAM
 /**
  * @author danil.kuznetsov
  */
-
 @SpringBootTest(classes = {KeepersTestConfig.class, Keepers.class})
 public class BaseIntegrationTest {
 
