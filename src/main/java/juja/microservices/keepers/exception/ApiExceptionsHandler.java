@@ -27,6 +27,7 @@ import java.util.List;
 
 /**
  * @author Vadim Dyachenko
+ * @author Dmitriy Lyashenko
  */
 @RestControllerAdvice
 public class ApiExceptionsHandler extends ResponseEntityExceptionHandler {

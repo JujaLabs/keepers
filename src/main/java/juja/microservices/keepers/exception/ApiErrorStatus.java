@@ -2,6 +2,7 @@ package juja.microservices.keepers.exception;
 
 /**
  * @author Vadim Dyachenko
+ * @author Dmitriy Lyashenko
  */
 public enum ApiErrorStatus {
     KEEPERS_EXCEPTION(
