@@ -88,7 +88,7 @@ public class KeepersRepositoryTest {
                 .thenReturn(listActiveKeepers);
 
         //Then
-        assertEquals(mapActiveKeepers, repository.getAllActiveKeepers());
+        assertEquals(mapActiveKeepers, repository.getActiveKeepers());
 
     }
 

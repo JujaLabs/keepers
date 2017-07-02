@@ -72,7 +72,7 @@ public class KeepersController {
             @ApiResponse(code = HttpURLConnection.HTTP_BAD_METHOD, message = "Bad method"),
             @ApiResponse(code = HttpURLConnection.HTTP_UNSUPPORTED_TYPE, message = "Unsupported request media type")
     })
-    public ResponseEntity<?> getKeepers() {
-        return ResponseEntity.ok(keepersService.getAllActiveKeepers());
+    public ResponseEntity<?> getActiveKeepers() {
+        return ResponseEntity.ok(keepersService.getActiveKeepers());
     }
 }
