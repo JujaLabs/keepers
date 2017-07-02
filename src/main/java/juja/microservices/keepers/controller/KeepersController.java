@@ -62,6 +62,16 @@ public class KeepersController {
     }
 
     @GetMapping(value = "/keepers", produces = "application/json")
+    @ApiOperation(
+            value = "Get all active keepers",
+            notes = "This method have to get all active keepers"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "Returns maps with active keepers id and their cctive directions"),
+            @ApiResponse(code = HttpURLConnection.HTTP_BAD_REQUEST, message = "Bad request"),
+            @ApiResponse(code = HttpURLConnection.HTTP_BAD_METHOD, message = "Bad method"),
+            @ApiResponse(code = HttpURLConnection.HTTP_UNSUPPORTED_TYPE, message = "Unsupported request media type")
+    })
     public ResponseEntity<?> getKeepers() {
         return ResponseEntity.ok(keepersService.getAllActiveKeepers());
     }
