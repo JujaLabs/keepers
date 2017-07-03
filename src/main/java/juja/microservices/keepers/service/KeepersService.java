@@ -1,6 +1,7 @@
 package juja.microservices.keepers.service;
 
 import juja.microservices.keepers.dao.KeepersRepository;
+import juja.microservices.keepers.entity.Keeper;
 import juja.microservices.keepers.entity.KeeperRequest;
 import juja.microservices.keepers.exception.KeeperAccessException;
 import juja.microservices.keepers.exception.KeeperDirectionActiveException;
@@ -9,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import javax.inject.Inject;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -29,8 +31,12 @@ public class KeepersService {
     public List<String> getDirections(String uuid) {
         logger.debug("Received get directions by uuid request. Requested uuid: {}", uuid);
 
-        List<String> result = keepersRepository.getDirections(uuid);
+        List<Keeper> directions = keepersRepository.getDirections(uuid);
 
+        List<String> result = new ArrayList<>();
+        for (Keeper keeper : directions) {
+            result.add(keeper.getDirection());
+        }
         logger.info("Number of returned keeper directions is {}", result.size());
         logger.debug("Request for active directions for keeper returned {}", result.toString());
         return result;

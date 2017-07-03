@@ -3,6 +3,7 @@ package juja.microservices.integration;
 import com.lordofthejars.nosqlunit.annotation.UsingDataSet;
 
 import juja.microservices.keepers.dao.KeepersRepository;
+import juja.microservices.keepers.entity.Keeper;
 import juja.microservices.keepers.entity.KeeperRequest;
 import juja.microservices.keepers.exception.KeeperAccessException;
 import juja.microservices.keepers.exception.KeeperDirectionActiveException;
@@ -16,6 +17,7 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.junit4.SpringRunner;
 import javax.inject.Inject;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -75,7 +77,11 @@ public class KeepersServiceIntegrationTest extends BaseIntegrationTest {
         //Given
         List<String> expectedList = Arrays.asList("First active direction", "Second active direction");
         //When
-        List<String> actualList = repository.getDirections("0000c9999");
+        List<Keeper> keepers = repository.getDirections("0000c9999");
+        List<String> actualList = new ArrayList<>();
+        for (Keeper keeper : keepers) {
+            actualList.add(keeper.getDirection());
+        }
         //Then
         assertEquals(expectedList, actualList);
     }
@@ -84,9 +90,9 @@ public class KeepersServiceIntegrationTest extends BaseIntegrationTest {
     @UsingDataSet(locations = "/datasets/getKeeperDirections.json")
     public void shouldReturnCorrectSize() {
         //Given
-        List<String> expectedList = Arrays.asList("First active direction", "Second active direction");
+//        List<String> expectedList = Arrays.asList("First active direction", "Second active direction");
         //When
-        List<String> actualList = repository.getDirections("0000c9999");
+        List<Keeper> actualList = repository.getDirections("0000c9999");
         //Then
         assertEquals(2, actualList.size());
     }
@@ -95,7 +101,7 @@ public class KeepersServiceIntegrationTest extends BaseIntegrationTest {
     @UsingDataSet(locations = "/datasets/getKeeperDirections.json")
     public void shouldReturnEmptyList() {
         //When
-        List<String> actualList = repository.getDirections("1111a9999");
+        List<Keeper> actualList = repository.getDirections("1111a9999");
         //Then
         assertEquals(0, actualList.size());
     }

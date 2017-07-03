@@ -48,9 +48,23 @@ public class KeepersServiceTest {
     @Test
     public void getDirectionsTest() {
         //Given
-        List<String> expectedList = Arrays.asList("direction1", "direction2", "direction3");
+        List<Keeper> keepers = new ArrayList<>();
+        keepers.add(new Keeper("1",
+                "0000c9999",
+                "direction1",
+                null)
+        );
+        keepers.add(new Keeper("2",
+                "0000c9999",
+                "direction2",
+                null)
+        );
+        when(repository.getDirections(UUID)).thenReturn(keepers);
+        List<String> expectedList = new ArrayList<>();
+        for (Keeper keeper : keepers) {
+            expectedList.add(keeper.getDirection());
+        }
         //When
-        when(repository.getDirections(UUID)).thenReturn(expectedList);
         List<String> actualList = service.getDirections(UUID);
         //Then
         assertEquals(expectedList, actualList);
@@ -58,10 +72,7 @@ public class KeepersServiceTest {
 
     @Test
     public void getDirectionsWithEmptyResultTest() {
-        //Given
-        List<String> expectedList = new ArrayList<>();
         //When
-        when(repository.getDirections(UUID)).thenReturn(expectedList);
         List<String> actualList = service.getDirections(UUID);
         //Then
         assertTrue(actualList.isEmpty());
