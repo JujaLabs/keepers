@@ -63,7 +63,7 @@ public class KeepersService {
         return newKeeperId;
     }
 
-    public Map<String, List<String>> getAllActiveKeepers() {
-        return keepersRepository.getAllActiveKeepers();
+    public Map<String, List<String>> getActiveKeepers() {
+        return keepersRepository.getActiveKeepers();
     }
 }
