@@ -1,17 +1,21 @@
 package juja.microservices.keepers.dao;
 
-import juja.microservices.keepers.entity.Keeper;
-import juja.microservices.keepers.entity.KeeperRequest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import javax.inject.Inject;
+
+import static org.junit.Assert.assertEquals;
+
+import juja.microservices.keepers.entity.Keeper;
+import juja.microservices.keepers.entity.KeeperRequest;
 import org.mockito.InjectMocks;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.test.context.junit4.SpringRunner;
-import javax.inject.Inject;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.ZoneId;
@@ -19,7 +23,6 @@ import java.util.*;
 
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
-import static org.junit.Assert.*;
 
 /**
  * @author Dmitriy Lyashenko
@@ -90,6 +93,4 @@ public class KeepersRepositoryTest {
         assertEquals(mapActiveKeepers, repository.getActiveKeepers());
 
     }
-
-
 }

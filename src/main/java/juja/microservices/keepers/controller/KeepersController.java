@@ -20,6 +20,7 @@ import java.util.List;
  * @author Vadim Dyachenko
  * @author Dmitriy Lyashenko
  * @author Dmitriy Roy
+ * @author Konstantin Sergey
  */
 @RestController
 public class KeepersController {
@@ -56,9 +57,23 @@ public class KeepersController {
     }
 
     @GetMapping(value = "/keepers/{uuid}", produces = "application/json")
+    @ApiOperation(
+            value = "Get a list of all directions of active keeper",
+            notes = "This method returns a list of all directions of active keeper"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "Returns a list of all directions of active keeper"),
+            @ApiResponse(code = HttpURLConnection.HTTP_BAD_REQUEST, message = "Bad request"),
+            @ApiResponse(code = HttpURLConnection.HTTP_BAD_METHOD, message = "Bad method")
+    })
     public ResponseEntity<?> getDirections(@PathVariable String uuid) {
-        //TODO Should be implemented feature KPR-F3
-        return null;
+        logger.debug("Received get directions by uuid request. Requested uuid: {}", uuid);
+
+        List<String> result = keepersService.getDirections(uuid);
+
+        logger.info("Number of returned keeper directions is {}", result.size());
+        logger.debug("Request for active directions for keeper returned {}", result.toString());
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping(value = "/keepers", produces = "application/json")
