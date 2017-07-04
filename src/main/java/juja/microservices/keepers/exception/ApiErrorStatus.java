@@ -3,6 +3,7 @@ package juja.microservices.keepers.exception;
 /**
  * @author Vadim Dyachenko
  * @author Dmitriy Lyashenko
+ * @author Oleksii Petrokhalko
  */
 public enum ApiErrorStatus {
     KEEPERS_EXCEPTION(
@@ -21,6 +22,12 @@ public enum ApiErrorStatus {
             "KPR-F1-D4",
             "Sorry, but keeper with the requested uuid already keeps the requested direction and he is active",
             "Exception - KeeperDirectionActiveException"
+    ),
+
+    KEEPER_NONEXISTENT_EXCEPTION(
+            "KPR-F2",
+            "Sorry, but keeper with uuid and direction is't exist or inactive",
+            "Exception - KeeperNonexistentException"
     ),
 
     OTHER_EXCEPTION(
