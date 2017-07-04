@@ -15,7 +15,7 @@ import javax.inject.Inject;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.ZoneId;
-import java.util.Date;
+import java.util.*;
 
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
@@ -70,5 +70,41 @@ public class KeepersServiceTest {
 
         //Then
         assertEquals(expected, result);
+    }
+
+    @Test
+    public void getActiveKeepers(){
+        //Given
+//        String expected = "{uuidTo2=[sqlcmd], uuidTo1=[teems, sqlcmd]}";
+        Map<String, List<String>> expected = new HashMap<>();
+        expected.put("uuidTo2", Arrays.asList("sqlcmd"));
+        expected.put("uuidTo1", Arrays.asList("teems","sqlcmd"));
+
+        List<Keeper> listActiveKeepers = new ArrayList<>();
+        Keeper activeKeeper1 = new Keeper("uuidFrom1", "uuidTo1", "teems", new Date());
+        Keeper activeKeeper2 = new Keeper("uuidFrom2", "uuidTo1", "sqlcmd", new Date());
+        Keeper activeKeeper3 = new Keeper("uuidFrom1", "uuidTo2", "sqlcmd", new Date());
+        listActiveKeepers.add(activeKeeper1);
+        listActiveKeepers.add(activeKeeper2);
+        listActiveKeepers.add(activeKeeper3);
+
+        //When
+        when(repository.getActiveKeepers()).thenReturn(listActiveKeepers);
+
+        Map<String, List<String>> mapActiveKeepers = new HashMap(){};
+        for (Keeper keeper : listActiveKeepers) {
+            List<String> directions = new ArrayList<>();
+            if(mapActiveKeepers.containsKey(keeper.getUuid())) {
+                directions = mapActiveKeepers.get(keeper.getUuid());
+                directions.add(keeper.getDirection());
+                mapActiveKeepers.replace(keeper.getUuid(),directions);
+            }else{
+                directions.add(keeper.getDirection());
+                mapActiveKeepers.put(keeper.getUuid(), directions);
+            }
+        }
+
+        //Then
+        assertEquals(expected, mapActiveKeepers);
     }
 }

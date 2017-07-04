@@ -1,6 +1,7 @@
 package juja.microservices.keepers.service;
 
 import juja.microservices.keepers.dao.KeepersRepository;
+import juja.microservices.keepers.entity.Keeper;
 import juja.microservices.keepers.entity.KeeperRequest;
 import juja.microservices.keepers.exception.KeeperAccessException;
 import juja.microservices.keepers.exception.KeeperDirectionActiveException;
@@ -9,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import javax.inject.Inject;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -47,6 +50,22 @@ public class KeepersService {
     }
 
     public Map<String, List<String>> getActiveKeepers() {
-        return keepersRepository.getActiveKeepers();
+        // todo log debug before
+        Map<String, List<String>> outMap = new HashMap<>();
+        List<Keeper> keepers = keepersRepository.getActiveKeepers();
+        for (Keeper keeper : keepers) {
+            List<String> directions = new ArrayList<>();
+            if(outMap.containsKey(keeper.getUuid())) {
+                directions = outMap.get(keeper.getUuid());
+                directions.add(keeper.getDirection());
+                outMap.replace(keeper.getUuid(),directions);
+            }else{
+                directions.add(keeper.getDirection());
+                outMap.put(keeper.getUuid(), directions);
+            }
+        }
+        // todo log info after
+        // todo log debug after
+        return outMap;
     }
 }
