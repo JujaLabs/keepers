@@ -71,4 +71,34 @@ public class KeepersAcceptanceTest extends BaseAcceptanceTest{
                 .when(Option.IGNORING_ARRAY_ORDER)
                 .isNotEqualTo(jsonContentControlResponse);
     }
+
+    @UsingDataSet(locations = "/datasets/getKeeperDirections.json", loadStrategy = LoadStrategyEnum.CLEAN_INSERT)
+    @Test
+    public void getDirections() throws IOException {
+        //Given
+        String jsonContentRequest = "";
+        String jsonContentControlResponse = convertToString(
+                resource("acceptance/response/responseGetDirections.json"));
+        //When
+        Response actualResponse = getRealResponse("/keepers/0000c9999", jsonContentRequest, HttpMethod.GET);
+        //Then
+        assertThatJson(actualResponse.asString())
+                .when(Option.IGNORING_ARRAY_ORDER)
+                .isEqualTo(jsonContentControlResponse);
+    }
+
+    @UsingDataSet(locations = "/datasets/getKeeperDirections.json", loadStrategy = LoadStrategyEnum.CLEAN_INSERT)
+    @Test
+    public void getDirectionsWithEmptyResult() throws IOException {
+        //Given
+        String jsonContentRequest = "";
+        String jsonContentControlResponse = convertToString(
+                resource("acceptance/response/responseGetDirectionsWithEmptyResult.json"));
+        //When
+        Response actualResponse = getRealResponse("/keepers/1111a9999", jsonContentRequest, HttpMethod.GET);
+        //Then
+        assertThatJson(actualResponse.asString())
+                .when(Option.IGNORING_ARRAY_ORDER)
+                .isEqualTo(jsonContentControlResponse);
+    }
 }

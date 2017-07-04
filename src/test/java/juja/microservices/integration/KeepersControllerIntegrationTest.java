@@ -9,18 +9,25 @@ import org.junit.runner.RunWith;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import static org.junit.Assert.assertEquals;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.junit.Assert.*;
 
 /**
  * @author Dmitriy Lyashenko
  */
 @RunWith(SpringRunner.class)
 public class KeepersControllerIntegrationTest extends BaseIntegrationTest{
+
+    private static final String ADD_KEEPER_URL = "/keepers";
+    private static final String GET_DIRECTIONS_URL = "/keepers/0000c9999";
 
     private MockMvc mockMvc;
 
@@ -106,7 +113,6 @@ public class KeepersControllerIntegrationTest extends BaseIntegrationTest{
                 .content(json))
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
-
     }
 
     @Test
@@ -125,5 +131,23 @@ public class KeepersControllerIntegrationTest extends BaseIntegrationTest{
                 .content(json))
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @UsingDataSet(locations = "/datasets/getKeeperDirections.json")
+    public void getDirectionsAndReturnJson() throws Exception {
+        //Given
+        String expected = "[\"First active direction\",\"Second active direction\"]";
+        mockMvc.perform(get(GET_DIRECTIONS_URL)
+                .contentType(APPLICATION_JSON_UTF8))
+                .andExpect(content().contentType(APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk());
+        //When
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get(GET_DIRECTIONS_URL)
+                .contentType(APPLICATION_JSON_UTF8))
+                .andReturn();
+        String content = result.getResponse().getContentAsString();
+        //Then
+        assertEquals(expected, content);
     }
 }
