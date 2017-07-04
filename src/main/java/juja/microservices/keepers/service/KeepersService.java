@@ -50,7 +50,7 @@ public class KeepersService {
     }
 
     public Map<String, List<String>> getActiveKeepers() {
-        // todo log debug before
+        logger.debug("Service.getActiveKeepers after in, without any parameters.");
         Map<String, List<String>> outMap = new HashMap<>();
         List<Keeper> keepers = keepersRepository.getActiveKeepers();
         for (Keeper keeper : keepers) {
@@ -64,8 +64,8 @@ public class KeepersService {
                 outMap.put(keeper.getUuid(), directions);
             }
         }
-        // todo log info after
-        // todo log debug after
+        logger.info("Get List<Keeper> : {}, and create Map<String, List<String>> : {} from income list.", keepers,outMap);
+        logger.debug("Service.getActiveKeepers before out, parameters: {}", outMap);
         return outMap;
     }
 }
