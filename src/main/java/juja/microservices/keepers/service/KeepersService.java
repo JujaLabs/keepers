@@ -19,6 +19,7 @@ import java.util.Map;
  * @author Vadim Dyachenko
  * @author Dmitriy Lyashenko
  * @author Dmitriy Roy
+ * @author Konstantin Sergey
  */
 @Service
 public class KeepersService {
@@ -27,6 +28,20 @@ public class KeepersService {
 
     @Inject
     private KeepersRepository keepersRepository;
+
+    public List<String> getDirections(String uuid) {
+        logger.debug("Received get directions by uuid request. Requested uuid: {}", uuid);
+
+        List<Keeper> directions = keepersRepository.getDirections(uuid);
+
+        List<String> result = new ArrayList<>();
+        for (Keeper keeper : directions) {
+            result.add(keeper.getDirection());
+        }
+        logger.info("Number of returned keeper directions is {}", result.size());
+        logger.debug("Request for active directions for keeper returned {}", result.toString());
+        return result;
+    }
 
     public String addKeeper(KeeperRequest keeperRequest){
         logger.debug("Service.addKeeper after in, parameters: {}", keeperRequest.toString());

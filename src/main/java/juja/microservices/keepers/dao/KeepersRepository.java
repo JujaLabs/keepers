@@ -1,6 +1,8 @@
 package juja.microservices.keepers.dao;
 
 import juja.microservices.keepers.entity.Keeper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import juja.microservices.keepers.entity.KeeperRequest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -16,12 +18,26 @@ import java.util.*;
  * @author Vadim Dyachenko
  * @author Dmitriy Lyashenko
  * @author Dmitriy Roy
+ * @author Konstantin Sergey
  */
 @Repository
 public class KeepersRepository {
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Inject
     private MongoTemplate mongoTemplate;
+
+    public List<Keeper> getDirections(String uuid) {
+        logger.debug("Received get directions by uuid request. Requested uuid: {}", uuid);
+
+        List<Keeper> result = mongoTemplate.find(new Query(
+                Criteria.where("uuid").is(uuid).and("isActive").is(true)), Keeper.class);
+
+        logger.info("Number of returned keeper directions is {}", result.size());
+        logger.debug("Request for active directions for keeper returned {}", result.toString());
+        return result;
+    }
 
     public String save(KeeperRequest keeperRequest) {
         Date startDate = Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant());
