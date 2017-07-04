@@ -23,6 +23,7 @@ import static org.junit.Assert.*;
 
 /**
  * @author Dmitriy Lyashenko
+ * @author Dmitriy Roy
  */
 @RunWith(SpringRunner.class)
 @WebMvcTest(KeepersService.class)
