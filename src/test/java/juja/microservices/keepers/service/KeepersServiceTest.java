@@ -75,7 +75,6 @@ public class KeepersServiceTest {
     @Test
     public void getActiveKeepers(){
         //Given
-//        String expected = "{uuidTo2=[sqlcmd], uuidTo1=[teems, sqlcmd]}";
         Map<String, List<String>> expected = new HashMap<>();
         expected.put("uuidTo2", Arrays.asList("sqlcmd"));
         expected.put("uuidTo1", Arrays.asList("teems","sqlcmd"));
