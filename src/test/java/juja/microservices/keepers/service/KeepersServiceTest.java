@@ -40,7 +40,6 @@ public class KeepersServiceTest {
     private static final String UUID = "00001111";
 
     @Inject
-    @InjectMocks
     private KeepersService service;
 
     @MockBean
