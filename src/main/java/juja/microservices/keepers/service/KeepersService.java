@@ -82,7 +82,7 @@ public class KeepersService {
             }
         }
         logger.info("Create Map<String, List<String>> : {} from income list of Keepers.", keepersWithDirections);
-        logger.debug("Service.getActiveKeepers before out, parameters: {}", keepersWithDirections);
+        logger.debug("Service.getActiveKeepers before out with result data - map of Keepers and their Directions: {}", keepersWithDirections);
         return keepersWithDirections;
     }
 }
