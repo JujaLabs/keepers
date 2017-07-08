@@ -67,6 +67,7 @@ public class KeepersService {
         logger.debug("Service.getActiveKeepers after in, without any parameters.");
         Map<String, List<String>> keepersWithDirections = new HashMap<>();
         List<Keeper> keepers = keepersRepository.getActiveKeepers();
+        logger.info("Get List<Keeper> : {}", keepers);
         for (Keeper keeper : keepers) {
             List<String> directions = new ArrayList<>();
             String keeperUuid = keeper.getUuid();
@@ -80,7 +81,7 @@ public class KeepersService {
                 keepersWithDirections.put(keeperUuid, directions);
             }
         }
-        logger.info("Get List<Keeper> : {}, and create Map<String, List<String>> : {} from income list.", keepers,keepersWithDirections);
+        logger.info("Create Map<String, List<String>> : {} from income list of Keepers.", keepersWithDirections);
         logger.debug("Service.getActiveKeepers before out, parameters: {}", keepersWithDirections);
         return keepersWithDirections;
     }
