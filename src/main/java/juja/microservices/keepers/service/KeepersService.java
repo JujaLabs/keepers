@@ -69,13 +69,15 @@ public class KeepersService {
         List<Keeper> keepers = keepersRepository.getActiveKeepers();
         for (Keeper keeper : keepers) {
             List<String> directions = new ArrayList<>();
-            if(keepersWithDirections.containsKey(keeper.getUuid())) {
-                directions = keepersWithDirections.get(keeper.getUuid());
-                directions.add(keeper.getDirection());
-                keepersWithDirections.replace(keeper.getUuid(),directions);
+            String keeperUuid = keeper.getUuid();
+            String keeperDirection = keeper.getDirection();
+            if(keepersWithDirections.containsKey(keeperUuid)) {
+                directions = keepersWithDirections.get(keeperUuid);
+                directions.add(keeperDirection);
+                keepersWithDirections.replace(keeperUuid,directions);
             }else{
-                directions.add(keeper.getDirection());
-                keepersWithDirections.put(keeper.getUuid(), directions);
+                directions.add(keeperDirection);
+                keepersWithDirections.put(keeperUuid, directions);
             }
         }
         logger.info("Get List<Keeper> : {}, and create Map<String, List<String>> : {} from income list.", keepers,keepersWithDirections);
