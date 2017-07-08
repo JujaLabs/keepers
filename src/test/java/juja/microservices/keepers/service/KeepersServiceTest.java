@@ -119,8 +119,8 @@ public class KeepersServiceTest {
     public void getActiveKeepers(){
         //Given
         Map<String, List<String>> expected = new HashMap<>();
-        expected.put("uuidTo2", Arrays.asList("sqlcmd"));
         expected.put("uuidTo1", Arrays.asList("teems","sqlcmd"));
+        expected.put("uuidTo2", Arrays.asList("sqlcmd"));
 
         List<Keeper> listActiveKeepers = new ArrayList<>();
         Keeper activeKeeper1 = new Keeper("uuidFrom1", "uuidTo1", "teems", new Date());

@@ -65,21 +65,21 @@ public class KeepersService {
 
     public Map<String, List<String>> getActiveKeepers() {
         logger.debug("Service.getActiveKeepers after in, without any parameters.");
-        Map<String, List<String>> outMap = new HashMap<>();
+        Map<String, List<String>> keepersWithDirections = new HashMap<>();
         List<Keeper> keepers = keepersRepository.getActiveKeepers();
         for (Keeper keeper : keepers) {
             List<String> directions = new ArrayList<>();
-            if(outMap.containsKey(keeper.getUuid())) {
-                directions = outMap.get(keeper.getUuid());
+            if(keepersWithDirections.containsKey(keeper.getUuid())) {
+                directions = keepersWithDirections.get(keeper.getUuid());
                 directions.add(keeper.getDirection());
-                outMap.replace(keeper.getUuid(),directions);
+                keepersWithDirections.replace(keeper.getUuid(),directions);
             }else{
                 directions.add(keeper.getDirection());
-                outMap.put(keeper.getUuid(), directions);
+                keepersWithDirections.put(keeper.getUuid(), directions);
             }
         }
-        logger.info("Get List<Keeper> : {}, and create Map<String, List<String>> : {} from income list.", keepers,outMap);
-        logger.debug("Service.getActiveKeepers before out, parameters: {}", outMap);
-        return outMap;
+        logger.info("Get List<Keeper> : {}, and create Map<String, List<String>> : {} from income list.", keepers,keepersWithDirections);
+        logger.debug("Service.getActiveKeepers before out, parameters: {}", keepersWithDirections);
+        return keepersWithDirections;
     }
 }
