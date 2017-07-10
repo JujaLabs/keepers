@@ -1,5 +1,6 @@
 package juja.microservices.keepers.controller;
 
+import juja.microservices.common.Constants;
 import juja.microservices.keepers.entity.KeeperRequest;
 import juja.microservices.keepers.exception.KeeperAccessException;
 import juja.microservices.keepers.exception.KeeperDirectionActiveException;
@@ -18,12 +19,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static juja.microservices.common.TestUtils.reflectionEqual;
+import static juja.microservices.common.TestUtils.toJson;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.argThat;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -45,7 +52,38 @@ public class KeepersControllerTest {
     private KeepersController controller;
 
     @Test
-    public void inactiveKeeperTest() throws Exception {
+    public void inactiveKeeperBadRequestTest() throws Exception {
+        //given
+        String jsonContentRequest = "{\"from\":\"admin\",\"direction\":\"LMS\"}";
+
+        //then
+        mockMvc.perform(put("/keepers")
+                .contentType(APPLICATION_JSON_UTF8)
+                .content(jsonContentRequest))
+                .andExpect(content().contentType(APPLICATION_JSON_UTF8))
+                .andExpect(status().isBadRequest());
+
+    }
+
+    @Test
+    public void inactiveKeeperSuccessTest() throws Exception {
+        KeeperRequest keeperRequest = new KeeperRequest(Constants.FROM, Constants.UUID, Constants.DIRECTION);
+        List<String> ids = new ArrayList<>();
+        ids.add(Constants.UUID);
+        when(service.inactiveKeeper(any(KeeperRequest.class))).thenReturn(ids);
+
+        String actual = mockMvc.perform(put(Constants.KEEPERS_URL)
+                .contentType(APPLICATION_JSON_UTF8)
+                .content(toJson(keeperRequest)))
+                .andExpect(content().contentType(APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        verify(service).inactiveKeeper(argThat(reflectionEqual(keeperRequest)));
+
+        assertEquals(Constants.ONE_UUID, actual);
 
     }
 

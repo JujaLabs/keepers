@@ -8,5 +8,7 @@ public interface Constants {
     String UUID = "uuid";
     String DIRECTION = "direction";
     String IS_ACTIVE = "isActive";
+    String ONE_UUID = "[\"uuid\"]";
+    String KEEPERS_URL = "/keepers";
 
 }

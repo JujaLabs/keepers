@@ -1,7 +1,11 @@
 package juja.microservices.common;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import junit.framework.AssertionFailedError;
 import org.mockito.ArgumentMatcher;
+
+import java.io.IOException;
 
 import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEquals;
 
@@ -11,6 +15,12 @@ import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEqua
 public final class TestUtils {
     private TestUtils() {
         //utility class
+    }
+
+    public static byte[] toJson(Object o) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        return mapper.writeValueAsBytes(o);
     }
 
 
