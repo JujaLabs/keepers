@@ -12,9 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Vadim Dyachenko
@@ -45,13 +43,15 @@ public class KeepersService {
         return result;
     }
 
-    public List<String> deleteKeeper(KeeperRequest keeperRequest) {
+    public List<String> inactiveKeeper(KeeperRequest keeperRequest) {
         logger.debug("Service.deleteKeeper after in, parameters: {}", keeperRequest.toString());
         if (keepersRepository.findOneActive(keeperRequest.getFrom()) == null) {
-            logger.warn("Keeper '{}' tried to delete 'Keeper' but he's not an active Keeper", keeperRequest.getFrom());
-            throw new KeeperAccessException("Only active keeper could delete another keeper");
+            logger.warn("Keeper '{}' tried to set inactive 'Keeper' but he's not an active Keeper",
+                    keeperRequest.getFrom());
+            throw new KeeperAccessException("Only active keeper could set inactive another keeper");
         }
-        Keeper keeper = keepersRepository.findOneByUUIdAndDirectionIsActive(keeperRequest.getUuid(), keeperRequest.getDirection());
+        Keeper keeper = keepersRepository.findOneByUUIdAndDirectionIsActive(keeperRequest.getUuid(),
+                keeperRequest.getDirection());
         if (keeper == null) {
             logger.warn("Keeper with uuid '{}' and direction '{}' is't exist or inactive",
                     keeperRequest.getUuid(), keeperRequest.getDirection());
@@ -59,8 +59,9 @@ public class KeepersService {
                     + keeperRequest.getDirection() + " is't exist or inactive");
         }
         keeper.setDismissDate(LocalDateTime.now());
-        List<String> ids = new ArrayList<>();
-        ids.add(keepersRepository.delete(keeper));
+        List<String> ids = Collections.singletonList(keepersRepository.inactive(keeper));
+        logger.info("'Keeper' updated , with uuid {}, from user '{}'", keeperRequest.getUuid(),
+                keeperRequest.getFrom());
         return ids;
     }
 

@@ -61,7 +61,7 @@ public class KeepersRepository {
                 .addCriteria(Criteria.where("isActive").is(true)), Keeper.class);
     }
 
-    public String delete(Keeper keeper) {
+    public String inactive(Keeper keeper) {
         mongoTemplate.save(keeper);
         return keeper.getId();
     }

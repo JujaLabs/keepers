@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+
 import javax.inject.Inject;
 
 import java.util.ArrayList;
@@ -41,13 +42,17 @@ public class KeepersControllerTest {
     private KeepersService service;
 
     @Inject
-    @InjectMocks
     private KeepersController controller;
+
+    @Test
+    public void inactiveKeeperTest() throws Exception {
+
+    }
 
     @Test
     public void addKeeperTest() throws Exception {
         //given
-        String jsonContentRequest ="{\"from\":\"admin\",\"direction\":\"LMS\"}";
+        String jsonContentRequest = "{\"from\":\"admin\",\"direction\":\"LMS\"}";
 
         //then
         checkBadRequest("/keepers", jsonContentRequest);
@@ -123,7 +128,7 @@ public class KeepersControllerTest {
     }
 
     @Test(expected = KeeperAccessException.class)
-    public void addKeeperBadRequest(){
+    public void addKeeperBadRequest() {
         //Given
         KeeperRequest keeperRequest = new KeeperRequest("123qwe", "asdqwe", "teems");
         when(service.addKeeper(keeperRequest)).thenThrow(
@@ -134,12 +139,12 @@ public class KeepersControllerTest {
     }
 
     @Test(expected = KeeperDirectionActiveException.class)
-    public void addKeeperBadRequestOther(){
+    public void addKeeperBadRequestOther() {
         //Given
         KeeperRequest keeperRequest = new KeeperRequest("123qwe", "asdqwe", "teems");
         when(service.addKeeper(keeperRequest)).thenThrow(
-            new KeeperDirectionActiveException("Keeper with uuid " + keeperRequest.getUuid() + " already keeps direction "
-                + keeperRequest.getDirection() + " and he is active"));
+                new KeeperDirectionActiveException("Keeper with uuid " + keeperRequest.getUuid() + " already keeps direction "
+                        + keeperRequest.getDirection() + " and he is active"));
 
         //When
         controller.addKeeper(keeperRequest);

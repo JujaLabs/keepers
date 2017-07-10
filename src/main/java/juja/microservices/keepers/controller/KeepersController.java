@@ -63,8 +63,10 @@ public class KeepersController {
             @ApiResponse(code = HttpURLConnection.HTTP_BAD_METHOD, message = "Bad method"),
             @ApiResponse(code = HttpURLConnection.HTTP_UNSUPPORTED_TYPE, message = "Unsupported request media type")
     })
-    public ResponseEntity<?> updateKeeper(@Valid @RequestBody KeeperRequest request) {
-        return ResponseEntity.ok(keepersService.deleteKeeper(request));
+    public ResponseEntity<?> inactiveKeeper(@Valid @RequestBody KeeperRequest request) {
+        List<String> ids = keepersService.inactiveKeeper(request);
+        logger.info("Updated keeper, ids = {}", ids.toString());
+        return ResponseEntity.ok(ids);
     }
 
     @GetMapping(value = "/keepers/{uuid}", produces = "application/json")

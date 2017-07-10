@@ -1,11 +1,14 @@
 package juja.microservices.keepers.dao;
 
+import juja.microservices.common.Constants;
+import juja.microservices.common.KeeperAbstractTest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.inject.Inject;
 
+import static juja.microservices.common.TestUtils.reflectionEqual;
 import static org.junit.Assert.assertEquals;
 
 import juja.microservices.keepers.entity.Keeper;
@@ -16,6 +19,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.ZoneId;
@@ -29,14 +33,33 @@ import static org.mockito.Mockito.*;
  */
 @RunWith(SpringRunner.class)
 @WebMvcTest(KeepersRepository.class)
-public class KeepersRepositoryTest {
+public class KeepersRepositoryTest extends KeeperAbstractTest {
 
     @Inject
-    @InjectMocks
     private KeepersRepository repository;
 
     @MockBean
     private MongoTemplate mongoTemplate;
+
+    @Test
+    public void inactiveTest() {
+        Keeper keeper = createKeeper().withId(Constants.UUID).isActive(false).create();
+        String actual = repository.inactive(keeper);
+        assertEquals(Constants.UUID, actual);
+
+        verify(mongoTemplate).save(argThat(reflectionEqual(keeper)));
+        verifyNoMoreInteractions(mongoTemplate);
+    }
+
+    @Test
+    public void findOneActiveTest() {
+        Keeper keeper = createKeeper().withId(Constants.UUID).isActive(true).create();
+        when(mongoTemplate.findOne(new Query(Criteria.where(Constants.UUID).is(Constants.UUID))
+                .addCriteria(Criteria.where(Constants.IS_ACTIVE).is(true)), Keeper.class))
+                .thenReturn(keeper);
+
+        assertEquals(keeper, repository.findOneActive(Constants.UUID));
+    }
 
     @Test
     public void save() {
@@ -46,12 +69,14 @@ public class KeepersRepositoryTest {
         //Then
         assertEquals(null,
                 repository.save(new KeeperRequest("123qwe", "asdqwe", "teems")));
+
+        //TODO: its incorrect scenario for this test
     }
 
     @Test
-    public void findOneById(){
+    public void findOneById() {
         //Given
-        Date startDate = Date.from(LocalDateTime.of(2017, Month.APRIL, 1, 12,0).atZone(ZoneId.systemDefault()).toInstant());
+        Date startDate = Date.from(LocalDateTime.of(2017, Month.APRIL, 1, 12, 0).atZone(ZoneId.systemDefault()).toInstant());
         Keeper keeper = new Keeper("123qwe", "asdqwe", "teems", startDate);
 
         //When
@@ -62,7 +87,7 @@ public class KeepersRepositoryTest {
     }
 
     @Test
-    public void getAllActiveKeepers(){
+    public void getAllActiveKeepers() {
         //Given
         List<Keeper> listActiveKeepers = new ArrayList<>();
         Keeper activeKeeper1 = new Keeper("uuidFrom1", "uuidTo1", "teems", new Date());
@@ -72,14 +97,15 @@ public class KeepersRepositoryTest {
         listActiveKeepers.add(activeKeeper2);
         listActiveKeepers.add(activeKeeper3);
 
-        Map<String, List<String>> mapActiveKeepers = new HashMap(){};
+        Map<String, List<String>> mapActiveKeepers = new HashMap() {
+        };
         for (Keeper keeper : listActiveKeepers) {
             List<String> directions = new ArrayList<>();
-            if(mapActiveKeepers.containsKey(keeper.getUuid())) {
+            if (mapActiveKeepers.containsKey(keeper.getUuid())) {
                 directions = mapActiveKeepers.get(keeper.getUuid());
                 directions.add(keeper.getDirection());
-                mapActiveKeepers.replace(keeper.getUuid(),directions);
-            }else{
+                mapActiveKeepers.replace(keeper.getUuid(), directions);
+            } else {
                 directions.add(keeper.getDirection());
                 mapActiveKeepers.put(keeper.getUuid(), directions);
             }
