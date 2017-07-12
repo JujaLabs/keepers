@@ -46,8 +46,8 @@ public class KeepersService {
     public List<String> inactiveKeeper(KeeperRequest keeperRequest) {
         logger.debug("Service.deleteKeeper after in, parameters: {}", keeperRequest.toString());
         if (keepersRepository.findOneActive(keeperRequest.getFrom()) == null) {
-            logger.warn("Keeper '{}' tried to set inactive 'Keeper' but he's not an active Keeper",
-                    keeperRequest.getFrom());
+            logger.warn("Keeper '{}' tried to set inactive 'Keeper' '{}' but he's not an active Keeper",
+                    keeperRequest.getFrom(), keeperRequest.getUuid());
             throw new KeeperAccessException("Only active keeper could set inactive another keeper");
         }
         Keeper keeper = keepersRepository.findOneByUUIdAndDirectionIsActive(keeperRequest.getUuid(),

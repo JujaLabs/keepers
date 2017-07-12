@@ -3,6 +3,7 @@ package juja.microservices.keepers.controller;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import juja.microservices.keepers.entity.Keeper;
 import juja.microservices.keepers.entity.KeeperRequest;
 import juja.microservices.keepers.service.KeepersService;
 import org.slf4j.Logger;
@@ -65,7 +66,7 @@ public class KeepersController {
     })
     public ResponseEntity<?> inactiveKeeper(@Valid @RequestBody KeeperRequest request) {
         List<String> ids = keepersService.inactiveKeeper(request);
-        logger.info("Updated keeper, ids = {}", ids.toString());
+        logger.info("Inactive keeper, ids = {}", ids.toString());
         return ResponseEntity.ok(ids);
     }
 

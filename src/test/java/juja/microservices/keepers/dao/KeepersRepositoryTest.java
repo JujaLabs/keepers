@@ -1,6 +1,5 @@
 package juja.microservices.keepers.dao;
 
-import juja.microservices.common.Constants;
 import juja.microservices.common.KeeperAbstractTest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,7 +12,6 @@ import static org.junit.Assert.assertEquals;
 
 import juja.microservices.keepers.entity.Keeper;
 import juja.microservices.keepers.entity.KeeperRequest;
-import org.mockito.InjectMocks;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -43,9 +41,9 @@ public class KeepersRepositoryTest extends KeeperAbstractTest {
 
     @Test
     public void inactiveTest() {
-        Keeper keeper = createKeeper().withId(Constants.UUID).isActive(false).create();
+        Keeper keeper = createKeeper().withId("uuid").isActive(false).create();
         String actual = repository.inactive(keeper);
-        assertEquals(Constants.UUID, actual);
+        assertEquals("uuid", actual);
 
         verify(mongoTemplate).save(argThat(reflectionEqual(keeper)));
         verifyNoMoreInteractions(mongoTemplate);
@@ -53,12 +51,12 @@ public class KeepersRepositoryTest extends KeeperAbstractTest {
 
     @Test
     public void findOneActiveTest() {
-        Keeper keeper = createKeeper().withId(Constants.UUID).isActive(true).create();
-        when(mongoTemplate.findOne(new Query(Criteria.where(Constants.UUID).is(Constants.UUID))
-                .addCriteria(Criteria.where(Constants.IS_ACTIVE).is(true)), Keeper.class))
+        Keeper keeper = createKeeper().withId("uuid").isActive(true).create();
+        when(mongoTemplate.findOne(new Query(Criteria.where("uuid").is("uuid"))
+                .addCriteria(Criteria.where("isActive").is(true)), Keeper.class))
                 .thenReturn(keeper);
 
-        assertEquals(keeper, repository.findOneActive(Constants.UUID));
+        assertEquals(keeper, repository.findOneActive("uuid"));
     }
 
     @Test

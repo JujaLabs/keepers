@@ -1,7 +1,6 @@
 package juja.microservices.keepers.service;
 
 import juja.microservices.common.KeeperAbstractTest;
-import juja.microservices.common.Constants;
 import juja.microservices.keepers.dao.KeepersRepository;
 import juja.microservices.keepers.exception.KeeperNonexistentException;
 import org.junit.Test;
@@ -48,27 +47,27 @@ public class KeepersServiceTest extends KeeperAbstractTest {
     public void inactiveKeeperWithKeeperAccessExceptionTest() {
         when(repository.findOneActive(anyString())).thenReturn(null);
 
-        service.inactiveKeeper(new KeeperRequest(Constants.FROM, Constants.UUID, Constants.DIRECTION));
+        service.inactiveKeeper(new KeeperRequest("from", "uuid", "direction"));
     }
 
     @Test(expected = KeeperNonexistentException.class)
     public void inactiveKeeperWithKeeperNonexistentExceptionTest() {
-        when(repository.findOneActive(anyString())).thenReturn(createKeeper().withId(Constants.UUID).create());
+        when(repository.findOneActive(anyString())).thenReturn(createKeeper().withId("uuid").create());
         when(repository.findOneByUUIdAndDirectionIsActive(anyString(), anyString())).thenReturn(null);
 
-        service.inactiveKeeper(new KeeperRequest(Constants.FROM, Constants.UUID, Constants.DIRECTION));
+        service.inactiveKeeper(new KeeperRequest("from", "uuid", "direction"));
     }
 
     @Test
     public void inactiveKeeperSuccessTest() {
-        KeeperRequest keeperRequest = new KeeperRequest(Constants.FROM, Constants.UUID, Constants.DIRECTION);
-        Keeper keeper = createKeeper().withId(Constants.UUID).create();
-        when(repository.findOneActive(anyString())).thenReturn(createKeeper().withId(Constants.UUID).create());
+        KeeperRequest keeperRequest = new KeeperRequest("from", "uuid", "direction");
+        Keeper keeper = createKeeper().withId("uuid").create();
+        when(repository.findOneActive(anyString())).thenReturn(createKeeper().withId("uuid").create());
         when(repository.findOneByUUIdAndDirectionIsActive(anyString(), anyString())).thenReturn(keeper);
-        when(repository.inactive(keeper)).thenReturn(Constants.UUID);
+        when(repository.inactive(keeper)).thenReturn("uuid");
 
         List<String> actual = service.inactiveKeeper(keeperRequest);
-        assertEquals(Collections.singletonList(Constants.UUID), actual);
+        assertEquals(Collections.singletonList("uuid"), actual);
 
         verify(repository).findOneActive(eq(keeperRequest.getFrom()));
         verify(repository).findOneByUUIdAndDirectionIsActive(eq(keeperRequest.getUuid()), eq(keeperRequest.getDirection()));
