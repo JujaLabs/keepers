@@ -15,6 +15,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
+import org.mockito.Mockito;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.inject.Inject;
@@ -65,10 +66,9 @@ public class KeepersServiceIntegrationTest extends BaseIntegrationTest {
     public void inactiveKeeperSuccessTest() {
         service.inactiveKeeper(new KeeperRequest("asdqwe", "max", "SomeDirection"));
         String result = repository.findOneActive("asdqwe").getUuid();
-        String result2 = repository.findOneByUUId("max").getUuid();
 
+        assertEquals(false, repository.findOneByUUId("max").isActive());
         assertNotNull(result);
-        assertNotNull(result2);
     }
 
     @Test(expected = KeeperAccessException.class)

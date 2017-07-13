@@ -12,7 +12,10 @@ import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Vadim Dyachenko
@@ -44,24 +47,23 @@ public class KeepersService {
     }
 
     public List<String> inactiveKeeper(KeeperRequest keeperRequest) {
+        String uuid = keeperRequest.getUuid();
+        String direction = keeperRequest.getDirection();
+        String form = keeperRequest.getFrom();
         logger.debug("Service.deleteKeeper after in, parameters: {}", keeperRequest.toString());
-        if (keepersRepository.findOneActive(keeperRequest.getFrom()) == null) {
-            logger.warn("Keeper '{}' tried to set inactive 'Keeper' '{}' but he's not an active Keeper",
-                    keeperRequest.getFrom(), keeperRequest.getUuid());
+        if (keepersRepository.findOneActive(form) == null) {
+            logger.warn("Keeper '{}' tried to set inactive 'Keeper' '{}' but he's not an active Keeper", form, uuid);
             throw new KeeperAccessException("Only active keeper could set inactive another keeper");
         }
-        Keeper keeper = keepersRepository.findOneByUUIdAndDirectionIsActive(keeperRequest.getUuid(),
-                keeperRequest.getDirection());
+        Keeper keeper = keepersRepository.findOneByUUIdAndDirectionIsActive(uuid, direction);
         if (keeper == null) {
-            logger.warn("Keeper with uuid '{}' and direction '{}' is't exist or inactive",
-                    keeperRequest.getUuid(), keeperRequest.getDirection());
-            throw new KeeperNonexistentException("Keeper with uuid " + keeperRequest.getUuid() + " and direction "
-                    + keeperRequest.getDirection() + " is't exist or inactive");
+            logger.warn("Keeper with uuid '{}' and direction '{}' is't exist or inactive", uuid, direction);
+            throw new KeeperNonexistentException("Keeper with uuid " + uuid + " and direction " + direction
+                    + " is't exist or inactive");
         }
         keeper.setDismissDate(LocalDateTime.now());
         List<String> ids = Collections.singletonList(keepersRepository.inactive(keeper));
-        logger.info("'Keeper' updated , with uuid {}, from user '{}'", keeperRequest.getUuid(),
-                keeperRequest.getFrom());
+        logger.info("'Keeper' updated , with uuid {}, from user '{}'", uuid, form);
         return ids;
     }
 

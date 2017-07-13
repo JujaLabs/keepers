@@ -43,8 +43,6 @@ public class KeepersControllerIntegrationTest extends BaseIntegrationTest {
     @Test
     @UsingDataSet(locations = "/datasets/severalKeepers.json")
     public void inactiveKeeperSuccessTest() throws Exception {
-
-
         mockMvc.perform(put("/keepers")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JSON_CONTENT_REQ))
