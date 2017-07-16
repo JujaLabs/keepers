@@ -28,8 +28,6 @@ public class ActiveKeeperDTO {
     }
 
     public void addDirection(String direction){
-        System.out.println("directions = " + directions);
-        System.out.println("direction = " + direction);
         this.directions.add(direction);
     }
 }
