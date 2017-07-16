@@ -120,8 +120,8 @@ public class KeepersServiceTest {
     public void getActiveKeepers(){
         //Given
         List<ActiveKeeperDTO> expected = new ArrayList<>();
-        expected.add(new ActiveKeeperDTO("uuidTo1", Arrays.asList("teems","sqlcmd")));
         expected.add(new ActiveKeeperDTO("uuidTo2", Arrays.asList("sqlcmd")));
+        expected.add(new ActiveKeeperDTO("uuidTo1", Arrays.asList("teems","sqlcmd")));
 
         List<Keeper> listActiveKeepers = new ArrayList<>();
         Keeper activeKeeper1 = new Keeper("uuidFrom1", "uuidTo1", "teems", new Date());
