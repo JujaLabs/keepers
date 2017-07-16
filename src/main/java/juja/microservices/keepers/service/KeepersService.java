@@ -1,6 +1,7 @@
 package juja.microservices.keepers.service;
 
 import juja.microservices.keepers.dao.KeepersRepository;
+import juja.microservices.keepers.entity.ActiveKeeperDTO;
 import juja.microservices.keepers.entity.Keeper;
 import juja.microservices.keepers.entity.KeeperRequest;
 import juja.microservices.keepers.exception.KeeperAccessException;
@@ -9,10 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Vadim Dyachenko
@@ -63,26 +61,24 @@ public class KeepersService {
         return newKeeperId;
     }
 
-    public Map<String, List<String>> getActiveKeepers() {
+    public List<ActiveKeeperDTO> getActiveKeepers() {
         logger.debug("Service.getActiveKeepers after in, without any parameters.");
-        Map<String, List<String>> keepersWithDirections = new HashMap<>();
+        List<ActiveKeeperDTO> activeKeeperDTOList = new ArrayList<>();
+        Map<String, ActiveKeeperDTO> activeKeeperDTOMap = new HashMap<>();
         List<Keeper> keepers = keepersRepository.getActiveKeepers();
         logger.info("Get List<Keeper> : {}", keepers);
         for (Keeper keeper : keepers) {
-            List<String> directions = new ArrayList<>();
             String keeperUuid = keeper.getUuid();
-            String keeperDirection = keeper.getDirection();
-            if(keepersWithDirections.containsKey(keeperUuid)) {
-                directions = keepersWithDirections.get(keeperUuid);
-                directions.add(keeperDirection);
-                keepersWithDirections.replace(keeperUuid,directions);
+
+            if(activeKeeperDTOMap.containsKey(keeperUuid)) {
+                activeKeeperDTOMap.get(keeperUuid).addDirection(keeper.getDirection());
             }else{
-                directions.add(keeperDirection);
-                keepersWithDirections.put(keeperUuid, directions);
+                activeKeeperDTOMap.put(keeperUuid, new ActiveKeeperDTO(keeperUuid, Arrays.asList(keeper.getDirection())));
             }
         }
-        logger.info("Create Map<String, List<String>> : {} from income list of Keepers.", keepersWithDirections);
-        logger.debug("Service.getActiveKeepers before out with result data - map of Keepers and their Directions: {}", keepersWithDirections);
-        return keepersWithDirections;
+        logger.info("Create Map<String, ActiveKeeperDTO> : {} from income list of Keepers.", activeKeeperDTOMap);
+        activeKeeperDTOMap.forEach((String, ActiveKeeperDTO) -> activeKeeperDTOList.add(ActiveKeeperDTO));
+        logger.debug("Service.getActiveKeepers before out with result data - list of ActiveKeepersDTO: {}", activeKeeperDTOList);
+        return activeKeeperDTOList;
     }
 }

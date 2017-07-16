@@ -3,7 +3,7 @@ package juja.microservices.keepers.entity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.Getter;
-import lombok.NonNull;
+import lombok.Setter;
 import lombok.ToString;
 
 import java.util.List;
@@ -13,6 +13,7 @@ import java.util.List;
  */
 @Data
 @Getter
+//@Setter
 @ToString
 public class ActiveKeeperDTO {
 
@@ -20,4 +21,11 @@ public class ActiveKeeperDTO {
     private String uuid;
     @JsonProperty("directions")
     private List<String> directions;
+
+    public ActiveKeeperDTO(String keeperUuid, List<String> directions) {
+    }
+
+    public void addDirection(String direction){
+        this.directions.add(direction);
+    }
 }
