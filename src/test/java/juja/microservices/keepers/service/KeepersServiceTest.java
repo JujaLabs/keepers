@@ -133,21 +133,8 @@ public class KeepersServiceTest {
         //When
         when(repository.getActiveKeepers()).thenReturn(listActiveKeepers);
 
-        Map<String, List<String>> mapActiveKeepers = new HashMap(){};
-        for (Keeper keeper : listActiveKeepers) {
-            List<String> directions = new ArrayList<>();
-            if(mapActiveKeepers.containsKey(keeper.getUuid())) {
-                directions = mapActiveKeepers.get(keeper.getUuid());
-                directions.add(keeper.getDirection());
-                mapActiveKeepers.replace(keeper.getUuid(),directions);
-            }else{
-                directions.add(keeper.getDirection());
-                mapActiveKeepers.put(keeper.getUuid(), directions);
-            }
-        }
-
         //Then
-        assertEquals(expected, mapActiveKeepers);
+        assertEquals(expected, service.getActiveKeepers());
     }
 }
 
