@@ -1,6 +1,7 @@
 package juja.microservices.keepers.service;
 
 import juja.microservices.keepers.dao.KeepersRepository;
+import juja.microservices.keepers.entity.ActiveKeeperDTO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -118,9 +119,9 @@ public class KeepersServiceTest {
     @Test
     public void getActiveKeepers(){
         //Given
-        Map<String, List<String>> expected = new HashMap<>();
-        expected.put("uuidTo1", Arrays.asList("teems","sqlcmd"));
-        expected.put("uuidTo2", Arrays.asList("sqlcmd"));
+        List<ActiveKeeperDTO> expected = new ArrayList<>();
+        expected.add(new ActiveKeeperDTO("uuidTo1", Arrays.asList("teems","sqlcmd")));
+        expected.add(new ActiveKeeperDTO("uuidTo2", Arrays.asList("sqlcmd")));
 
         List<Keeper> listActiveKeepers = new ArrayList<>();
         Keeper activeKeeper1 = new Keeper("uuidFrom1", "uuidTo1", "teems", new Date());
