@@ -2,8 +2,6 @@ package juja.microservices.keepers.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
-import lombok.Getter;
-import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +19,9 @@ public class ActiveKeeperDTO {
 
     public ActiveKeeperDTO(String uuid, List<String> directions) {
         this.uuid = uuid;
-        this.directions.addAll(directions);
+        if(directions != null && !directions.isEmpty()) {
+            this.directions.addAll(directions);
+        }
     }
 
     public void addDirection(String direction){
