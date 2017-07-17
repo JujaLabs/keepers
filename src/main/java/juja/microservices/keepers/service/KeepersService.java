@@ -71,7 +71,7 @@ public class KeepersService {
         List<ActiveKeeperDTO> activeKeeperDTOList = new ArrayList<>();
         Map<String, ActiveKeeperDTO> activeKeeperDTOMap = new HashMap<>();
         List<Keeper> keepers = keepersRepository.getActiveKeepers();
-        logger.info("Get List<Keeper> : {}", keepers);
+        logger.debug("Get List<Keeper> : {}", keepers);
         for (Keeper keeper : keepers) {
             String keeperUuid = keeper.getUuid();
 
@@ -81,9 +81,11 @@ public class KeepersService {
                 activeKeeperDTOMap.put(keeperUuid, new ActiveKeeperDTO(keeperUuid, Arrays.asList(keeper.getDirection())));
             }
         }
-        logger.info("Create Map<String, ActiveKeeperDTO> : {} from income list of Keepers.", activeKeeperDTOMap);
+
         activeKeeperDTOMap.forEach((String, ActiveKeeperDTO) -> activeKeeperDTOList.add(ActiveKeeperDTO));
-        logger.debug("Service.getActiveKeepers before out with result data - list of ActiveKeepersDTO: {}", activeKeeperDTOList);
+        logger.debug("Create Map<String, ActiveKeeperDTO> : from income list of Keepers.");
+        activeKeeperDTOMap.forEach((String, ActiveKeeperDTO) -> logger.debug("row Map<String, ActiveKeeperDTO> : uuid : {}; ActiveKeeperDTO : {}", String, ActiveKeeperDTO));
+        logger.info("Service.getActiveKeepers before out with result data - list of ActiveKeepersDTO: {}", activeKeeperDTOList);
         return activeKeeperDTOList;
     }
 }
