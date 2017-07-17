@@ -12,8 +12,6 @@ import java.util.List;
  * @author Dmitriy Roy
  */
 @Data
-@Getter
-@ToString
 public class ActiveKeeperDTO {
 
     @JsonProperty("uuid")
