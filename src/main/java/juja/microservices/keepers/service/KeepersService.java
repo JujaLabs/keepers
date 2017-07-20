@@ -70,7 +70,7 @@ public class KeepersService {
         logger.debug("Service.getActiveKeepers after in, without any parameters.");
         List<ActiveKeeperDTO> activeKeeperDTOList = new ArrayList<>();
         Map<String, ActiveKeeperDTO> activeKeeperDTOMap = new HashMap<>();
-        logger.debug("Service.getActiveKeepers after goes to keepersRepository.getActiveKeepers()");
+        logger.debug("Service.getActiveKeepers after repository invocation");
         List<Keeper> keepers = keepersRepository.getActiveKeepers();
         logger.debug("Get List<Keeper> : {}", keepers);
         for (Keeper keeper : keepers) {
