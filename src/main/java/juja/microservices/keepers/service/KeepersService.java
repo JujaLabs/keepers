@@ -84,8 +84,7 @@ public class KeepersService {
         }
 
         activeKeeperDTOMap.forEach((String, ActiveKeeperDTO) -> activeKeeperDTOList.add(ActiveKeeperDTO));
-        logger.debug("Create Map<String, ActiveKeeperDTO> : from income list of Keepers.");
-        activeKeeperDTOMap.forEach((String, ActiveKeeperDTO) -> logger.debug("row Map<String, ActiveKeeperDTO> : uuid : {}; ActiveKeeperDTO : {}", String, ActiveKeeperDTO));
+        logger.debug("Create Map<String, ActiveKeeperDTO>. It has {} elements.", activeKeeperDTOMap.size());
         logger.info("Service.getActiveKeepers before out with result data - list of ActiveKeepersDTO: {}", activeKeeperDTOList);
         return activeKeeperDTOList;
     }
