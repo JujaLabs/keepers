@@ -3,7 +3,6 @@ package juja.microservices.keepers.controller;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import juja.microservices.keepers.entity.Keeper;
 import juja.microservices.keepers.entity.KeeperRequest;
 import juja.microservices.keepers.service.KeepersService;
 import org.slf4j.Logger;
@@ -64,9 +63,9 @@ public class KeepersController {
             @ApiResponse(code = HttpURLConnection.HTTP_BAD_METHOD, message = "Bad method"),
             @ApiResponse(code = HttpURLConnection.HTTP_UNSUPPORTED_TYPE, message = "Unsupported request media type")
     })
-    public ResponseEntity<?> inactiveKeeper(@Valid @RequestBody KeeperRequest request) {
-        List<String> ids = keepersService.inactiveKeeper(request);
-        logger.info("Inactive keeper, ids = {}", ids.toString());
+    public ResponseEntity<?> deactivateKeeper(@Valid @RequestBody KeeperRequest request) {
+        List<String> ids = keepersService.deactivateKeeper(request);
+        logger.info("Deactivate keeper, ids = {}", ids.toString());
         return ResponseEntity.ok(ids);
     }
 

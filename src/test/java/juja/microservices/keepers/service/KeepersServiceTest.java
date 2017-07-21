@@ -13,7 +13,6 @@ import javax.inject.Inject;
 
 import java.util.*;
 
-import static juja.microservices.common.TestUtils.reflectionEqual;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -47,7 +46,7 @@ public class KeepersServiceTest extends KeeperAbstractTest {
     public void inactiveKeeperWithKeeperAccessExceptionTest() {
         when(repository.findOneActive(anyString())).thenReturn(null);
 
-        service.inactiveKeeper(new KeeperRequest("from", "uuid", "direction"));
+        service.deactivateKeeper(new KeeperRequest("from", "uuid", "direction"));
     }
 
     @Test(expected = KeeperNonexistentException.class)
@@ -55,24 +54,22 @@ public class KeepersServiceTest extends KeeperAbstractTest {
         when(repository.findOneActive(anyString())).thenReturn(createKeeper().withId("uuid").create());
         when(repository.findOneByUUIdAndDirectionIsActive(anyString(), anyString())).thenReturn(null);
 
-        service.inactiveKeeper(new KeeperRequest("from", "uuid", "direction"));
+        service.deactivateKeeper(new KeeperRequest("from", "uuid", "direction"));
     }
 
     @Test
     public void inactiveKeeperSuccessTest() {
         KeeperRequest keeperRequest = new KeeperRequest("from", "uuid", "direction");
-        Keeper keeper = createKeeper().withId("uuid").create();
-        when(repository.findOneActive(anyString())).thenReturn(createKeeper().withId("uuid").create());
+        Keeper keeper = createKeeper().withId("uuid").withUuid("1").create();
+        when(repository.findOneActive(anyString())).thenReturn(keeper);
         when(repository.findOneByUUIdAndDirectionIsActive(anyString(), anyString())).thenReturn(keeper);
-        when(repository.inactive(keeper)).thenReturn("uuid");
+        when(repository.save(keeper)).thenReturn("uuid");
 
-        List<String> actual = service.inactiveKeeper(keeperRequest);
+        List<String> actual = service.deactivateKeeper(keeperRequest);
         assertEquals(Collections.singletonList("uuid"), actual);
 
         verify(repository).findOneActive(eq(keeperRequest.getFrom()));
         verify(repository).findOneByUUIdAndDirectionIsActive(eq(keeperRequest.getUuid()), eq(keeperRequest.getDirection()));
-        verify(repository).inactive(argThat(reflectionEqual(keeper)));
-        verifyNoMoreInteractions(repository);
     }
 
     @Test
@@ -111,7 +108,7 @@ public class KeepersServiceTest extends KeeperAbstractTest {
     @Test(expected = KeeperAccessException.class)
     public void addKeeperWithKeeperAccessException() {
         //Given
-        when(repository.findOneByUUId(anyString())).thenReturn(null);
+        when(repository.findOneActive(anyString())).thenReturn(null);
 
         //When
         service.addKeeper(new KeeperRequest("123qwe", "asdqwe", "teems"));
@@ -121,7 +118,7 @@ public class KeepersServiceTest extends KeeperAbstractTest {
     public void addKeeperWithKeeperDirectionActiveException() {
         //Given
         Keeper keeper = new Keeper("some", "some", "some", new Date());
-        when(repository.findOneByUUId(anyString())).thenReturn(keeper);
+        when(repository.findOneActive(anyString())).thenReturn(keeper);
         when(repository.findOneByUUIdAndDirectionIsActive(anyString(), anyString())).thenReturn(keeper);
 
         //When
@@ -134,8 +131,8 @@ public class KeepersServiceTest extends KeeperAbstractTest {
         Date startDate = Date.from(LocalDateTime.of(2017, Month.APRIL, 1, 12, 0).atZone(ZoneId.systemDefault()).toInstant());
         KeeperRequest keeperRequest = new KeeperRequest("123qwe", "asdqwe", "teems");
         Keeper keeper = new Keeper("123qwe", "asdqwe", "teems", startDate);
-        when(repository.findOneByUUId(anyString())).thenReturn(keeper);
-        when(repository.save(keeperRequest)).thenReturn("SomeID");
+        when(repository.findOneActive(anyString())).thenReturn(keeper);
+        when(repository.save(any(Keeper.class))).thenReturn("SomeID");
         String expected = "SomeID";
 
         //When

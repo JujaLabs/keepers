@@ -1,17 +1,16 @@
 package juja.microservices.keepers.dao;
 
 import juja.microservices.common.KeeperAbstractTest;
+import juja.microservices.common.matchers.KeeperMatcher;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.inject.Inject;
 
-import static juja.microservices.common.TestUtils.reflectionEqual;
 import static org.junit.Assert.assertEquals;
 
 import juja.microservices.keepers.entity.Keeper;
-import juja.microservices.keepers.entity.KeeperRequest;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -41,11 +40,13 @@ public class KeepersRepositoryTest extends KeeperAbstractTest {
 
     @Test
     public void inactiveTest() {
-        Keeper keeper = createKeeper().withId("uuid").isActive(false).create();
-        String actual = repository.inactive(keeper);
+        Keeper keeper = createKeeper().withId("uuid").withUuid("uuid")
+                .withFrom("from").withDirection("direction").isActive(false).create();
+        String actual = repository.save(keeper);
         assertEquals("uuid", actual);
 
-        verify(mongoTemplate).save(argThat(reflectionEqual(keeper)));
+        verify(mongoTemplate).save(argThat(new KeeperMatcher("uuid", "uuid", "from",
+                "direction", false)));
         verifyNoMoreInteractions(mongoTemplate);
     }
 
@@ -57,18 +58,6 @@ public class KeepersRepositoryTest extends KeeperAbstractTest {
                 .thenReturn(keeper);
 
         assertEquals(keeper, repository.findOneActive("uuid"));
-    }
-
-    @Test
-    public void save() {
-        //When
-        doNothing().when(mongoTemplate).save(any(Keeper.class));
-
-        //Then
-        assertEquals(null,
-                repository.save(new KeeperRequest("123qwe", "asdqwe", "teems")));
-
-        //TODO: its incorrect scenario for this test
     }
 
     @Test

@@ -12,10 +12,8 @@ import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.time.ZoneId;
+import java.util.*;
 
 /**
  * @author Vadim Dyachenko
@@ -46,44 +44,51 @@ public class KeepersService {
         return result;
     }
 
-    public List<String> inactiveKeeper(KeeperRequest keeperRequest) {
+    public List<String> deactivateKeeper(KeeperRequest keeperRequest) {
         String uuid = keeperRequest.getUuid();
         String direction = keeperRequest.getDirection();
-        String form = keeperRequest.getFrom();
-        logger.debug("Service.deleteKeeper after in, parameters: {}", keeperRequest.toString());
-        if (keepersRepository.findOneActive(form) == null) {
-            logger.warn("Keeper '{}' tried to set inactive 'Keeper' '{}' but he's not an active Keeper", form, uuid);
-            throw new KeeperAccessException("Only active keeper could set inactive another keeper");
+        String from = keeperRequest.getFrom();
+        logger.debug("Service.deactivate after in, parameters: {}", keeperRequest.toString());
+        if (keepersRepository.findOneActive(from) == null) {
+            logger.warn("Keeper '{}' tried to deactivate 'keeper' '{}' but '{}' not active", from, uuid, from);
+            throw new KeeperAccessException("Only active keeper could deactivate another keeper");
         }
         Keeper keeper = keepersRepository.findOneByUUIdAndDirectionIsActive(uuid, direction);
         if (keeper == null) {
-            logger.warn("Keeper with uuid '{}' and direction '{}' is't exist or inactive", uuid, direction);
+            logger.warn("Keeper with uuid '{}' and direction '{}' is't exist or not active", uuid, direction);
             throw new KeeperNonexistentException("Keeper with uuid " + uuid + " and direction " + direction
-                    + " is't exist or inactive");
+                    + " is't exist or not active");
         }
         keeper.setDismissDate(LocalDateTime.now());
-        List<String> ids = Collections.singletonList(keepersRepository.inactive(keeper));
-        logger.info("'Keeper' updated , with uuid {}, from user '{}'", uuid, form);
+        List<String> ids = Collections.singletonList(keepersRepository.save(keeper));
+        logger.info("'Keeper' deactivated , with uuid '{}', from user '{}'", uuid, from);
+        logger.debug("Keeper {} was deactivated ", uuid);
         return ids;
     }
 
     public String addKeeper(KeeperRequest keeperRequest) {
+        String uuid = keeperRequest.getUuid();
+        String direction = keeperRequest.getDirection();
+        String from = keeperRequest.getFrom();
         logger.debug("Service.addKeeper after in, parameters: {}", keeperRequest.toString());
-        if (keepersRepository.findOneByUUId(keeperRequest.getFrom()) == null) {
-            logger.warn("User '{}' tried to add new 'Keeper' but he is not a Keeper", keeperRequest.getFrom());
+        if (keepersRepository.findOneActive(from) == null) {
+            logger.warn("User '{}' tried to add new 'Keeper' but he is not a Keeper", from);
             throw new KeeperAccessException("Only the keeper can appoint another keeper");
         }
 
-        if (keepersRepository.findOneByUUIdAndDirectionIsActive(keeperRequest.getUuid(), keeperRequest.getDirection()) != null) {
-            logger.warn("Keeper with uuid '{}' already keeps direction '{}' and he is active",
-                    keeperRequest.getUuid(), keeperRequest.getDirection());
-            throw new KeeperDirectionActiveException("Keeper with uuid " + keeperRequest.getUuid() + " already keeps direction "
-                    + keeperRequest.getDirection() + " and he is active");
+        if (keepersRepository.findOneByUUIdAndDirectionIsActive(uuid, direction) != null) {
+            logger.warn("Keeper with uuid '{}' already keeps direction '{}' and he is active", uuid, direction);
+            throw new KeeperDirectionActiveException("Keeper with uuid " + uuid + " already keeps direction "
+                    + direction + " and he is active");
         }
-
-        String newKeeperId = keepersRepository.save(keeperRequest);
+        Date startDate = Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant());
+        Keeper keeper = new Keeper(keeperRequest.getFrom(),
+                keeperRequest.getUuid(),
+                keeperRequest.getDirection(),
+                startDate);
+        String newKeeperId = keepersRepository.save(keeper);
         logger.info("Added new 'Keeper' with DBId'{}', with uuid {}, from user '{}'",
-                newKeeperId, keeperRequest.getUuid(), keeperRequest.getFrom());
+                newKeeperId, uuid, from);
         logger.debug("Service.addKeeper before out, parameters: {}", newKeeperId);
         return newKeeperId;
     }

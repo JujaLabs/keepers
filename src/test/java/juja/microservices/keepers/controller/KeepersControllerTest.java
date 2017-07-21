@@ -17,11 +17,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static juja.microservices.common.TestUtils.reflectionEqual;
 import static juja.microservices.common.TestUtils.toJson;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8;
@@ -59,7 +57,6 @@ public class KeepersControllerTest {
                 .content(badJsonRequest))
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
                 .andExpect(status().isBadRequest());
-
     }
 
     @Test
@@ -67,7 +64,7 @@ public class KeepersControllerTest {
         KeeperRequest keeperRequest = new KeeperRequest("from", "uuid", "direction");
         List<String> ids = new ArrayList<>();
         ids.add("uuid");
-        when(service.inactiveKeeper(any(KeeperRequest.class))).thenReturn(ids);
+        when(service.deactivateKeeper(any(KeeperRequest.class))).thenReturn(ids);
 
         String actual = mockMvc.perform(put("/keepers")
                 .contentType(APPLICATION_JSON_UTF8)
@@ -78,10 +75,7 @@ public class KeepersControllerTest {
                 .getResponse()
                 .getContentAsString();
 
-        verify(service).inactiveKeeper(argThat(reflectionEqual(keeperRequest)));
-
         assertEquals("[\"uuid\"]", actual);
-
     }
 
     @Test

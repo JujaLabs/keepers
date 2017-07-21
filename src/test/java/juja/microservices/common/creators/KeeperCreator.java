@@ -24,6 +24,16 @@ public class KeeperCreator implements Creator<Keeper> {
         return this;
     }
 
+    public KeeperCreator withFrom(String from) {
+        keeper.setFrom(from);
+        return this;
+    }
+
+    public KeeperCreator withDirection(String direction) {
+        keeper.setDirection(direction);
+        return this;
+    }
+
     public KeeperCreator isActive(boolean isActive) {
         keeper.setActive(isActive);
         return this;

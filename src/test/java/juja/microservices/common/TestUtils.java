@@ -14,7 +14,6 @@ import static org.unitils.reflectionassert.ReflectionAssert.assertReflectionEqua
  */
 public final class TestUtils {
     private TestUtils() {
-        //utility class
     }
 
     public static byte[] toJson(Object o) throws IOException {

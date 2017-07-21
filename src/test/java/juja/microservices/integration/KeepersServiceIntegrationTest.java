@@ -15,7 +15,6 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
-import org.mockito.Mockito;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.inject.Inject;
@@ -48,7 +47,7 @@ public class KeepersServiceIntegrationTest extends BaseIntegrationTest {
         KeeperRequest request = new KeeperRequest("asdqwe", "max", "teems");
 
         //When
-        service.inactiveKeeper(request);
+        service.deactivateKeeper(request);
     }
 
     @Test(expected = KeeperNonexistentException.class)
@@ -58,16 +57,16 @@ public class KeepersServiceIntegrationTest extends BaseIntegrationTest {
         KeeperRequest request = new KeeperRequest("asdqwe", "max", "teems");
 
         //When
-        service.inactiveKeeper(request);
+        service.deactivateKeeper(request);
     }
 
     @Test
     @UsingDataSet(locations = "/datasets/severalKeepers.json")
     public void inactiveKeeperSuccessTest() {
-        service.inactiveKeeper(new KeeperRequest("asdqwe", "max", "SomeDirection"));
+        service.deactivateKeeper(new KeeperRequest("asdqwe", "max", "SomeDirection"));
         String result = repository.findOneActive("asdqwe").getUuid();
 
-        assertEquals(false, repository.findOneByUUId("max").isActive());
+        assertNull(repository.findOneActive("max"));
         assertNotNull(result);
     }
 

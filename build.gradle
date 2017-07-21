@@ -66,7 +66,6 @@ dependencies {
     testCompile 'io.rest-assured:rest-assured:3.0.2'
     testCompile 'net.javacrumbs.json-unit:json-unit-fluent:1.19.0'
     testCompile 'org.skyscreamer:jsonassert:1.4.0'
-    testCompile 'org.unitils:unitils-core:3.4.6'
 }
 
 task wrapper(type: Wrapper) {

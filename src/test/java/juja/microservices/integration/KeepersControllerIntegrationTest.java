@@ -58,7 +58,7 @@ public class KeepersControllerIntegrationTest extends BaseIntegrationTest {
                 "\"internalErrorCode\":\"KPR-F1-D4\"," +
                 "\"clientMessage\":\"Sorry, but you're not a keeper\"," +
                 "\"developerMessage\":\"Exception - KeeperAccessException\"," +
-                "\"exceptionMessage\":\"Only active keeper could set inactive another keeper\"," +
+                "\"exceptionMessage\":\"Only active keeper could deactivatee another keeper\"," +
                 "\"detailErrors\":[]}";
 
         String result = mockMvc.perform(put("/keepers")
@@ -79,7 +79,7 @@ public class KeepersControllerIntegrationTest extends BaseIntegrationTest {
                 "\"internalErrorCode\":\"KPR-F2\"," +
                 "\"clientMessage\":\"Sorry, but keeper with uuid and direction is't exist or inactive\"," +
                 "\"developerMessage\":\"Exception - KeeperNonexistentException\"," +
-                "\"exceptionMessage\":\"Keeper with uuid max and direction SomeDirection is't exist or inactive\"," +
+                "\"exceptionMessage\":\"Keeper with uuid max and direction SomeDirection is't exist or not active\"," +
                 "\"detailErrors\":[]}";
 
         String result = mockMvc.perform(put("/keepers")

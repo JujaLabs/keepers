@@ -3,16 +3,12 @@ package juja.microservices.keepers.dao;
 import juja.microservices.keepers.entity.Keeper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import juja.microservices.keepers.entity.KeeperRequest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 import javax.inject.Inject;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.*;
 
 /**
@@ -41,12 +37,7 @@ public class KeepersRepository {
         return result;
     }
 
-    public String save(KeeperRequest keeperRequest) {
-        Date startDate = Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant());
-        Keeper keeper = new Keeper(keeperRequest.getFrom(),
-                keeperRequest.getUuid(),
-                keeperRequest.getDirection(),
-                startDate);
+    public String save(Keeper keeper) {
         mongoTemplate.save(keeper);
         return keeper.getId();
     }
@@ -59,11 +50,6 @@ public class KeepersRepository {
         return mongoTemplate.findOne(new Query(Criteria.where("uuid").is(uuid))
                 .addCriteria(Criteria.where("direction").is(direction))
                 .addCriteria(Criteria.where("isActive").is(true)), Keeper.class);
-    }
-
-    public String inactive(Keeper keeper) {
-        mongoTemplate.save(keeper);
-        return keeper.getId();
     }
 
     public Keeper findOneActive(String uuid) {
