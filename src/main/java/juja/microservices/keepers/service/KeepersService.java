@@ -1,6 +1,7 @@
 package juja.microservices.keepers.service;
 
 import juja.microservices.keepers.dao.KeepersRepository;
+import juja.microservices.keepers.entity.ActiveKeeperDTO;
 import juja.microservices.keepers.entity.Keeper;
 import juja.microservices.keepers.entity.KeeperRequest;
 import juja.microservices.keepers.exception.KeeperAccessException;
@@ -14,6 +15,12 @@ import javax.inject.Inject;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Arrays;
 
 /**
  * @author Vadim Dyachenko
@@ -90,7 +97,26 @@ public class KeepersService {
         return newKeeperId;
     }
 
-    public Map<String, List<String>> getActiveKeepers() {
-        return keepersRepository.getActiveKeepers();
+    public List<ActiveKeeperDTO> getActiveKeepers() {
+        logger.debug("Service.getActiveKeepers after in, without any parameters.");
+        List<ActiveKeeperDTO> activeKeeperDTOList = new ArrayList<>();
+        Map<String, ActiveKeeperDTO> activeKeeperDTOMap = new HashMap<>();
+        logger.debug("Service.getActiveKeepers before repository invocation.");
+        List<Keeper> keepers = keepersRepository.getActiveKeepers();
+        logger.debug("Get List<Keeper> : {}", keepers);
+        for (Keeper keeper : keepers) {
+            String keeperUuid = keeper.getUuid();
+
+            if(activeKeeperDTOMap.containsKey(keeperUuid)) {
+                activeKeeperDTOMap.get(keeperUuid).addDirection(keeper.getDirection());
+            }else{
+                activeKeeperDTOMap.put(keeperUuid, new ActiveKeeperDTO(keeperUuid, Arrays.asList(keeper.getDirection())));
+            }
+        }
+
+        activeKeeperDTOMap.forEach((String, ActiveKeeperDTO) -> activeKeeperDTOList.add(ActiveKeeperDTO));
+        logger.debug("Create Map<String, ActiveKeeperDTO>. It has {} elements.", activeKeeperDTOMap.size());
+        logger.info("Service.getActiveKeepers before out with result data - list of ActiveKeepersDTO: {}", activeKeeperDTOList);
+        return activeKeeperDTOList;
     }
 }
