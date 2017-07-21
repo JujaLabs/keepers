@@ -18,8 +18,6 @@ import java.util.Date;
  * @author Dmitriy Lyashenko
  */
 @Data
-@Getter
-@ToString
 public class Keeper {
 
     @Id

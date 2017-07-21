@@ -59,21 +59,7 @@ public class KeepersRepository {
                                                 .addCriteria(Criteria.where("isActive").is(true)), Keeper.class);
     }
 
-    public Map<String, List<String>> getActiveKeepers(){
-        Map<String, List<String>> outMap = new HashMap<>();
-
-        List<Keeper> keepers = mongoTemplate.find(new Query(Criteria.where("isActive").is(true)), Keeper.class);
-        for (Keeper keeper : keepers) {
-            List<String> directions = new ArrayList<>();
-            if(outMap.containsKey(keeper.getUuid())) {
-                directions = outMap.get(keeper.getUuid());
-                directions.add(keeper.getDirection());
-                outMap.replace(keeper.getUuid(),directions);
-            }else{
-                directions.add(keeper.getDirection());
-                outMap.put(keeper.getUuid(), directions);
-            }
-        }
-        return outMap;
+    public List<Keeper> getActiveKeepers(){
+        return mongoTemplate.find(new Query(Criteria.where("isActive").is(true)), Keeper.class);
     }
 }

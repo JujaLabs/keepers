@@ -1,6 +1,7 @@
 package juja.microservices.keepers.service;
 
 import juja.microservices.keepers.dao.KeepersRepository;
+import juja.microservices.keepers.entity.ActiveKeeperDTO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -8,10 +9,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.inject.Inject;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -21,16 +18,19 @@ import juja.microservices.keepers.entity.Keeper;
 import juja.microservices.keepers.entity.KeeperRequest;
 import juja.microservices.keepers.exception.KeeperAccessException;
 import juja.microservices.keepers.exception.KeeperDirectionActiveException;
-import org.mockito.InjectMocks;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import static org.mockito.Matchers.anyString;
 
 /**
  * @author Dmitriy Lyashenko
+ * @author Dmitriy Roy
  */
 @RunWith(SpringRunner.class)
 @WebMvcTest(KeepersService.class)
@@ -39,7 +39,6 @@ public class KeepersServiceTest {
     private static final String UUID = "00001111";
 
     @Inject
-    @InjectMocks
     private KeepersService service;
 
     @MockBean
@@ -114,4 +113,26 @@ public class KeepersServiceTest {
         //Then
         assertEquals(expected, result);
     }
+    @Test
+    public void getActiveKeepers(){
+        //Given
+        List<ActiveKeeperDTO> expected = new ArrayList<>();
+        expected.add(new ActiveKeeperDTO("uuidTo2", Arrays.asList("sqlcmd")));
+        expected.add(new ActiveKeeperDTO("uuidTo1", Arrays.asList("teems","sqlcmd")));
+
+        List<Keeper> listActiveKeepers = new ArrayList<>();
+        Keeper activeKeeper1 = new Keeper("uuidFrom1", "uuidTo1", "teems", new Date());
+        Keeper activeKeeper2 = new Keeper("uuidFrom2", "uuidTo1", "sqlcmd", new Date());
+        Keeper activeKeeper3 = new Keeper("uuidFrom1", "uuidTo2", "sqlcmd", new Date());
+        listActiveKeepers.add(activeKeeper1);
+        listActiveKeepers.add(activeKeeper2);
+        listActiveKeepers.add(activeKeeper3);
+
+        //When
+        when(repository.getActiveKeepers()).thenReturn(listActiveKeepers);
+
+        //Then
+        assertEquals(expected, service.getActiveKeepers());
+    }
 }
+

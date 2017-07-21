@@ -62,7 +62,7 @@ public class KeepersRepositoryTest {
     }
 
     @Test
-    public void getAllActiveKeepers(){
+    public void getActiveKeepers(){
         //Given
         List<Keeper> listActiveKeepers = new ArrayList<>();
         Keeper activeKeeper1 = new Keeper("uuidFrom1", "uuidTo1", "teems", new Date());
@@ -72,25 +72,12 @@ public class KeepersRepositoryTest {
         listActiveKeepers.add(activeKeeper2);
         listActiveKeepers.add(activeKeeper3);
 
-        Map<String, List<String>> mapActiveKeepers = new HashMap(){};
-        for (Keeper keeper : listActiveKeepers) {
-            List<String> directions = new ArrayList<>();
-            if(mapActiveKeepers.containsKey(keeper.getUuid())) {
-                directions = mapActiveKeepers.get(keeper.getUuid());
-                directions.add(keeper.getDirection());
-                mapActiveKeepers.replace(keeper.getUuid(),directions);
-            }else{
-                directions.add(keeper.getDirection());
-                mapActiveKeepers.put(keeper.getUuid(), directions);
-            }
-        }
-
         //When
         when(mongoTemplate.find(new Query(Criteria.where("isActive").is(true)), Keeper.class))
                 .thenReturn(listActiveKeepers);
 
         //Then
-        assertEquals(mapActiveKeepers, repository.getActiveKeepers());
+        assertEquals(listActiveKeepers, repository.getActiveKeepers());
 
     }
 }
