@@ -42,7 +42,7 @@ public class KeepersServiceIntegrationTest extends BaseIntegrationTest {
 
     @Test(expected = KeeperAccessException.class)
     @UsingDataSet(locations = "/datasets/inactiveKeeper.json")
-    public void inactiveKeeperWithKeeperAccessExceptionTest() {
+    public void deactivateKeeperWithKeeperAccessExceptionTest() {
         //Given
         KeeperRequest request = new KeeperRequest("asdqwe", "max", "teems");
 
@@ -52,7 +52,7 @@ public class KeepersServiceIntegrationTest extends BaseIntegrationTest {
 
     @Test(expected = KeeperNonexistentException.class)
     @UsingDataSet(locations = "/datasets/severalKeepers.json")
-    public void inactiveKeeperWithKeeperNonexistentExceptionTest() {
+    public void deactivateKeeperWithKeeperNonexistentExceptionTest() {
         //Given
         KeeperRequest request = new KeeperRequest("asdqwe", "max", "teems");
 
@@ -62,7 +62,7 @@ public class KeepersServiceIntegrationTest extends BaseIntegrationTest {
 
     @Test
     @UsingDataSet(locations = "/datasets/severalKeepers.json")
-    public void inactiveKeeperSuccessTest() {
+    public void deactivateKeeperSuccessTest() {
         service.deactivateKeeper(new KeeperRequest("asdqwe", "max", "SomeDirection"));
         String result = repository.findOneActive("asdqwe").getUuid();
 

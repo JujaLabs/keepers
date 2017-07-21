@@ -52,13 +52,13 @@ public class KeepersControllerIntegrationTest extends BaseIntegrationTest {
 
     @Test
     @UsingDataSet(locations = "/datasets/inactiveKeeper.json")
-    public void inactiveKeeperWithKeeperAccessExceptionTest() throws Exception {
+    public void deactivetKeeperWithKeeperAccessExceptionTest() throws Exception {
         String expected = "{" +
                 "\"httpStatus\":400," +
                 "\"internalErrorCode\":\"KPR-F1-D4\"," +
                 "\"clientMessage\":\"Sorry, but you're not a keeper\"," +
                 "\"developerMessage\":\"Exception - KeeperAccessException\"," +
-                "\"exceptionMessage\":\"Only active keeper could deactivatee another keeper\"," +
+                "\"exceptionMessage\":\"Only active keeper could deactivate another keeper\"," +
                 "\"detailErrors\":[]}";
 
         String result = mockMvc.perform(put("/keepers")

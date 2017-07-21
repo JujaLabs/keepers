@@ -47,7 +47,7 @@ public class KeepersControllerTest {
     private KeepersController controller;
 
     @Test
-    public void inactiveKeeperBadRequestTest() throws Exception {
+    public void deactivateKeeperBadRequestTest() throws Exception {
         //given
         String badJsonRequest = "{\"from\":\"admin\",\"direction\":\"LMS\"}";
 
@@ -60,7 +60,7 @@ public class KeepersControllerTest {
     }
 
     @Test
-    public void inactiveKeeperSuccessTest() throws Exception {
+    public void deactivateKeeperSuccessTest() throws Exception {
         KeeperRequest keeperRequest = new KeeperRequest("from", "uuid", "direction");
         List<String> ids = new ArrayList<>();
         ids.add("uuid");

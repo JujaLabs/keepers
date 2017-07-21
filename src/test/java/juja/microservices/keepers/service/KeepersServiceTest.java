@@ -43,14 +43,14 @@ public class KeepersServiceTest extends KeeperAbstractTest {
     private KeepersRepository repository;
 
     @Test(expected = KeeperAccessException.class)
-    public void inactiveKeeperWithKeeperAccessExceptionTest() {
+    public void deactivateKeeperWithKeeperAccessExceptionTest() {
         when(repository.findOneActive(anyString())).thenReturn(null);
 
         service.deactivateKeeper(new KeeperRequest("from", "uuid", "direction"));
     }
 
     @Test(expected = KeeperNonexistentException.class)
-    public void inactiveKeeperWithKeeperNonexistentExceptionTest() {
+    public void deactivateKeeperWithKeeperNonexistentExceptionTest() {
         when(repository.findOneActive(anyString())).thenReturn(createKeeper().withId("uuid").create());
         when(repository.findOneByUUIdAndDirectionIsActive(anyString(), anyString())).thenReturn(null);
 
@@ -58,7 +58,7 @@ public class KeepersServiceTest extends KeeperAbstractTest {
     }
 
     @Test
-    public void inactiveKeeperSuccessTest() {
+    public void deactivateKeeperSuccessTest() {
         KeeperRequest keeperRequest = new KeeperRequest("from", "uuid", "direction");
         Keeper keeper = createKeeper().withId("uuid").withUuid("1").create();
         when(repository.findOneActive(anyString())).thenReturn(keeper);

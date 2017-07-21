@@ -39,7 +39,7 @@ public class KeepersRepositoryTest extends KeeperAbstractTest {
     private MongoTemplate mongoTemplate;
 
     @Test
-    public void inactiveTest() {
+    public void deactivateKeeperTest() {
         Keeper keeper = createKeeper().withId("uuid").withUuid("uuid")
                 .withFrom("from").withDirection("direction").isActive(false).create();
         String actual = repository.save(keeper);
