@@ -51,8 +51,8 @@ public class KeepersControllerIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    @UsingDataSet(locations = "/datasets/inactiveKeeper.json")
-    public void deactivetKeeperWithKeeperAccessExceptionTest() throws Exception {
+    @UsingDataSet(locations = "/datasets/deactivateKeeper.json")
+    public void deactiveteKeeperWithKeeperAccessExceptionTest() throws Exception {
         String expected = "{" +
                 "\"httpStatus\":400," +
                 "\"internalErrorCode\":\"KPR-F1-D4\"," +

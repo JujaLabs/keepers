@@ -41,7 +41,7 @@ public class KeepersServiceIntegrationTest extends BaseIntegrationTest {
     private KeepersService service;
 
     @Test(expected = KeeperAccessException.class)
-    @UsingDataSet(locations = "/datasets/inactiveKeeper.json")
+    @UsingDataSet(locations = "/datasets/deactivateKeeper.json")
     public void deactivateKeeperWithKeeperAccessExceptionTest() {
         //Given
         KeeperRequest request = new KeeperRequest("asdqwe", "max", "teems");

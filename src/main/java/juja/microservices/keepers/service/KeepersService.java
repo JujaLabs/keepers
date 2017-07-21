@@ -82,10 +82,7 @@ public class KeepersService {
                     + direction + " and he is active");
         }
         Date startDate = Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant());
-        Keeper keeper = new Keeper(keeperRequest.getFrom(),
-                keeperRequest.getUuid(),
-                keeperRequest.getDirection(),
-                startDate);
+        Keeper keeper = new Keeper(from, uuid, direction, startDate);
         String newKeeperId = keepersRepository.save(keeper);
         logger.info("Added new 'Keeper' with DBId'{}', with uuid {}, from user '{}'",
                 newKeeperId, uuid, from);
