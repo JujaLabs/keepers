@@ -20,7 +20,6 @@ import java.util.List;
 import static juja.microservices.common.TestUtils.toJson;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -84,11 +83,11 @@ public class KeepersControllerTest {
         String jsonContentRequest = "{\"from\":\"admin\",\"direction\":\"LMS\"}";
 
         //then
-        checkBadRequest("/keepers", jsonContentRequest);
+        checkBadRequest(jsonContentRequest);
     }
 
-    private void checkBadRequest(String uri, String jsonContentRequest) throws Exception {
-        mockMvc.perform(post(uri)
+    private void checkBadRequest(String jsonContentRequest) throws Exception {
+        mockMvc.perform(post("/keepers")
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(jsonContentRequest))
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
@@ -141,14 +140,14 @@ public class KeepersControllerTest {
 
         //When
         when(service.addKeeper(any(KeeperRequest.class))).thenReturn("SomeId");
-        String result = getResult("/keepers", jsonContentRequest);
+        String result = getResult(jsonContentRequest);
 
         //Then
         assertEquals("[\"SomeId\"]", result);
     }
 
-    private String getResult(String uri, String jsonContentRequest) throws Exception {
-        return mockMvc.perform(post(uri)
+    private String getResult(String jsonContentRequest) throws Exception {
+        return mockMvc.perform(post("/keepers")
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(jsonContentRequest))
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))

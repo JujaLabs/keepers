@@ -74,7 +74,7 @@ public class KeepersRepositoryTest extends KeeperAbstractTest {
     }
 
     @Test
-    public void getActiveKeepers(){
+    public void getActiveKeepers() {
         //Given
         List<Keeper> listActiveKeepers = new ArrayList<>();
         Keeper activeKeeper1 = new Keeper("uuidFrom1", "uuidTo1", "teems", new Date());

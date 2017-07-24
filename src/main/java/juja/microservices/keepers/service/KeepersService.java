@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Arrays;
+import java.util.function.BiConsumer;
 
 /**
  * @author Vadim Dyachenko
@@ -107,9 +108,9 @@ public class KeepersService {
         for (Keeper keeper : keepers) {
             String keeperUuid = keeper.getUuid();
 
-            if(activeKeeperDTOMap.containsKey(keeperUuid)) {
+            if (activeKeeperDTOMap.containsKey(keeperUuid)) {
                 activeKeeperDTOMap.get(keeperUuid).addDirection(keeper.getDirection());
-            }else{
+            } else {
                 activeKeeperDTOMap.put(keeperUuid, new ActiveKeeperDTO(keeperUuid, Arrays.asList(keeper.getDirection())));
             }
         }

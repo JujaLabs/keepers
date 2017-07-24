@@ -42,7 +42,7 @@ public class KeepersControllerIntegrationTest extends BaseIntegrationTest {
 
     @Test
     @UsingDataSet(locations = "/datasets/severalKeepers.json")
-    public void inactiveKeeperSuccessTest() throws Exception {
+    public void deactivateKeeperSuccessTest() throws Exception {
         mockMvc.perform(put("/keepers")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JSON_CONTENT_REQ))
@@ -52,7 +52,7 @@ public class KeepersControllerIntegrationTest extends BaseIntegrationTest {
 
     @Test
     @UsingDataSet(locations = "/datasets/deactivateKeeper.json")
-    public void deactiveteKeeperWithKeeperAccessExceptionTest() throws Exception {
+    public void deactivateKeeperWithKeeperAccessExceptionTest() throws Exception {
         String expected = "{" +
                 "\"httpStatus\":400," +
                 "\"internalErrorCode\":\"KPR-F1-D4\"," +
@@ -73,7 +73,7 @@ public class KeepersControllerIntegrationTest extends BaseIntegrationTest {
 
     @Test
     @UsingDataSet(locations = "/datasets/oneKeeperInDB.json")
-    public void inactiveKeeperWithKeeperNonexistentExceptionTest() throws Exception {
+    public void deactivateKeeperWithKeeperNonexistentExceptionTest() throws Exception {
         String expected = "{" +
                 "\"httpStatus\":400," +
                 "\"internalErrorCode\":\"KPR-F2\"," +
