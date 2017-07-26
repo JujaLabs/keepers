@@ -7,6 +7,7 @@ import juja.microservices.keepers.entity.Keeper;
 import juja.microservices.keepers.entity.KeeperRequest;
 import juja.microservices.keepers.exception.KeeperAccessException;
 import juja.microservices.keepers.exception.KeeperDirectionActiveException;
+import juja.microservices.keepers.exception.KeeperNonexistentException;
 import juja.microservices.keepers.service.KeepersService;
 
 import org.junit.Rule;
@@ -15,6 +16,7 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
 import org.springframework.test.context.junit4.SpringRunner;
+
 import javax.inject.Inject;
 
 import java.util.ArrayList;
@@ -37,6 +39,36 @@ public class KeepersServiceIntegrationTest extends BaseIntegrationTest {
 
     @Inject
     private KeepersService service;
+
+    @Test(expected = KeeperAccessException.class)
+    @UsingDataSet(locations = "/datasets/deactivateKeeper.json")
+    public void deactivateKeeperWithKeeperAccessExceptionTest() {
+        //Given
+        KeeperRequest request = new KeeperRequest("asdqwe", "max", "teems");
+
+        //When
+        service.deactivateKeeper(request);
+    }
+
+    @Test(expected = KeeperNonexistentException.class)
+    @UsingDataSet(locations = "/datasets/severalKeepers.json")
+    public void deactivateKeeperWithKeeperNonexistentExceptionTest() {
+        //Given
+        KeeperRequest request = new KeeperRequest("asdqwe", "max", "teems");
+
+        //When
+        service.deactivateKeeper(request);
+    }
+
+    @Test
+    @UsingDataSet(locations = "/datasets/severalKeepers.json")
+    public void deactivateKeeperSuccessTest() {
+        service.deactivateKeeper(new KeeperRequest("asdqwe", "max", "SomeDirection"));
+        String result = repository.findOneActive("asdqwe").getUuid();
+
+        assertNull(repository.findOneActive("max"));
+        assertNotNull(result);
+    }
 
     @Test(expected = KeeperAccessException.class)
     @UsingDataSet(locations = "/datasets/oneKeeperInDB.json")

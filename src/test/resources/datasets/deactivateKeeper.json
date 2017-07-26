@@ -1,0 +1,12 @@
+{
+  "keeper": [
+    {
+      "id":"oop",
+      "from":"123qwe",
+      "uuid":"asdqwe",
+      "direction":"teems",
+      "startDate":{ "$date" : "2017-04-01T00:00:00.000Z"},
+      "isActive":false
+    }
+  ]
+}

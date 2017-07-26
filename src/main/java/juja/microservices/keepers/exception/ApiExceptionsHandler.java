@@ -28,6 +28,7 @@ import java.util.List;
 /**
  * @author Vadim Dyachenko
  * @author Dmitriy Lyashenko
+ * @author Oleksii Petrokhalko
  */
 @RestControllerAdvice
 public class ApiExceptionsHandler extends ResponseEntityExceptionHandler {
@@ -74,6 +75,17 @@ public class ApiExceptionsHandler extends ResponseEntityExceptionHandler {
                         .build();
         logger.warn("handleKeeperDirectionActiveException before out " + message);
         return new ResponseEntity<>(message,HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(KeeperNonexistentException.class)
+    public ResponseEntity<ApiErrorMessage> handleKeeperNonexistentException(KeeperNonexistentException ex) {
+        ApiErrorMessage message =
+                ApiErrorMessage.builder(ApiErrorStatus.KEEPER_NONEXISTENT_EXCEPTION)
+                        .httpStatus(HttpStatus.BAD_REQUEST.value())
+                        .exceptionMessage(ex.getMessage())
+                        .build();
+        logger.warn("handleKeeperNonexistentException before out " + message);
+        return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
     }
 
     @Override

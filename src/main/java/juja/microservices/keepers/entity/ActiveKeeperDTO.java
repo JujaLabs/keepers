@@ -19,12 +19,12 @@ public class ActiveKeeperDTO {
 
     public ActiveKeeperDTO(String uuid, List<String> directions) {
         this.uuid = uuid;
-        if(directions != null && !directions.isEmpty()) {
+        if (directions != null && !directions.isEmpty()) {
             this.directions.addAll(directions);
         }
     }
 
-    public void addDirection(String direction){
+    public void addDirection(String direction) {
         this.directions.add(direction);
     }
 }

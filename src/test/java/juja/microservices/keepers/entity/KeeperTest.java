@@ -1,10 +1,12 @@
 package juja.microservices.keepers.entity;
 
 import org.junit.Test;
+
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.ZoneId;
 import java.util.Date;
+
 import static org.junit.Assert.*;
 
 /**
@@ -13,9 +15,9 @@ import static org.junit.Assert.*;
 public class KeeperTest {
 
     @Test
-    public void newKeeper(){
+    public void newKeeper() {
         //Given
-        Date startDate = Date.from(LocalDateTime.of(2017, Month.APRIL, 1, 12,0)
+        Date startDate = Date.from(LocalDateTime.of(2017, Month.APRIL, 1, 12, 0)
                 .atZone(ZoneId.of("Europe/Paris")).minusHours(1).toInstant());
 
         Keeper keeper = new Keeper("123qwe", "asdqwe", "teems", startDate);
@@ -35,15 +37,15 @@ public class KeeperTest {
     }
 
     @Test
-    public void newKeeperSetDismiss(){
+    public void newKeeperSetDismiss() {
         //Given
-        Date startDate = Date.from(LocalDateTime.of(2017, Month.APRIL, 1, 12,0).
+        Date startDate = Date.from(LocalDateTime.of(2017, Month.APRIL, 1, 12, 0).
                 atZone(ZoneId.of("Europe/Paris")).minusHours(1).toInstant());
 
         Keeper keeper = new Keeper("123qwe", "asdqwe", "teems", startDate);
 
         //When
-        keeper.setDismissDate(LocalDateTime.of(2017, Month.MAY, 1, 12,0));
+        keeper.setDismissDate(LocalDateTime.of(2017, Month.MAY, 1, 12, 0));
 
         //Then
         String expectedFrom = "123qwe";

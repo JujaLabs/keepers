@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import javax.inject.Inject;
 import javax.validation.Valid;
 import java.net.HttpURLConnection;
@@ -21,6 +22,7 @@ import java.util.List;
  * @author Dmitriy Lyashenko
  * @author Dmitriy Roy
  * @author Konstantin Sergey
+ * @author Oleksii Petrokhalko
  */
 @RestController
 public class KeepersController {
@@ -51,9 +53,20 @@ public class KeepersController {
     }
 
     @PutMapping(value = "/keepers", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<?> updateKeeper(@Valid @RequestBody KeeperRequest request) {
-        //TODO Should be implemented feature KPR-F2
-        return null;
+    @ApiOperation(
+            value = "Makes keeper inactive",
+            notes = "This method makes keeper inactive"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "Returns array with one keeper id"),
+            @ApiResponse(code = HttpURLConnection.HTTP_BAD_REQUEST, message = "Bad request"),
+            @ApiResponse(code = HttpURLConnection.HTTP_BAD_METHOD, message = "Bad method"),
+            @ApiResponse(code = HttpURLConnection.HTTP_UNSUPPORTED_TYPE, message = "Unsupported request media type")
+    })
+    public ResponseEntity<?> deactivateKeeper(@Valid @RequestBody KeeperRequest request) {
+        List<String> ids = keepersService.deactivateKeeper(request);
+        logger.info("Deactivate keeper, ids = {}", ids.toString());
+        return ResponseEntity.ok(ids);
     }
 
     @GetMapping(value = "/keepers/{uuid}", produces = "application/json")
