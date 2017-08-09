@@ -45,13 +45,16 @@ public class KeepersControllerTest {
     @Inject
     private KeepersController controller;
 
+    private static final String GET_DIRECTIONS_URL = "/v1/keepers/0000c9999";
+    private static final String KEEPERS_URL = "/v1/keepers";
+
     @Test
     public void deactivateKeeperBadRequestTest() throws Exception {
         //given
         String badJsonRequest = "{\"from\":\"admin\",\"direction\":\"LMS\"}";
 
         //then
-        mockMvc.perform(put("/keepers")
+        mockMvc.perform(put(KEEPERS_URL)
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(badJsonRequest))
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
@@ -65,7 +68,7 @@ public class KeepersControllerTest {
         ids.add("uuid");
         when(service.deactivateKeeper(any(KeeperRequest.class))).thenReturn(ids);
 
-        String actual = mockMvc.perform(put("/keepers")
+        String actual = mockMvc.perform(put(KEEPERS_URL)
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(toJson(keeperRequest)))
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
@@ -87,7 +90,7 @@ public class KeepersControllerTest {
     }
 
     private void checkBadRequest(String jsonContentRequest) throws Exception {
-        mockMvc.perform(post("/keepers")
+        mockMvc.perform(post(KEEPERS_URL)
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(jsonContentRequest))
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
@@ -101,7 +104,7 @@ public class KeepersControllerTest {
         List<String> expectedList = Arrays.asList("direction1", "direction2", "direction3");
         //When
         when(service.getDirections("0000c9999")).thenReturn(expectedList);
-        String result = mockMvc.perform(get("/keepers/0000c9999")
+        String result = mockMvc.perform(get(GET_DIRECTIONS_URL)
                 .contentType(APPLICATION_JSON_UTF8))
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
@@ -117,7 +120,7 @@ public class KeepersControllerTest {
         List<String> expectedList = new ArrayList<>();
         //When
         when(service.getDirections("0000c9999")).thenReturn(expectedList);
-        String result = mockMvc.perform(get("/keepers/0000c9999")
+        String result = mockMvc.perform(get(GET_DIRECTIONS_URL)
                 .contentType(APPLICATION_JSON_UTF8))
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
@@ -128,7 +131,7 @@ public class KeepersControllerTest {
 
     @Test()
     public void getHttpRequestMethodNotSupportedException() throws Exception {
-        mockMvc.perform(post("/keepers/0000c9999")
+        mockMvc.perform(post(GET_DIRECTIONS_URL)
                 .contentType(APPLICATION_JSON_UTF8))
                 .andExpect(status().isMethodNotAllowed());
     }
@@ -147,7 +150,7 @@ public class KeepersControllerTest {
     }
 
     private String getResult(String jsonContentRequest) throws Exception {
-        return mockMvc.perform(post("/keepers")
+        return mockMvc.perform(post(KEEPERS_URL)
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(jsonContentRequest))
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))

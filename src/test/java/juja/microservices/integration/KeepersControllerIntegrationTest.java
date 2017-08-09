@@ -27,7 +27,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 public class KeepersControllerIntegrationTest extends BaseIntegrationTest {
 
-    private static final String GET_DIRECTIONS_URL = "/keepers/0000c9999";
+    private static final String GET_DIRECTIONS_URL = "/v1/keepers/0000c9999";
+    private static final String KEEPERS_URL = "/v1/keepers";
     private static final String JSON_CONTENT_REQ = "{\"from\":\"asdqwe\",\"uuid\":\"max\", \"direction\":\"SomeDirection\"}";
 
     private MockMvc mockMvc;
@@ -43,7 +44,7 @@ public class KeepersControllerIntegrationTest extends BaseIntegrationTest {
     @Test
     @UsingDataSet(locations = "/datasets/severalKeepers.json")
     public void deactivateKeeperSuccessTest() throws Exception {
-        mockMvc.perform(put("/keepers")
+        mockMvc.perform(put(KEEPERS_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JSON_CONTENT_REQ))
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
@@ -61,7 +62,7 @@ public class KeepersControllerIntegrationTest extends BaseIntegrationTest {
                 "\"exceptionMessage\":\"Only active keeper could deactivate another keeper\"," +
                 "\"detailErrors\":[]}";
 
-        String result = mockMvc.perform(put("/keepers")
+        String result = mockMvc.perform(put(KEEPERS_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JSON_CONTENT_REQ))
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
@@ -82,7 +83,7 @@ public class KeepersControllerIntegrationTest extends BaseIntegrationTest {
                 "\"exceptionMessage\":\"Keeper with uuid max and direction SomeDirection is't exist or not active\"," +
                 "\"detailErrors\":[]}";
 
-        String result = mockMvc.perform(put("/keepers")
+        String result = mockMvc.perform(put(KEEPERS_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JSON_CONTENT_REQ))
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
@@ -110,7 +111,7 @@ public class KeepersControllerIntegrationTest extends BaseIntegrationTest {
                 "  \"direction\":\"SomeDirection\"" +
                 "}";
         //When
-        String result = mockMvc.perform(post("/keepers")
+        String result = mockMvc.perform(post(KEEPERS_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
@@ -139,7 +140,7 @@ public class KeepersControllerIntegrationTest extends BaseIntegrationTest {
                 "  \"direction\":\"teems\"" +
                 "}";
         //When
-        String result = mockMvc.perform(post("/keepers")
+        String result = mockMvc.perform(post(KEEPERS_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
@@ -161,7 +162,7 @@ public class KeepersControllerIntegrationTest extends BaseIntegrationTest {
                 "}";
 
         //Then
-        mockMvc.perform(post("/keepers")
+        mockMvc.perform(post(KEEPERS_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
@@ -179,7 +180,7 @@ public class KeepersControllerIntegrationTest extends BaseIntegrationTest {
                 "}";
 
         //Then
-        mockMvc.perform(post("/keepers")
+        mockMvc.perform(post(KEEPERS_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))

@@ -28,7 +28,7 @@ public class KeepersAcceptanceTest extends BaseAcceptanceTest{
                 resource("acceptance/response/responseAddKeeperException.json"));
 
         //When
-        Response actualResponse = getRealResponse("/keepers", jsonContentRequest, HttpMethod.POST);
+        Response actualResponse = getRealResponse("/v1/keepers", jsonContentRequest, HttpMethod.POST);
 
         //Then
         assertThatJson(actualResponse.asString())
@@ -46,7 +46,7 @@ public class KeepersAcceptanceTest extends BaseAcceptanceTest{
                 resource("acceptance/response/responseAddKeeperAlreadyKeepsDirectionIsAlive.json"));
 
         //When
-        Response actualResponse = getRealResponse("/keepers", jsonContentRequest, HttpMethod.POST);
+        Response actualResponse = getRealResponse("/v1/keepers", jsonContentRequest, HttpMethod.POST);
 
         //Then
         assertThatJson(actualResponse.asString())
@@ -64,7 +64,7 @@ public class KeepersAcceptanceTest extends BaseAcceptanceTest{
                 resource("acceptance/response/responseAddKeeperException.json"));
 
         //When
-        Response actualResponse = getRealResponse("/keepers", jsonContentRequest, HttpMethod.POST);
+        Response actualResponse = getRealResponse("/v1/keepers", jsonContentRequest, HttpMethod.POST);
 
         //Then
         assertThatJson(actualResponse.asString())
@@ -80,7 +80,7 @@ public class KeepersAcceptanceTest extends BaseAcceptanceTest{
         String jsonContentControlResponse = convertToString(
                 resource("acceptance/response/responseGetDirections.json"));
         //When
-        Response actualResponse = getRealResponse("/keepers/0000c9999", jsonContentRequest, HttpMethod.GET);
+        Response actualResponse = getRealResponse("/v1/keepers/0000c9999", jsonContentRequest, HttpMethod.GET);
         //Then
         assertThatJson(actualResponse.asString())
                 .when(Option.IGNORING_ARRAY_ORDER)
@@ -95,7 +95,7 @@ public class KeepersAcceptanceTest extends BaseAcceptanceTest{
         String jsonContentControlResponse = convertToString(
                 resource("acceptance/response/responseGetDirectionsWithEmptyResult.json"));
         //When
-        Response actualResponse = getRealResponse("/keepers/1111a9999", jsonContentRequest, HttpMethod.GET);
+        Response actualResponse = getRealResponse("/v1/keepers/1111a9999", jsonContentRequest, HttpMethod.GET);
         //Then
         assertThatJson(actualResponse.asString())
                 .when(Option.IGNORING_ARRAY_ORDER)
