@@ -8,12 +8,17 @@ import juja.microservices.keepers.service.KeepersService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
 import java.net.HttpURLConnection;
-
 import java.util.Collections;
 import java.util.List;
 
@@ -25,7 +30,7 @@ import java.util.List;
  * @author Oleksii Petrokhalko
  */
 @RestController
-@RequestMapping(value = "/v1/keepers", produces = "application/json")
+@RequestMapping(value = "/" + "${keepers.rest.api.version}" + "${keepers.baseURL}", produces = "application/json")
 public class KeepersController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -33,7 +38,7 @@ public class KeepersController {
     @Inject
     private KeepersService keepersService;
 
-    @PostMapping(consumes = "application/json")
+    @PostMapping(value = "${keepers.endpoint.addKeeper}", consumes = "application/json")
     @ApiOperation(
             value = "Add new keeper",
             notes = "This method add new keeper"
@@ -53,7 +58,7 @@ public class KeepersController {
         return ResponseEntity.ok(ids);
     }
 
-    @PutMapping(consumes = "application/json")
+    @PutMapping(value = "${keepers.endpoint.deactivateKeeper}", consumes = "application/json")
     @ApiOperation(
             value = "Makes keeper inactive",
             notes = "This method makes keeper inactive"
@@ -70,7 +75,7 @@ public class KeepersController {
         return ResponseEntity.ok(ids);
     }
 
-    @GetMapping(value = "/{uuid}")
+    @GetMapping(value = "${keepers.endpoint.getDirections}" + "/{uuid}")
     @ApiOperation(
             value = "Get a list of all directions of active keeper",
             notes = "This method returns a list of all directions of active keeper"
@@ -90,7 +95,7 @@ public class KeepersController {
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping()
+    @GetMapping(value = "${keepers.endpoint.getActiveKeepers}")
     @ApiOperation(
             value = "Get all active keepers",
             notes = "This method have to get all active keepers"
