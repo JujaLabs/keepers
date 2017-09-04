@@ -30,7 +30,7 @@ import java.util.List;
  * @author Oleksii Petrokhalko
  */
 @RestController
-@RequestMapping(value = "/" + "${keepers.rest.api.version}" + "${keepers.baseURL}", produces = "application/json")
+@RequestMapping(produces = "application/json")
 public class KeepersController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());

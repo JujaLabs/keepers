@@ -5,7 +5,6 @@ import com.lordofthejars.nosqlunit.core.LoadStrategyEnum;
 import io.restassured.response.Response;
 import net.javacrumbs.jsonunit.core.Option;
 import org.eclipse.jetty.http.HttpMethod;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,15 +34,6 @@ public class KeepersAcceptanceTest extends BaseAcceptanceTest {
     @Value("${keepers.endpoint.getActiveKeepers}")
     private String keepersGetActiveKeepersUrl;
 
-    private String keepersFullAddKeeperUrl;
-    private String keepersFullGetDirectionsUrl;
-
-    @Before
-    public void localSetup() {
-        keepersFullAddKeeperUrl = "/" + keepersRestApiVersion + keepersBaseUrl + keepersAddKeeperUrl;
-        keepersFullGetDirectionsUrl = "/" + keepersRestApiVersion + keepersBaseUrl + keepersGetDirectionsUrl+"/";
-    }
-
     @UsingDataSet(locations = "/datasets/initEmptyDb.json", loadStrategy = LoadStrategyEnum.CLEAN_INSERT)
     @Test
     public void addKeeperException() throws IOException {
@@ -54,7 +44,7 @@ public class KeepersAcceptanceTest extends BaseAcceptanceTest {
                 resource("acceptance/response/responseAddKeeperException.json"));
 
         //When
-        Response actualResponse = getRealResponse(keepersFullAddKeeperUrl, jsonContentRequest, HttpMethod.POST);
+        Response actualResponse = getRealResponse(keepersAddKeeperUrl, jsonContentRequest, HttpMethod.POST);
 
         //Then
         assertThatJson(actualResponse.asString())
@@ -69,7 +59,7 @@ public class KeepersAcceptanceTest extends BaseAcceptanceTest {
         String jsonContentControlResponse = convertToString(
                 resource("acceptance/response/responseAddKeeperAlreadyKeepsDirectionIsAlive.json"));
 
-        Response actualResponse = getRealResponse(keepersFullAddKeeperUrl, jsonContentRequest, HttpMethod.POST);
+        Response actualResponse = getRealResponse(keepersAddKeeperUrl, jsonContentRequest, HttpMethod.POST);
 
         assertThatJson(actualResponse.asString())
                 .when(Option.IGNORING_ARRAY_ORDER)
@@ -83,7 +73,7 @@ public class KeepersAcceptanceTest extends BaseAcceptanceTest {
         String jsonContentControlResponse = convertToString(
                 resource("acceptance/response/responseAddKeeperException.json"));
 
-        Response actualResponse = getRealResponse(keepersFullAddKeeperUrl, jsonContentRequest, HttpMethod.POST);
+        Response actualResponse = getRealResponse(keepersAddKeeperUrl, jsonContentRequest, HttpMethod.POST);
 
         assertThatJson(actualResponse.asString())
                 .when(Option.IGNORING_ARRAY_ORDER)
@@ -94,11 +84,11 @@ public class KeepersAcceptanceTest extends BaseAcceptanceTest {
     @Test
     public void getDirections() throws IOException {
         String jsonContentRequest = "";
-        String uuid="0000c9999";
+        String uuid = "0000c9999";
         String jsonContentControlResponse = convertToString(
                 resource("acceptance/response/responseGetDirections.json"));
 
-        Response actualResponse = getRealResponse(keepersFullGetDirectionsUrl+uuid, jsonContentRequest, HttpMethod.GET);
+        Response actualResponse = getRealResponse(keepersGetDirectionsUrl + uuid, jsonContentRequest, HttpMethod.GET);
 
         assertThatJson(actualResponse.asString())
                 .when(Option.IGNORING_ARRAY_ORDER)
@@ -109,11 +99,11 @@ public class KeepersAcceptanceTest extends BaseAcceptanceTest {
     @Test
     public void getDirectionsWithEmptyResult() throws IOException {
         String jsonContentRequest = "";
-        String uuid="1111a9999";
+        String uuid = "1111a9999";
         String jsonContentControlResponse = convertToString(
                 resource("acceptance/response/responseGetDirectionsWithEmptyResult.json"));
 
-        Response actualResponse = getRealResponse(keepersFullGetDirectionsUrl+uuid, jsonContentRequest, HttpMethod.GET);
+        Response actualResponse = getRealResponse(keepersGetDirectionsUrl + uuid, jsonContentRequest, HttpMethod.GET);
 
         assertThatJson(actualResponse.asString())
                 .when(Option.IGNORING_ARRAY_ORDER)

@@ -31,10 +31,6 @@ public class KeepersControllerIntegrationTest extends BaseIntegrationTest {
     private static final String JSON_CONTENT_REQ = "{\"from\":\"asdqwe\",\"uuid\":\"max\", \"direction\":\"SomeDirection\"}";
     @Rule
     public final ExpectedException exception = ExpectedException.none();
-    @Value("${keepers.rest.api.version}")
-    private String keepersRestApiVersion;
-    @Value("${keepers.baseURL}")
-    private String keepersBaseUrl;
     @Value("${keepers.endpoint.addKeeper}")
     private String keepersAddKeeperUrl;
     @Value("${keepers.endpoint.deactivateKeeper}")
@@ -43,25 +39,18 @@ public class KeepersControllerIntegrationTest extends BaseIntegrationTest {
     private String keepersGetDirectionsUrl;
     @Value("${keepers.endpoint.getActiveKeepers}")
     private String keepersGetActiveKeepersUrl;
-    private String keepersFullAddKeeperUrl;
-    private String keepersFullDeactivateKeeperUrl;
-    private String keepersFullGetDirectionsUrl;
 
     private MockMvc mockMvc;
 
     @Before
     public void setup() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-
-        keepersFullAddKeeperUrl = "/" + keepersRestApiVersion + keepersBaseUrl + keepersAddKeeperUrl;
-        keepersFullDeactivateKeeperUrl = "/" + keepersRestApiVersion + keepersBaseUrl + keepersDeactivateKeeperUrl;
-        keepersFullGetDirectionsUrl = "/" + keepersRestApiVersion + keepersBaseUrl + keepersGetDirectionsUrl;
     }
 
     @Test
     @UsingDataSet(locations = "/datasets/severalKeepers.json")
     public void deactivateKeeperSuccessTest() throws Exception {
-        mockMvc.perform(put(keepersFullDeactivateKeeperUrl)
+        mockMvc.perform(put(keepersDeactivateKeeperUrl)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JSON_CONTENT_REQ))
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
@@ -79,7 +68,7 @@ public class KeepersControllerIntegrationTest extends BaseIntegrationTest {
                 "\"exceptionMessage\":\"Only active keeper could deactivate another keeper\"," +
                 "\"detailErrors\":[]}";
 
-        String result = mockMvc.perform(put(keepersFullDeactivateKeeperUrl)
+        String result = mockMvc.perform(put(keepersDeactivateKeeperUrl)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JSON_CONTENT_REQ))
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
@@ -100,7 +89,7 @@ public class KeepersControllerIntegrationTest extends BaseIntegrationTest {
                 "\"exceptionMessage\":\"Keeper with uuid max and direction SomeDirection is't exist or not active\"," +
                 "\"detailErrors\":[]}";
 
-        String result = mockMvc.perform(put(keepersFullDeactivateKeeperUrl)
+        String result = mockMvc.perform(put(keepersDeactivateKeeperUrl)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JSON_CONTENT_REQ))
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
@@ -127,7 +116,7 @@ public class KeepersControllerIntegrationTest extends BaseIntegrationTest {
                 "  \"direction\":\"SomeDirection\"" +
                 "}";
 
-        String result = mockMvc.perform(post(keepersFullAddKeeperUrl)
+        String result = mockMvc.perform(post(keepersAddKeeperUrl)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
@@ -154,7 +143,7 @@ public class KeepersControllerIntegrationTest extends BaseIntegrationTest {
                 "  \"direction\":\"teams\"" +
                 "}";
 
-        String result = mockMvc.perform(post(keepersFullAddKeeperUrl)
+        String result = mockMvc.perform(post(keepersAddKeeperUrl)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
@@ -173,7 +162,7 @@ public class KeepersControllerIntegrationTest extends BaseIntegrationTest {
                 "  \"direction\":\"SomeDirection\"" +
                 "}";
 
-        mockMvc.perform(post(keepersFullAddKeeperUrl)
+        mockMvc.perform(post(keepersAddKeeperUrl)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
@@ -189,7 +178,7 @@ public class KeepersControllerIntegrationTest extends BaseIntegrationTest {
                 "  \"direction\":\"SomeDirection\"" +
                 "}";
 
-        mockMvc.perform(post(keepersFullAddKeeperUrl)
+        mockMvc.perform(post(keepersAddKeeperUrl)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
@@ -201,12 +190,12 @@ public class KeepersControllerIntegrationTest extends BaseIntegrationTest {
     public void getDirectionsAndReturnJson() throws Exception {
         String expected = "[\"First active direction\",\"Second active direction\"]";
         String uuid="0000c9999";
-        mockMvc.perform(get(keepersFullGetDirectionsUrl+uuid)
+        mockMvc.perform(get(keepersGetDirectionsUrl+uuid)
                 .contentType(APPLICATION_JSON_UTF8))
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
 
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get(keepersFullGetDirectionsUrl+uuid)
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get(keepersGetDirectionsUrl+uuid)
                 .contentType(APPLICATION_JSON_UTF8))
                 .andReturn();
 

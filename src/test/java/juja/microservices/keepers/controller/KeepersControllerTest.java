@@ -48,10 +48,6 @@ public class KeepersControllerTest {
     private KeepersService service;
     @Inject
     private KeepersController controller;
-    @Value("${keepers.rest.api.version}")
-    private String keepersRestApiVersion;
-    @Value("${keepers.baseURL}")
-    private String keepersBaseUrl;
     @Value("${keepers.endpoint.addKeeper}")
     private String keepersAddKeeperUrl;
     @Value("${keepers.endpoint.deactivateKeeper}")
@@ -61,24 +57,11 @@ public class KeepersControllerTest {
     @Value("${keepers.endpoint.getActiveKeepers}")
     private String keepersGetActiveKeepersUrl;
 
-    private String keepersFullAddKeeperUrl;
-    private String keepersFullDeactivateKeeperUrl;
-    private String keepersFullGetDirectionsUrl;
-    private String keepersFullGetActiveKeepersUrl;
-
-    @Before
-    public void setup() {
-        keepersFullAddKeeperUrl = "/" + keepersRestApiVersion + keepersBaseUrl + keepersAddKeeperUrl;
-        keepersFullDeactivateKeeperUrl = "/" + keepersRestApiVersion + keepersBaseUrl + keepersDeactivateKeeperUrl;
-        keepersFullGetDirectionsUrl = "/" + keepersRestApiVersion + keepersBaseUrl + keepersGetDirectionsUrl;
-        keepersFullGetActiveKeepersUrl = "/" + keepersRestApiVersion + keepersBaseUrl + keepersGetActiveKeepersUrl;
-    }
-
     @Test
     public void deactivateKeeperBadRequestTest() throws Exception {
         String badJsonRequest = "{\"from\":\"admin\",\"direction\":\"LMS\"}";
 
-        mockMvc.perform(put(keepersFullDeactivateKeeperUrl)
+        mockMvc.perform(put(keepersDeactivateKeeperUrl)
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(badJsonRequest))
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
@@ -92,7 +75,7 @@ public class KeepersControllerTest {
         ids.add("uuid");
         when(service.deactivateKeeper(eq(keeperRequest))).thenReturn(ids);
 
-        String actual = mockMvc.perform(put(keepersFullDeactivateKeeperUrl)
+        String actual = mockMvc.perform(put(keepersDeactivateKeeperUrl)
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(toJson(keeperRequest)))
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
@@ -114,7 +97,7 @@ public class KeepersControllerTest {
     }
 
     private void checkBadRequest(String jsonContentRequest) throws Exception {
-        mockMvc.perform(post(keepersFullAddKeeperUrl)
+        mockMvc.perform(post(keepersAddKeeperUrl)
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(jsonContentRequest))
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
@@ -128,7 +111,7 @@ public class KeepersControllerTest {
         String uuid = "0000c9999";
         when(service.getDirections(uuid)).thenReturn(expectedList);
 
-        String result = mockMvc.perform(get(keepersFullGetDirectionsUrl + uuid)
+        String result = mockMvc.perform(get(keepersGetDirectionsUrl + uuid)
                 .contentType(APPLICATION_JSON_UTF8))
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
@@ -146,7 +129,7 @@ public class KeepersControllerTest {
         String uuid = "0000c9999";
         when(service.getDirections(uuid)).thenReturn(expectedList);
 
-        String result = mockMvc.perform(get(keepersFullGetDirectionsUrl + uuid)
+        String result = mockMvc.perform(get(keepersGetDirectionsUrl + uuid)
                 .contentType(APPLICATION_JSON_UTF8))
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
@@ -160,7 +143,7 @@ public class KeepersControllerTest {
     @Test()
     public void getHttpRequestMethodNotSupportedException() throws Exception {
         String uuid = "0000c9999";
-        mockMvc.perform(post(keepersFullGetDirectionsUrl + uuid)
+        mockMvc.perform(post(keepersGetDirectionsUrl + uuid)
                 .contentType(APPLICATION_JSON_UTF8))
                 .andExpect(status().isMethodNotAllowed());
     }
@@ -170,7 +153,7 @@ public class KeepersControllerTest {
         KeeperRequest keeperRequest = new KeeperRequest("asdqwe", "max", "SomeDirection");
         when(service.addKeeper(eq(keeperRequest))).thenReturn("SomeId");
 
-        String result = mockMvc.perform(post(keepersFullAddKeeperUrl)
+        String result = mockMvc.perform(post(keepersAddKeeperUrl)
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(toJson(keeperRequest)))
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
@@ -215,7 +198,7 @@ public class KeepersControllerTest {
         String expected = "[{\"uuid\":\"uuidTo2\",\"directions\":[\"sqlcmd\"]},{\"uuid\":\"uuidTo1\"," +
                 "\"directions\":[\"teams\",\"sqlcmd\"]}]";
 
-        String result = mockMvc.perform(get(keepersFullGetActiveKeepersUrl)
+        String result = mockMvc.perform(get(keepersGetActiveKeepersUrl)
                 .contentType(APPLICATION_JSON_UTF8))
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
