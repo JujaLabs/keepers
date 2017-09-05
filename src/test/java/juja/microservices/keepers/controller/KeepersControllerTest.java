@@ -1,25 +1,30 @@
 package juja.microservices.keepers.controller;
 
+import juja.microservices.keepers.entity.ActiveKeeperDTO;
 import juja.microservices.keepers.entity.KeeperRequest;
 import juja.microservices.keepers.exception.KeeperAccessException;
 import juja.microservices.keepers.exception.KeeperDirectionActiveException;
 import juja.microservices.keepers.service.KeepersService;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import javax.inject.Inject;
-
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static juja.microservices.common.TestUtils.toJson;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -41,20 +46,22 @@ public class KeepersControllerTest {
 
     @MockBean
     private KeepersService service;
-
     @Inject
     private KeepersController controller;
-
-    private static final String GET_DIRECTIONS_URL = "/v1/keepers/0000c9999";
-    private static final String KEEPERS_URL = "/v1/keepers";
+    @Value("${keepers.endpoint.addKeeper}")
+    private String keepersAddKeeperUrl;
+    @Value("${keepers.endpoint.deactivateKeeper}")
+    private String keepersDeactivateKeeperUrl;
+    @Value("${keepers.endpoint.getDirections}")
+    private String keepersGetDirectionsUrl;
+    @Value("${keepers.endpoint.getActiveKeepers}")
+    private String keepersGetActiveKeepersUrl;
 
     @Test
     public void deactivateKeeperBadRequestTest() throws Exception {
-        //given
         String badJsonRequest = "{\"from\":\"admin\",\"direction\":\"LMS\"}";
 
-        //then
-        mockMvc.perform(put(KEEPERS_URL)
+        mockMvc.perform(put(keepersDeactivateKeeperUrl)
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(badJsonRequest))
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
@@ -66,9 +73,9 @@ public class KeepersControllerTest {
         KeeperRequest keeperRequest = new KeeperRequest("from", "uuid", "direction");
         List<String> ids = new ArrayList<>();
         ids.add("uuid");
-        when(service.deactivateKeeper(any(KeeperRequest.class))).thenReturn(ids);
+        when(service.deactivateKeeper(eq(keeperRequest))).thenReturn(ids);
 
-        String actual = mockMvc.perform(put(KEEPERS_URL)
+        String actual = mockMvc.perform(put(keepersDeactivateKeeperUrl)
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(toJson(keeperRequest)))
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
@@ -78,19 +85,19 @@ public class KeepersControllerTest {
                 .getContentAsString();
 
         assertEquals("[\"uuid\"]", actual);
+        verify(service).deactivateKeeper(eq(keeperRequest));
+        verifyNoMoreInteractions(service);
     }
 
     @Test
     public void addKeeperTest() throws Exception {
-        //given
         String jsonContentRequest = "{\"from\":\"admin\",\"direction\":\"LMS\"}";
 
-        //then
         checkBadRequest(jsonContentRequest);
     }
 
     private void checkBadRequest(String jsonContentRequest) throws Exception {
-        mockMvc.perform(post(KEEPERS_URL)
+        mockMvc.perform(post(keepersAddKeeperUrl)
                 .contentType(APPLICATION_JSON_UTF8)
                 .content(jsonContentRequest))
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
@@ -99,85 +106,106 @@ public class KeepersControllerTest {
 
     @Test
     public void getKeeperDirections() throws Exception {
-        //Given
         final String expectedString = "[\"direction1\",\"direction2\",\"direction3\"]";
         List<String> expectedList = Arrays.asList("direction1", "direction2", "direction3");
-        //When
-        when(service.getDirections("0000c9999")).thenReturn(expectedList);
-        String result = mockMvc.perform(get(GET_DIRECTIONS_URL)
+        String uuid = "0000c9999";
+        when(service.getDirections(uuid)).thenReturn(expectedList);
+
+        String result = mockMvc.perform(get(keepersGetDirectionsUrl + uuid)
                 .contentType(APPLICATION_JSON_UTF8))
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
-        //Then
+
         assertEquals(expectedString, result);
+        verify(service).getDirections(uuid);
+        verifyNoMoreInteractions(service);
     }
 
     @Test
     public void getKeeperDirectionsWithEmptyResult() throws Exception {
-        //Given
         final String expectedString = "[]";
         List<String> expectedList = new ArrayList<>();
-        //When
-        when(service.getDirections("0000c9999")).thenReturn(expectedList);
-        String result = mockMvc.perform(get(GET_DIRECTIONS_URL)
+        String uuid = "0000c9999";
+        when(service.getDirections(uuid)).thenReturn(expectedList);
+
+        String result = mockMvc.perform(get(keepersGetDirectionsUrl + uuid)
                 .contentType(APPLICATION_JSON_UTF8))
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
-        //Then
+
         assertEquals(expectedString, result);
+        verify(service).getDirections(uuid);
+        verifyNoMoreInteractions(service);
     }
 
     @Test()
     public void getHttpRequestMethodNotSupportedException() throws Exception {
-        mockMvc.perform(post(GET_DIRECTIONS_URL)
+        String uuid = "0000c9999";
+        mockMvc.perform(post(keepersGetDirectionsUrl + uuid)
                 .contentType(APPLICATION_JSON_UTF8))
                 .andExpect(status().isMethodNotAllowed());
     }
 
     @Test
     public void addKeeper() throws Exception {
-        //Given
-        String jsonContentRequest = "{\"from\":\"asdqwe\",\"uuid\":\"max\", \"direction\":\"SomeDirection\"}";
+        KeeperRequest keeperRequest = new KeeperRequest("asdqwe", "max", "SomeDirection");
+        when(service.addKeeper(eq(keeperRequest))).thenReturn("SomeId");
 
-        //When
-        when(service.addKeeper(any(KeeperRequest.class))).thenReturn("SomeId");
-        String result = getResult(jsonContentRequest);
-
-        //Then
-        assertEquals("[\"SomeId\"]", result);
-    }
-
-    private String getResult(String jsonContentRequest) throws Exception {
-        return mockMvc.perform(post(KEEPERS_URL)
+        String result = mockMvc.perform(post(keepersAddKeeperUrl)
                 .contentType(APPLICATION_JSON_UTF8)
-                .content(jsonContentRequest))
+                .content(toJson(keeperRequest)))
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
+
+        assertEquals("[\"SomeId\"]", result);
+        verify(service).addKeeper(eq(keeperRequest));
+        verifyNoMoreInteractions(service);
     }
 
     @Test(expected = KeeperAccessException.class)
     public void addKeeperBadRequest() {
-        //Given
-        KeeperRequest keeperRequest = new KeeperRequest("123qwe", "asdqwe", "teems");
+        KeeperRequest keeperRequest = new KeeperRequest("123qwe", "asdqwe", "teams");
         when(service.addKeeper(keeperRequest)).thenThrow(
                 new KeeperAccessException("Only the keeper can appoint another keeper"));
 
-        //When
         controller.addKeeper(keeperRequest);
+
+        verify(service).addKeeper(keeperRequest);
+        verifyNoMoreInteractions(service);
     }
 
     @Test(expected = KeeperDirectionActiveException.class)
     public void addKeeperBadRequestOther() {
-        //Given
-        KeeperRequest keeperRequest = new KeeperRequest("123qwe", "asdqwe", "teems");
+        KeeperRequest keeperRequest = new KeeperRequest("123qwe", "asdqwe", "teams");
         when(service.addKeeper(keeperRequest)).thenThrow(
                 new KeeperDirectionActiveException("Keeper with uuid " + keeperRequest.getUuid() + " already keeps direction "
                         + keeperRequest.getDirection() + " and he is active"));
 
-        //When
         controller.addKeeper(keeperRequest);
+        verify(service).addKeeper(keeperRequest);
+        verifyNoMoreInteractions(service);
+    }
+
+    @Test
+    public void getActiveKeepers() throws Exception {
+        List<ActiveKeeperDTO> list = new ArrayList<>();
+        list.add(new ActiveKeeperDTO("uuidTo2", Collections.singletonList("sqlcmd")));
+        list.add(new ActiveKeeperDTO("uuidTo1", Arrays.asList("teams", "sqlcmd")));
+        when(service.getActiveKeepers()).thenReturn(list);
+        String expected = "[{\"uuid\":\"uuidTo2\",\"directions\":[\"sqlcmd\"]},{\"uuid\":\"uuidTo1\"," +
+                "\"directions\":[\"teams\",\"sqlcmd\"]}]";
+
+        String result = mockMvc.perform(get(keepersGetActiveKeepersUrl)
+                .contentType(APPLICATION_JSON_UTF8))
+                .andExpect(content().contentType(APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+
+        assertEquals(expected, result);
+        verify(service).getActiveKeepers();
+        verifyNoMoreInteractions(service);
     }
 }

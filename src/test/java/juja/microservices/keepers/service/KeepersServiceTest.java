@@ -2,8 +2,12 @@ package juja.microservices.keepers.service;
 
 import juja.microservices.common.KeeperAbstractTest;
 import juja.microservices.keepers.dao.KeepersRepository;
-import juja.microservices.keepers.exception.KeeperNonexistentException;
 import juja.microservices.keepers.entity.ActiveKeeperDTO;
+import juja.microservices.keepers.entity.Keeper;
+import juja.microservices.keepers.entity.KeeperRequest;
+import juja.microservices.keepers.exception.KeeperAccessException;
+import juja.microservices.keepers.exception.KeeperDirectionActiveException;
+import juja.microservices.keepers.exception.KeeperNonexistentException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -11,27 +15,21 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.inject.Inject;
-
-import java.util.*;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import juja.microservices.keepers.entity.Keeper;
-import juja.microservices.keepers.entity.KeeperRequest;
-import juja.microservices.keepers.exception.KeeperAccessException;
-import juja.microservices.keepers.exception.KeeperDirectionActiveException;
-
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Dmitriy Lyashenko
@@ -51,37 +49,51 @@ public class KeepersServiceTest extends KeeperAbstractTest {
 
     @Test(expected = KeeperAccessException.class)
     public void deactivateKeeperWithKeeperAccessExceptionTest() {
-        when(repository.findOneActive(anyString())).thenReturn(null);
+        KeeperRequest keeperRequest = new KeeperRequest("from", "uuid", "direction");
+        when(repository.findOneActive(keeperRequest.getFrom())).thenReturn(null);
 
-        service.deactivateKeeper(new KeeperRequest("from", "uuid", "direction"));
+        service.deactivateKeeper(keeperRequest);
+
+        verify(repository).findOneActive(keeperRequest.getFrom());
+        verifyNoMoreInteractions(repository);
+
     }
 
     @Test(expected = KeeperNonexistentException.class)
     public void deactivateKeeperWithKeeperNonexistentExceptionTest() {
-        when(repository.findOneActive(anyString())).thenReturn(createKeeper().withId("uuid").create());
-        when(repository.findOneByUUIdAndDirectionIsActive(anyString(), anyString())).thenReturn(null);
+        KeeperRequest keeperRequest = new KeeperRequest("from", "uuid", "direction");
+        when(repository.findOneActive(keeperRequest.getFrom())).thenReturn(createKeeper().withId("uuid").create());
+        when(repository.findOneByUUIdAndDirectionIsActive(keeperRequest.getUuid(), keeperRequest.getDirection()))
+                .thenReturn(null);
 
-        service.deactivateKeeper(new KeeperRequest("from", "uuid", "direction"));
+        service.deactivateKeeper(keeperRequest);
+
+        verify(repository).findOneActive(keeperRequest.getFrom());
+        verify(repository).findOneByUUIdAndDirectionIsActive(keeperRequest.getUuid(), keeperRequest.getDirection());
+        verifyNoMoreInteractions(repository);
     }
 
     @Test
     public void deactivateKeeperSuccessTest() {
         KeeperRequest keeperRequest = new KeeperRequest("from", "uuid", "direction");
         Keeper keeper = createKeeper().withId("uuid").withUuid("1").create();
-        when(repository.findOneActive(anyString())).thenReturn(keeper);
-        when(repository.findOneByUUIdAndDirectionIsActive(anyString(), anyString())).thenReturn(keeper);
+        when(repository.findOneActive(keeperRequest.getFrom())).thenReturn(keeper);
+        when(repository.findOneByUUIdAndDirectionIsActive(keeperRequest.getUuid(), keeperRequest.getDirection()))
+                .thenReturn(keeper);
         when(repository.save(keeper)).thenReturn("uuid");
 
         List<String> actual = service.deactivateKeeper(keeperRequest);
         assertEquals(Collections.singletonList("uuid"), actual);
 
-        verify(repository).findOneActive(eq(keeperRequest.getFrom()));
-        verify(repository).findOneByUUIdAndDirectionIsActive(eq(keeperRequest.getUuid()), eq(keeperRequest.getDirection()));
+        verify(repository).findOneActive(keeperRequest.getFrom());
+        verify(repository).findOneByUUIdAndDirectionIsActive(keeperRequest.getUuid(), keeperRequest.getDirection());
+        verify(repository).save(keeper);
+        verifyNoMoreInteractions(repository);
+
     }
 
     @Test
     public void getDirectionsTest() {
-        //Given
         List<Keeper> keepers = new ArrayList<>();
         keepers.add(new Keeper("1",
                 "0000c9999",
@@ -98,65 +110,77 @@ public class KeepersServiceTest extends KeeperAbstractTest {
         for (Keeper keeper : keepers) {
             expectedList.add(keeper.getDirection());
         }
-        //When
+
         List<String> actualList = service.getDirections(UUID);
-        //Then
+
         assertEquals(expectedList, actualList);
+        verify(repository).getDirections(UUID);
+        verifyNoMoreInteractions(repository);
     }
 
     @Test
     public void getDirectionsWithEmptyResultTest() {
-        //When
+        when(repository.getDirections(UUID)).thenReturn(new ArrayList<>());
+
         List<String> actualList = service.getDirections(UUID);
-        //Then
+
         assertTrue(actualList.isEmpty());
+        verify(repository).getDirections(UUID);
+        verifyNoMoreInteractions(repository);
     }
 
     @Test(expected = KeeperAccessException.class)
     public void addKeeperWithKeeperAccessException() {
-        //Given
-        when(repository.findOneActive(anyString())).thenReturn(null);
+        KeeperRequest keeperRequest = new KeeperRequest("from", "uuid", "direction");
+        when(repository.findOneActive(keeperRequest.getFrom())).thenReturn(null);
 
-        //When
-        service.addKeeper(new KeeperRequest("123qwe", "asdqwe", "teems"));
+        service.addKeeper(keeperRequest);
+
+        verify(repository).findOneActive(keeperRequest.getFrom());
+        verifyNoMoreInteractions(repository);
     }
 
     @Test(expected = KeeperDirectionActiveException.class)
     public void addKeeperWithKeeperDirectionActiveException() {
-        //Given
-        Keeper keeper = new Keeper("some", "some", "some", new Date());
-        when(repository.findOneActive(anyString())).thenReturn(keeper);
-        when(repository.findOneByUUIdAndDirectionIsActive(anyString(), anyString())).thenReturn(keeper);
+        KeeperRequest keeperRequest = new KeeperRequest("from", "uuid", "direction");
+        Keeper keeper = new Keeper("from", "uuid", "direction", new Date());
+        when(repository.findOneActive(keeperRequest.getFrom())).thenReturn(keeper);
+        when(repository.findOneByUUIdAndDirectionIsActive(keeperRequest.getUuid(), keeperRequest.getDirection()))
+                .thenReturn(keeper);
 
-        //When
-        service.addKeeper(new KeeperRequest("123qwe", "asdqwe", "teems"));
+        service.addKeeper(keeperRequest);
+
+        verify(repository).findOneActive(keeperRequest.getFrom());
+        verify(repository).findOneByUUIdAndDirectionIsActive(keeperRequest.getUuid(), keeperRequest.getDirection());
+        verifyNoMoreInteractions(repository);
     }
 
     @Test
     public void addKeeper() {
-        //Given
         Date startDate = Date.from(LocalDateTime.of(2017, Month.APRIL, 1, 12, 0).atZone(ZoneId.systemDefault()).toInstant());
-        KeeperRequest keeperRequest = new KeeperRequest("123qwe", "asdqwe", "teems");
-        Keeper keeper = new Keeper("123qwe", "asdqwe", "teems", startDate);
-        when(repository.findOneActive(anyString())).thenReturn(keeper);
+        KeeperRequest keeperRequest = new KeeperRequest("from", "uuid", "direction");
+        Keeper keeper = new Keeper("from", "uuid", "direction", startDate);
+        when(repository.findOneActive(keeperRequest.getFrom())).thenReturn(keeper);
+        when(repository.findOneByUUIdAndDirectionIsActive(keeperRequest.getUuid(), keeperRequest.getDirection()))
+                .thenReturn(null);
         when(repository.save(any(Keeper.class))).thenReturn("SomeID");
         String expected = "SomeID";
 
-        //When
         String result = service.addKeeper(keeperRequest);
 
-        //Then
         assertEquals(expected, result);
-    }
+        verify(repository).findOneActive(keeperRequest.getFrom());
+        verify(repository).findOneByUUIdAndDirectionIsActive(keeperRequest.getUuid(), keeperRequest.getDirection());
+        verify(repository).save(any(Keeper.class));
+        verifyNoMoreInteractions(repository);
 
+    }
 
     @Test
     public void getActiveKeepers() {
-        //Given
         List<ActiveKeeperDTO> expected = new ArrayList<>();
-        expected.add(new ActiveKeeperDTO("uuidTo2", Arrays.asList("sqlcmd")));
+        expected.add(new ActiveKeeperDTO("uuidTo2", Collections.singletonList("sqlcmd")));
         expected.add(new ActiveKeeperDTO("uuidTo1", Arrays.asList("teems", "sqlcmd")));
-
         List<Keeper> listActiveKeepers = new ArrayList<>();
         Keeper activeKeeper1 = new Keeper("uuidFrom1", "uuidTo1", "teems", new Date());
         Keeper activeKeeper2 = new Keeper("uuidFrom2", "uuidTo1", "sqlcmd", new Date());
@@ -164,12 +188,13 @@ public class KeepersServiceTest extends KeeperAbstractTest {
         listActiveKeepers.add(activeKeeper1);
         listActiveKeepers.add(activeKeeper2);
         listActiveKeepers.add(activeKeeper3);
-
-        //When
         when(repository.getActiveKeepers()).thenReturn(listActiveKeepers);
 
-        //Then
-        assertEquals(expected, service.getActiveKeepers());
+        List<ActiveKeeperDTO> actual = service.getActiveKeepers();
+
+        assertEquals(expected, actual);
+        verify(repository).getActiveKeepers();
+        verifyNoMoreInteractions(repository);
     }
 }
 

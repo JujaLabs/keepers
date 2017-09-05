@@ -2,6 +2,7 @@ package juja.microservices.keepers.entity;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -10,6 +11,7 @@ import org.hibernate.validator.constraints.NotEmpty;
  * @author Dmitriy Lyashenko
  */
 @Getter
+@EqualsAndHashCode
 public class KeeperRequest {
 
     @NotEmpty
