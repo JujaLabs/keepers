@@ -5,15 +5,21 @@ buildscript {
     }
     dependencies {
         classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.4.1.RELEASE'
+        classpath 'se.transmode.gradle:gradle-docker:1.2'
     }
+}
+
+repositories {
+    mavenCentral()
+    mavenLocal()
 }
 
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
+apply plugin: 'docker'
 
-group = 'ua.com.juja'
-version = '1.0-SNAPSHOT'
+group = 'juja'
 
 jar {
     baseName = "keepers"
@@ -24,13 +30,25 @@ description = "keepers"
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
+
+import org.gradle.internal.os.OperatingSystem
+
+task buildDocker(type: Docker, dependsOn: build) {
+    if (OperatingSystem.current().isLinux()) {
+        dockerBinary = "sudo docker"
+    }
+    applicationName = jar.baseName
+    dockerfile = file('docker/Dockerfile')
+    doFirst {
+        copy {
+            from jar
+            into "${stageDir}/target"
+        }
+    }
 }
 
-repositories {
-    mavenCentral()
-    mavenLocal()
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
 }
 
 test.testLogging {
@@ -40,7 +58,7 @@ test.testLogging {
 }
 
 test {
-    filter{
+    filter {
         includeTestsMatching "juja.microservices.keepers.*"
     }
     afterTest { desc, result ->
