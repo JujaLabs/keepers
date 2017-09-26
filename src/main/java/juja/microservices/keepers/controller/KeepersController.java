@@ -50,12 +50,9 @@ public class KeepersController {
             @ApiResponse(code = HttpURLConnection.HTTP_UNSUPPORTED_TYPE, message = "Unsupported request media type")
     })
     public ResponseEntity<?> addKeeper(@Valid @RequestBody KeeperRequest request) {
-        logger.debug("Controller.addKeeper after in, parameters: {}", request.toString());
-        String keeperId = keepersService.addKeeper(request);
-        List<String> ids = Collections.singletonList(keeperId);
-        logger.info("Added new 'Keeper', ids = {}", ids.toString());
-        logger.debug("Controller.addKeeper before out, parameters: {}", ids.toString());
-        return ResponseEntity.ok(ids);
+        logger.info("Received request to add keeper. Request parameters: {}", request.toString());
+        List<String> result = keepersService.addKeeper(request);
+        return ResponseEntity.ok(result);
     }
 
     @PutMapping(value = "${keepers.endpoint.deactivateKeeper}", consumes = "application/json")

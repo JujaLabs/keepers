@@ -62,7 +62,7 @@ public class ApiExceptionsHandler extends ResponseEntityExceptionHandler {
                         .httpStatus(HttpStatus.BAD_REQUEST.value())
                         .exceptionMessage(ex.getMessage())
                         .build();
-        logger.warn("handleKeeperAccessException before out " + message);
+        logger.warn(message.getExceptionMessage());
         return new ResponseEntity<>(message,HttpStatus.BAD_REQUEST);
     }
 
@@ -73,7 +73,7 @@ public class ApiExceptionsHandler extends ResponseEntityExceptionHandler {
                         .httpStatus(HttpStatus.BAD_REQUEST.value())
                         .exceptionMessage(ex.getMessage())
                         .build();
-        logger.warn("handleKeeperDirectionActiveException before out " + message);
+        logger.warn(message.getExceptionMessage());
         return new ResponseEntity<>(message,HttpStatus.BAD_REQUEST);
     }
 

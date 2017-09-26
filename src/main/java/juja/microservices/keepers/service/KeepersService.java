@@ -15,7 +15,6 @@ import javax.inject.Inject;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -73,28 +72,27 @@ public class KeepersService {
         return ids;
     }
 
-    public String addKeeper(KeeperRequest keeperRequest) {
-        String uuid = keeperRequest.getUuid();
-        String direction = keeperRequest.getDirection();
+    public List<String> addKeeper(KeeperRequest keeperRequest) {
         String from = keeperRequest.getFrom();
-        logger.debug("Service.addKeeper after in, parameters: {}", keeperRequest.toString());
         if (keepersRepository.findOneActive(from) == null) {
-            logger.warn("User '{}' tried to add new 'Keeper' but he is not a Keeper", from);
-            throw new KeeperAccessException("Only the keeper can appoint another keeper");
+            String message = String.format("Request 'add keeper' rejected. User '%s' tried to add new keeper, but he is not an active keeper.", from);
+            throw new KeeperAccessException(message);
         }
 
+        String uuid = keeperRequest.getUuid();
+        String direction = keeperRequest.getDirection();
         if (keepersRepository.findOneByUUIdAndDirectionIsActive(uuid, direction) != null) {
-            logger.warn("Keeper with uuid '{}' already keeps direction '{}' and he is active", uuid, direction);
-            throw new KeeperDirectionActiveException("Keeper with uuid " + uuid + " already keeps direction "
-                    + direction + " and he is active");
+            String message = String.format("Keeper with uuid '%s' already keeps direction '%s' and he is active", uuid, direction);
+            throw new KeeperDirectionActiveException(message);
         }
+
         Date startDate = Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant());
         Keeper keeper = new Keeper(from, uuid, direction, startDate);
-        String newKeeperId = keepersRepository.save(keeper);
-        logger.info("Added new 'Keeper' with DBId'{}', with uuid {}, from user '{}'",
-                newKeeperId, uuid, from);
-        logger.debug("Service.addKeeper before out, parameters: {}", newKeeperId);
-        return newKeeperId;
+        logger.debug("Trying to add new keeper to repository. {}", keeper.toString());
+        String id = keepersRepository.save(keeper);
+        logger.info("New keeper added successfully. Id '{}', uuid '{}', from user '{}'", id, uuid, from);
+
+        return Collections.singletonList(id);
     }
 
     public List<ActiveKeeperDTO> getActiveKeepers() {

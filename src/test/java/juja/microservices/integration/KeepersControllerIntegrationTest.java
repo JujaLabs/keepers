@@ -107,7 +107,7 @@ public class KeepersControllerIntegrationTest extends BaseIntegrationTest {
                 "\"internalErrorCode\":\"KPR-F1-D4\"," +
                 "\"clientMessage\":\"Sorry, but you're not a keeper\"," +
                 "\"developerMessage\":\"Exception - KeeperAccessException\"," +
-                "\"exceptionMessage\":\"Only the keeper can appoint another keeper\"," +
+                "\"exceptionMessage\":\"Request 'add keeper' rejected. User 'bill' tried to add new keeper, but he is not an active keeper.\"," +
                 "\"detailErrors\":[]}";
 
         String json = "{" +
@@ -134,7 +134,7 @@ public class KeepersControllerIntegrationTest extends BaseIntegrationTest {
                 "\"internalErrorCode\":\"KPR-F1-D4\"," +
                 "\"clientMessage\":\"Sorry, but keeper with the requested uuid already keeps the requested direction and he is active\"," +
                 "\"developerMessage\":\"Exception - KeeperDirectionActiveException\"," +
-                "\"exceptionMessage\":\"Keeper with uuid asdqwe already keeps direction teams and he is active\"," +
+                "\"exceptionMessage\":\"Keeper with uuid 'asdqwe' already keeps direction 'teams' and he is active\"," +
                 "\"detailErrors\":[]}";
 
         String json = "{" +
