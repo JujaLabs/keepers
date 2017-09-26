@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.inject.Inject;
 import javax.validation.Valid;
 import java.net.HttpURLConnection;
-import java.util.Collections;
 import java.util.List;
 
 /**
