@@ -37,16 +37,16 @@ public class KeepersService {
     private KeepersRepository keepersRepository;
 
     public List<String> getDirections(String uuid) {
-        logger.debug("Received get directions by uuid request. Requested uuid: {}", uuid);
-
+        logger.debug("Requesting the active directions to repository");
         List<Keeper> directions = keepersRepository.getDirections(uuid);
+        logger.debug("Found {} active directions for uuid '{}': {}", directions.size(), uuid, directions.toString());
 
         List<String> result = new ArrayList<>();
         for (Keeper keeper : directions) {
             result.add(keeper.getDirection());
         }
-        logger.info("Number of returned keeper directions is {}", result.size());
-        logger.debug("Request for active directions for keeper returned {}", result.toString());
+
+        logger.info("Request for active directions for keeper returned {}", result.toString());
         return result;
     }
 
