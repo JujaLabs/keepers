@@ -100,6 +100,7 @@ public class KeepersController {
             @ApiResponse(code = HttpURLConnection.HTTP_UNSUPPORTED_TYPE, message = "Unsupported request media type")
     })
     public ResponseEntity<?> getActiveKeepers() {
+        logger.info("Received get active keeper request");
         return ResponseEntity.ok(keepersService.getActiveKeepers());
     }
 }

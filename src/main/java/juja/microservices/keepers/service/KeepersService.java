@@ -97,25 +97,27 @@ public class KeepersService {
     }
 
     public List<ActiveKeeperDTO> getActiveKeepers() {
-        logger.debug("Service.getActiveKeepers after in, without any parameters.");
-        List<ActiveKeeperDTO> activeKeeperDTOList = new ArrayList<>();
-        Map<String, ActiveKeeperDTO> activeKeeperDTOMap = new HashMap<>();
-        logger.debug("Service.getActiveKeepers before repository invocation.");
+        logger.debug("Requesting the active keepers to repository");
+        List<ActiveKeeperDTO> result = new ArrayList<>();
         List<Keeper> keepers = keepersRepository.getActiveKeepers();
-        logger.debug("Get List<Keeper> : {}", keepers);
-        for (Keeper keeper : keepers) {
-            String keeperUuid = keeper.getUuid();
+        if (keepers != null) {
+            logger.debug("Recieved keepers: {}", keepers.toString());
 
-            if (activeKeeperDTOMap.containsKey(keeperUuid)) {
-                activeKeeperDTOMap.get(keeperUuid).addDirection(keeper.getDirection());
-            } else {
-                activeKeeperDTOMap.put(keeperUuid, new ActiveKeeperDTO(keeperUuid, Collections.singletonList(keeper.getDirection())));
+            Map<String, ActiveKeeperDTO> activeKeepers = new HashMap<>();
+            for (Keeper keeper : keepers) {
+                String uuid = keeper.getUuid();
+                String direction = keeper.getDirection();
+
+                if (activeKeepers.containsKey(uuid)) {
+                    activeKeepers.get(uuid).addDirection(direction);
+                } else {
+                    activeKeepers.put(uuid, new ActiveKeeperDTO(uuid, Collections.singletonList(direction)));
+                }
             }
-        }
 
-        activeKeeperDTOMap.forEach((String, ActiveKeeperDTO) -> activeKeeperDTOList.add(ActiveKeeperDTO));
-        logger.debug("Create Map<String, ActiveKeeperDTO>. It has {} elements.", activeKeeperDTOMap.size());
-        logger.info("Service.getActiveKeepers before out with result data - list of ActiveKeepersDTO: {}", activeKeeperDTOList);
-        return activeKeeperDTOList;
+            activeKeepers.forEach((String, ActiveKeeperDTO) -> result.add(ActiveKeeperDTO));
+        }
+        logger.info("Returned active keepers {}", result.toString());
+        return result;
     }
 }
