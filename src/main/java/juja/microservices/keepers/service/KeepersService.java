@@ -52,30 +52,31 @@ public class KeepersService {
 
     public List<String> deactivateKeeper(KeeperRequest keeperRequest) {
         String uuid = keeperRequest.getUuid();
-        String direction = keeperRequest.getDirection();
         String from = keeperRequest.getFrom();
-        logger.debug("Service.deactivate after in, parameters: {}", keeperRequest.toString());
         if (keepersRepository.findOneActive(from) == null) {
-            logger.warn("Keeper '{}' tried to deactivate 'keeper' '{}' but '{}' not active", from, uuid, from);
-            throw new KeeperAccessException("Only active keeper could deactivate another keeper");
+            String message = String.format("Request 'deactivate keeper' rejected. User '%s' tried to deactivate keeper, but he is not an active keeper", from);
+            throw new KeeperAccessException(message);
         }
+
+        String direction = keeperRequest.getDirection();
         Keeper keeper = keepersRepository.findOneByUUIdAndDirectionIsActive(uuid, direction);
         if (keeper == null) {
-            logger.warn("Keeper with uuid '{}' and direction '{}' is't exist or not active", uuid, direction);
-            throw new KeeperNonexistentException("Keeper with uuid " + uuid + " and direction " + direction
-                    + " is't exist or not active");
+            String message = String.format("Keeper with uuid '%s' and direction '%s' is't exist or not active", uuid, direction);
+            throw new KeeperNonexistentException(message);
         }
+
         keeper.setDismissDate(LocalDateTime.now());
-        List<String> ids = Collections.singletonList(keepersRepository.save(keeper));
-        logger.info("'Keeper' deactivated , with uuid '{}', from user '{}'", uuid, from);
-        logger.debug("Keeper {} was deactivated ", uuid);
-        return ids;
+        logger.debug("Trying to update record in repository. Deactivate date: {}", keeper.getDismissDate());
+        String id = keepersRepository.save(keeper);
+        logger.info("Keeper deactivated successfully. Id: '{}', uuid: '{}', from user: '{}'", id, uuid, from);
+
+        return Collections.singletonList(id);
     }
 
     public List<String> addKeeper(KeeperRequest keeperRequest) {
         String from = keeperRequest.getFrom();
         if (keepersRepository.findOneActive(from) == null) {
-            String message = String.format("Request 'add keeper' rejected. User '%s' tried to add new keeper, but he is not an active keeper.", from);
+            String message = String.format("Request 'add keeper' rejected. User '%s' tried to add new keeper, but he is not an active keeper", from);
             throw new KeeperAccessException(message);
         }
 
@@ -90,7 +91,7 @@ public class KeepersService {
         Keeper keeper = new Keeper(from, uuid, direction, startDate);
         logger.debug("Trying to add new keeper to repository. {}", keeper.toString());
         String id = keepersRepository.save(keeper);
-        logger.info("New keeper added successfully. Id '{}', uuid '{}', from user '{}'", id, uuid, from);
+        logger.info("New keeper added successfully. Id: '{}', uuid: '{}', from user: '{}'", id, uuid, from);
 
         return Collections.singletonList(id);
     }

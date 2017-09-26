@@ -67,9 +67,9 @@ public class KeepersController {
             @ApiResponse(code = HttpURLConnection.HTTP_UNSUPPORTED_TYPE, message = "Unsupported request media type")
     })
     public ResponseEntity<?> deactivateKeeper(@Valid @RequestBody KeeperRequest request) {
-        List<String> ids = keepersService.deactivateKeeper(request);
-        logger.info("Deactivate keeper, ids = {}", ids.toString());
-        return ResponseEntity.ok(ids);
+        logger.info("Received request to deactivate keeper. Request parameters: {}", request.toString());
+        List<String> result = keepersService.deactivateKeeper(request);
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping(value = "${keepers.endpoint.getDirections}" + "/{uuid}")
