@@ -3,7 +3,7 @@
   "internalErrorCode": "KPR-F1-D4",
   "clientMessage": "Sorry, but you're not a keeper",
   "developerMessage": "Exception - KeeperAccessException",
-  "exceptionMessage": "Only the keeper can appoint another keeper",
+  "exceptionMessage": "Request 'add keeper' rejected. User 'asdqwe' tried to add new keeper, but he is not an active keeper",
   "detailErrors": [
 
   ]
