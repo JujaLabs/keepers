@@ -22,6 +22,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,7 +53,7 @@ public class ApiExceptionsHandler extends ResponseEntityExceptionHandler {
                         .httpStatus(HttpStatus.BAD_REQUEST.value())
                         .exceptionMessage(ex.getMessage())
                         .build();
-        return new ResponseEntity<>(message,HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(KeeperAccessException.class)
@@ -62,8 +63,8 @@ public class ApiExceptionsHandler extends ResponseEntityExceptionHandler {
                         .httpStatus(HttpStatus.BAD_REQUEST.value())
                         .exceptionMessage(ex.getMessage())
                         .build();
-        logger.warn("handleKeeperAccessException before out " + message);
-        return new ResponseEntity<>(message,HttpStatus.BAD_REQUEST);
+        logger.warn(message.getExceptionMessage());
+        return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(KeeperDirectionActiveException.class)
@@ -73,8 +74,8 @@ public class ApiExceptionsHandler extends ResponseEntityExceptionHandler {
                         .httpStatus(HttpStatus.BAD_REQUEST.value())
                         .exceptionMessage(ex.getMessage())
                         .build();
-        logger.warn("handleKeeperDirectionActiveException before out " + message);
-        return new ResponseEntity<>(message,HttpStatus.BAD_REQUEST);
+        logger.warn(message.getExceptionMessage());
+        return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(KeeperNonexistentException.class)
@@ -84,7 +85,7 @@ public class ApiExceptionsHandler extends ResponseEntityExceptionHandler {
                         .httpStatus(HttpStatus.BAD_REQUEST.value())
                         .exceptionMessage(ex.getMessage())
                         .build();
-        logger.warn("handleKeeperNonexistentException before out " + message);
+        logger.warn(message.getExceptionMessage());
         return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
     }
 

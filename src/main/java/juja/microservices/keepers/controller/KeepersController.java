@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.inject.Inject;
 import javax.validation.Valid;
 import java.net.HttpURLConnection;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -50,12 +49,9 @@ public class KeepersController {
             @ApiResponse(code = HttpURLConnection.HTTP_UNSUPPORTED_TYPE, message = "Unsupported request media type")
     })
     public ResponseEntity<?> addKeeper(@Valid @RequestBody KeeperRequest request) {
-        logger.debug("Controller.addKeeper after in, parameters: {}", request.toString());
-        String keeperId = keepersService.addKeeper(request);
-        List<String> ids = Collections.singletonList(keeperId);
-        logger.info("Added new 'Keeper', ids = {}", ids.toString());
-        logger.debug("Controller.addKeeper before out, parameters: {}", ids.toString());
-        return ResponseEntity.ok(ids);
+        logger.info("Received request to add keeper. Request parameters: {}", request.toString());
+        List<String> result = keepersService.addKeeper(request);
+        return ResponseEntity.ok(result);
     }
 
     @PutMapping(value = "${keepers.endpoint.deactivateKeeper}", consumes = "application/json")
@@ -70,9 +66,9 @@ public class KeepersController {
             @ApiResponse(code = HttpURLConnection.HTTP_UNSUPPORTED_TYPE, message = "Unsupported request media type")
     })
     public ResponseEntity<?> deactivateKeeper(@Valid @RequestBody KeeperRequest request) {
-        List<String> ids = keepersService.deactivateKeeper(request);
-        logger.info("Deactivate keeper, ids = {}", ids.toString());
-        return ResponseEntity.ok(ids);
+        logger.info("Received request to deactivate keeper. Request parameters: {}", request.toString());
+        List<String> result = keepersService.deactivateKeeper(request);
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping(value = "${keepers.endpoint.getDirections}" + "/{uuid}")
@@ -86,12 +82,8 @@ public class KeepersController {
             @ApiResponse(code = HttpURLConnection.HTTP_BAD_METHOD, message = "Bad method")
     })
     public ResponseEntity<?> getDirections(@PathVariable String uuid) {
-        logger.debug("Received get directions by uuid request. Requested uuid: {}", uuid);
-
+        logger.info("Received get directions by uuid request. Requested uuid: {}", uuid);
         List<String> result = keepersService.getDirections(uuid);
-
-        logger.info("Number of returned keeper directions is {}", result.size());
-        logger.debug("Request for active directions for keeper returned {}", result.toString());
         return ResponseEntity.ok(result);
     }
 
@@ -107,6 +99,7 @@ public class KeepersController {
             @ApiResponse(code = HttpURLConnection.HTTP_UNSUPPORTED_TYPE, message = "Unsupported request media type")
     })
     public ResponseEntity<?> getActiveKeepers() {
+        logger.info("Received get active keeper request");
         return ResponseEntity.ok(keepersService.getActiveKeepers());
     }
 }

@@ -151,7 +151,9 @@ public class KeepersControllerTest {
     @Test
     public void addKeeper() throws Exception {
         KeeperRequest keeperRequest = new KeeperRequest("asdqwe", "max", "SomeDirection");
-        when(service.addKeeper(eq(keeperRequest))).thenReturn("SomeId");
+        List<String> id = new ArrayList<>();
+        id.add("SomeId");
+        when(service.addKeeper(eq(keeperRequest))).thenReturn(id);
 
         String result = mockMvc.perform(post(keepersAddKeeperUrl)
                 .contentType(APPLICATION_JSON_UTF8)

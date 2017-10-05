@@ -25,43 +25,37 @@ public class KeepersRepository {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Value("${spring.data.mongodb.collection}")
-    private String mongoCollectionName;
+    private String collectionName;
 
     @Inject
     private MongoTemplate mongoTemplate;
 
     public List<Keeper> getDirections(String uuid) {
-        logger.debug("Received get directions by uuid request. Requested uuid: {}", uuid);
-
-        List<Keeper> result = mongoTemplate.find(new Query(
-                Criteria.where("uuid").is(uuid).and("isActive").is(true)), Keeper.class, mongoCollectionName);
-
-        logger.info("Number of returned keeper directions is {}", result.size());
-        logger.debug("Request for active directions for keeper returned {}", result.toString());
-        return result;
+        return mongoTemplate.find(new Query(
+                Criteria.where("uuid").is(uuid).and("isActive").is(true)), Keeper.class, collectionName);
     }
 
     public String save(Keeper keeper) {
-        mongoTemplate.save(keeper, mongoCollectionName);
+        mongoTemplate.save(keeper, collectionName);
         return keeper.getId();
     }
 
     public Keeper findOneByUUId(String uuid) {
-        return mongoTemplate.findOne(new Query(Criteria.where("uuid").is(uuid)), Keeper.class, mongoCollectionName);
+        return mongoTemplate.findOne(new Query(Criteria.where("uuid").is(uuid)), Keeper.class, collectionName);
     }
 
     public Keeper findOneByUUIdAndDirectionIsActive(String uuid, String direction) {
         return mongoTemplate.findOne(new Query(Criteria.where("uuid").is(uuid))
                 .addCriteria(Criteria.where("direction").is(direction))
-                .addCriteria(Criteria.where("isActive").is(true)), Keeper.class, mongoCollectionName);
+                .addCriteria(Criteria.where("isActive").is(true)), Keeper.class, collectionName);
     }
 
     public Keeper findOneActive(String uuid) {
         return mongoTemplate.findOne(new Query(Criteria.where("uuid").is(uuid))
-                .addCriteria(Criteria.where("isActive").is(true)), Keeper.class, mongoCollectionName);
+                .addCriteria(Criteria.where("isActive").is(true)), Keeper.class, collectionName);
     }
 
     public List<Keeper> getActiveKeepers() {
-        return mongoTemplate.find(new Query(Criteria.where("isActive").is(true)), Keeper.class, mongoCollectionName);
+        return mongoTemplate.find(new Query(Criteria.where("isActive").is(true)), Keeper.class, collectionName);
     }
 }

@@ -65,7 +65,7 @@ public class KeepersControllerIntegrationTest extends BaseIntegrationTest {
                 "\"internalErrorCode\":\"KPR-F1-D4\"," +
                 "\"clientMessage\":\"Sorry, but you're not a keeper\"," +
                 "\"developerMessage\":\"Exception - KeeperAccessException\"," +
-                "\"exceptionMessage\":\"Only active keeper could deactivate another keeper\"," +
+                "\"exceptionMessage\":\"Request 'deactivate keeper' rejected. User 'asdqwe' tried to deactivate keeper, but he is not an active keeper\"," +
                 "\"detailErrors\":[]}";
 
         String result = mockMvc.perform(put(keepersDeactivateKeeperUrl)
@@ -86,7 +86,7 @@ public class KeepersControllerIntegrationTest extends BaseIntegrationTest {
                 "\"internalErrorCode\":\"KPR-F2\"," +
                 "\"clientMessage\":\"Sorry, but keeper with uuid and direction is't exist or inactive\"," +
                 "\"developerMessage\":\"Exception - KeeperNonexistentException\"," +
-                "\"exceptionMessage\":\"Keeper with uuid max and direction SomeDirection is't exist or not active\"," +
+                "\"exceptionMessage\":\"Keeper with uuid 'max' and direction 'SomeDirection' is't exist or not active\"," +
                 "\"detailErrors\":[]}";
 
         String result = mockMvc.perform(put(keepersDeactivateKeeperUrl)
@@ -107,7 +107,7 @@ public class KeepersControllerIntegrationTest extends BaseIntegrationTest {
                 "\"internalErrorCode\":\"KPR-F1-D4\"," +
                 "\"clientMessage\":\"Sorry, but you're not a keeper\"," +
                 "\"developerMessage\":\"Exception - KeeperAccessException\"," +
-                "\"exceptionMessage\":\"Only the keeper can appoint another keeper\"," +
+                "\"exceptionMessage\":\"Request 'add keeper' rejected. User 'bill' tried to add new keeper, but he is not an active keeper\"," +
                 "\"detailErrors\":[]}";
 
         String json = "{" +
@@ -134,7 +134,7 @@ public class KeepersControllerIntegrationTest extends BaseIntegrationTest {
                 "\"internalErrorCode\":\"KPR-F1-D4\"," +
                 "\"clientMessage\":\"Sorry, but keeper with the requested uuid already keeps the requested direction and he is active\"," +
                 "\"developerMessage\":\"Exception - KeeperDirectionActiveException\"," +
-                "\"exceptionMessage\":\"Keeper with uuid asdqwe already keeps direction teams and he is active\"," +
+                "\"exceptionMessage\":\"Keeper with uuid 'asdqwe' already keeps direction 'teams' and he is active\"," +
                 "\"detailErrors\":[]}";
 
         String json = "{" +

@@ -164,9 +164,9 @@ public class KeepersServiceTest extends KeeperAbstractTest {
         when(repository.findOneByUUIdAndDirectionIsActive(keeperRequest.getUuid(), keeperRequest.getDirection()))
                 .thenReturn(null);
         when(repository.save(any(Keeper.class))).thenReturn("SomeID");
-        String expected = "SomeID";
+        List<String> expected = Collections.singletonList("SomeID");
 
-        String result = service.addKeeper(keeperRequest);
+        List<String> result = service.addKeeper(keeperRequest);
 
         assertEquals(expected, result);
         verify(repository).findOneActive(keeperRequest.getFrom());

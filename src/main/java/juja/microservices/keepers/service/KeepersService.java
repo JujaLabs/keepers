@@ -15,7 +15,6 @@ import javax.inject.Inject;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -35,88 +34,90 @@ public class KeepersService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Inject
-    private KeepersRepository keepersRepository;
+    private KeepersRepository repository;
 
     public List<String> getDirections(String uuid) {
-        logger.debug("Received get directions by uuid request. Requested uuid: {}", uuid);
-
-        List<Keeper> directions = keepersRepository.getDirections(uuid);
+        logger.debug("Requesting the active directions to repository");
+        List<Keeper> directions = repository.getDirections(uuid);
+        logger.debug("Found {} active directions for uuid '{}': {}", directions.size(), uuid, directions.toString());
 
         List<String> result = new ArrayList<>();
         for (Keeper keeper : directions) {
             result.add(keeper.getDirection());
         }
-        logger.info("Number of returned keeper directions is {}", result.size());
-        logger.debug("Request for active directions for keeper returned {}", result.toString());
+
+        logger.info("Request for active directions for keeper returned {}", result.toString());
         return result;
     }
 
     public List<String> deactivateKeeper(KeeperRequest keeperRequest) {
         String uuid = keeperRequest.getUuid();
-        String direction = keeperRequest.getDirection();
         String from = keeperRequest.getFrom();
-        logger.debug("Service.deactivate after in, parameters: {}", keeperRequest.toString());
-        if (keepersRepository.findOneActive(from) == null) {
-            logger.warn("Keeper '{}' tried to deactivate 'keeper' '{}' but '{}' not active", from, uuid, from);
-            throw new KeeperAccessException("Only active keeper could deactivate another keeper");
+        if (repository.findOneActive(from) == null) {
+            String message = String.format("Request 'deactivate keeper' rejected. User '%s' tried to deactivate keeper, but he is not an active keeper", from);
+            throw new KeeperAccessException(message);
         }
-        Keeper keeper = keepersRepository.findOneByUUIdAndDirectionIsActive(uuid, direction);
+
+        String direction = keeperRequest.getDirection();
+        Keeper keeper = repository.findOneByUUIdAndDirectionIsActive(uuid, direction);
         if (keeper == null) {
-            logger.warn("Keeper with uuid '{}' and direction '{}' is't exist or not active", uuid, direction);
-            throw new KeeperNonexistentException("Keeper with uuid " + uuid + " and direction " + direction
-                    + " is't exist or not active");
+            String message = String.format("Keeper with uuid '%s' and direction '%s' is't exist or not active", uuid, direction);
+            throw new KeeperNonexistentException(message);
         }
+
         keeper.setDismissDate(LocalDateTime.now());
-        List<String> ids = Collections.singletonList(keepersRepository.save(keeper));
-        logger.info("'Keeper' deactivated , with uuid '{}', from user '{}'", uuid, from);
-        logger.debug("Keeper {} was deactivated ", uuid);
-        return ids;
+        logger.debug("Trying to update record in repository. Deactivate date: {}", keeper.getDismissDate());
+        String id = repository.save(keeper);
+        logger.info("Keeper deactivated successfully. Id: '{}', uuid: '{}', from user: '{}'", id, uuid, from);
+
+        return Collections.singletonList(id);
     }
 
-    public String addKeeper(KeeperRequest keeperRequest) {
-        String uuid = keeperRequest.getUuid();
-        String direction = keeperRequest.getDirection();
+    public List<String> addKeeper(KeeperRequest keeperRequest) {
         String from = keeperRequest.getFrom();
-        logger.debug("Service.addKeeper after in, parameters: {}", keeperRequest.toString());
-        if (keepersRepository.findOneActive(from) == null) {
-            logger.warn("User '{}' tried to add new 'Keeper' but he is not a Keeper", from);
-            throw new KeeperAccessException("Only the keeper can appoint another keeper");
+        if (repository.findOneActive(from) == null) {
+            String message = String.format("Request 'add keeper' rejected. User '%s' tried to add new keeper, but he is not an active keeper", from);
+            throw new KeeperAccessException(message);
         }
 
-        if (keepersRepository.findOneByUUIdAndDirectionIsActive(uuid, direction) != null) {
-            logger.warn("Keeper with uuid '{}' already keeps direction '{}' and he is active", uuid, direction);
-            throw new KeeperDirectionActiveException("Keeper with uuid " + uuid + " already keeps direction "
-                    + direction + " and he is active");
+        String uuid = keeperRequest.getUuid();
+        String direction = keeperRequest.getDirection();
+        if (repository.findOneByUUIdAndDirectionIsActive(uuid, direction) != null) {
+            String message = String.format("Keeper with uuid '%s' already keeps direction '%s' and he is active", uuid, direction);
+            throw new KeeperDirectionActiveException(message);
         }
+
         Date startDate = Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant());
         Keeper keeper = new Keeper(from, uuid, direction, startDate);
-        String newKeeperId = keepersRepository.save(keeper);
-        logger.info("Added new 'Keeper' with DBId'{}', with uuid {}, from user '{}'",
-                newKeeperId, uuid, from);
-        logger.debug("Service.addKeeper before out, parameters: {}", newKeeperId);
-        return newKeeperId;
+        logger.debug("Trying to add new keeper to repository. {}", keeper.toString());
+        String id = repository.save(keeper);
+        logger.info("New keeper added successfully. Id: '{}', uuid: '{}', from user: '{}'", id, uuid, from);
+
+        return Collections.singletonList(id);
     }
 
     public List<ActiveKeeperDTO> getActiveKeepers() {
-        logger.debug("Service.getActiveKeepers after in, without any parameters.");
-        List<ActiveKeeperDTO> activeKeeperDTOList = new ArrayList<>();
-        Map<String, ActiveKeeperDTO> activeKeeperDTOMap = new HashMap<>();
-        logger.debug("Service.getActiveKeepers before repository invocation.");
-        List<Keeper> keepers = keepersRepository.getActiveKeepers();
-        logger.debug("Get List<Keeper> : {}", keepers);
-        for (Keeper keeper : keepers) {
-            String keeperUuid = keeper.getUuid();
+        logger.debug("Requesting the active keepers to repository");
+        List<Keeper> keepers = repository.getActiveKeepers();
+        List<ActiveKeeperDTO> result = new ArrayList<>();
+        if (keepers != null) {
+            logger.debug("Received keepers: {}", keepers.toString());
 
-            if (activeKeeperDTOMap.containsKey(keeperUuid)) {
-                activeKeeperDTOMap.get(keeperUuid).addDirection(keeper.getDirection());
-            } else {
-                activeKeeperDTOMap.put(keeperUuid, new ActiveKeeperDTO(keeperUuid, Collections.singletonList(keeper.getDirection())));
+            Map<String, ActiveKeeperDTO> activeKeepers = new HashMap<>();
+            for (Keeper keeper : keepers) {
+                String uuid = keeper.getUuid();
+                String direction = keeper.getDirection();
+
+                if (activeKeepers.containsKey(uuid)) {
+                    activeKeepers.get(uuid).addDirection(direction);
+                } else {
+                    activeKeepers.put(uuid, new ActiveKeeperDTO(uuid, Collections.singletonList(direction)));
+                }
             }
-        }
 
-        activeKeeperDTOMap.forEach((String, ActiveKeeperDTO) -> activeKeeperDTOList.add(ActiveKeeperDTO));
-        logger.debug("Create Map<String, ActiveKeeperDTO>. It has {} elements.", activeKeeperDTOMap.size());
-        logger.info("Service.getActiveKeepers before out with result data - list of ActiveKeepersDTO: {}", activeKeeperDTOList);
-        return activeKeeperDTOList;
+            activeKeepers.forEach((String, ActiveKeeperDTO) -> result.add(ActiveKeeperDTO));
+        }
+        logger.info("Returned active keepers {}", result.toString());
+        return result;
     }
 }
