@@ -90,7 +90,7 @@ public class KeepersServiceIntegrationTest extends BaseIntegrationTest {
         Keeper keeper = repository.findOneActive("00000");
 
         assertNotNull(keeper);
-        assertEquals( "asdqwe", keeper.getFrom());
+        assertEquals("asdqwe", keeper.getFrom());
         assertEquals("00000", keeper.getUuid());
         assertEquals("codenjoy", keeper.getDirection());
     }

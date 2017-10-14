@@ -1,20 +1,20 @@
 {
   "keepers": [
-     {
-      "id":"oop",
-      "from":"123qwe",
-      "uuid":"asdqwe",
-      "direction":"teams",
-      "startDate":{ "$date" : "2017-04-01T00:00:00.000Z"},
-      "isActive":true
-     },
     {
-      "id":"oop1",
-      "from":"123qwe",
-      "uuid":"max",
-      "direction":"SomeDirection",
-      "startDate":{ "$date" : "2017-04-01T00:00:00.000Z"},
-      "isActive":true
+      "id": "oop",
+      "from": "123qwe",
+      "uuid": "asdqwe",
+      "direction": "teams",
+      "startDate": {"$date": "2017-04-01T00:00:00.000Z"},
+      "isActive": true
+    },
+    {
+      "id": "oop1",
+      "from": "123qwe",
+      "uuid": "max",
+      "direction": "SomeDirection",
+      "startDate": {"$date": "2017-04-01T00:00:00.000Z"},
+      "isActive": true
     }
   ]
 }
