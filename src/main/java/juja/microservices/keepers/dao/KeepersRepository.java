@@ -1,8 +1,6 @@
 package juja.microservices.keepers.dao;
 
 import juja.microservices.keepers.entity.Keeper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -22,8 +20,6 @@ import java.util.List;
 @Repository
 public class KeepersRepository {
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
     @Value("${spring.data.mongodb.collection}")
     private String collectionName;
 
@@ -38,10 +34,6 @@ public class KeepersRepository {
     public String save(Keeper keeper) {
         mongoTemplate.save(keeper, collectionName);
         return keeper.getId();
-    }
-
-    public Keeper findOneByUUId(String uuid) {
-        return mongoTemplate.findOne(new Query(Criteria.where("uuid").is(uuid)), Keeper.class, collectionName);
     }
 
     public Keeper findOneByUUIdAndDirectionIsActive(String uuid, String direction) {
