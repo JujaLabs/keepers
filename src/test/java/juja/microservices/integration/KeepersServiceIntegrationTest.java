@@ -2,6 +2,7 @@ package juja.microservices.integration;
 
 import com.lordofthejars.nosqlunit.annotation.UsingDataSet;
 import juja.microservices.keepers.dao.KeepersRepository;
+import juja.microservices.keepers.entity.ActiveKeeperDTO;
 import juja.microservices.keepers.entity.Keeper;
 import juja.microservices.keepers.entity.KeeperRequest;
 import juja.microservices.keepers.exception.KeeperAccessException;
@@ -97,12 +98,12 @@ public class KeepersServiceIntegrationTest extends BaseIntegrationTest {
     @Test
     @UsingDataSet(locations = "/datasets/getKeeperDirections.json")
     public void shouldReturnDirections() {
-        List<String> expectedList = Arrays.asList("First active direction", "Second active direction");
+        List<String> expected = Arrays.asList("First active direction", "Second active direction");
 
         List<String> actual = service.getDirections("0000c9999");
 
         assertNotNull(actual);
-        assertEquals(expectedList, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -112,5 +113,19 @@ public class KeepersServiceIntegrationTest extends BaseIntegrationTest {
 
         assertNotNull(actual);
         assertTrue(actual.isEmpty());
+    }
+
+    @Test
+    @UsingDataSet(locations = "/datasets/getActiveKeepers.json")
+    public void getActiveKeepers() {
+
+        ActiveKeeperDTO firstKeeperDTO = new ActiveKeeperDTO("1111a9999", Arrays.asList("First direction"));
+        ActiveKeeperDTO secondKeeperDTO = new ActiveKeeperDTO("0000c9999", Arrays.asList("First direction", "Second direction"));
+
+        List<ActiveKeeperDTO> actual = service.getActiveKeepers();
+
+        assertNotNull(actual);
+        assertTrue(actual.contains(firstKeeperDTO));
+        assertTrue(actual.contains(secondKeeperDTO));
     }
 }
