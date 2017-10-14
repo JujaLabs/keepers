@@ -21,6 +21,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 /**
  * @author Danil Kuznetsov
  * @author Dmitriy Lyashenko
+ * @author Vadim Dyachenko
  */
 @SpringBootTest(webEnvironment = RANDOM_PORT, classes = {Keepers.class})
 @DirtiesContext
@@ -93,6 +94,8 @@ public class BaseAcceptanceTest {
             response = specification.post(url);
         } else if (HttpMethod.GET == method) {
             response = specification.get(url);
+        } else if (HttpMethod.PUT == method) {
+            response = specification.put(url);
         } else {
             throw new RuntimeException("Unsupported HttpMethod in getResponse()");
         }

@@ -1,0 +1,8 @@
+{
+  "httpStatus": 400,
+  "internalErrorCode": "KPR-F2",
+  "clientMessage": "Sorry, but keeper with uuid and direction is't exist or inactive",
+  "developerMessage": "Exception - KeeperNonexistentException",
+  "exceptionMessage": "Keeper with uuid 'nonexistent' and direction 'SomeDirection' is't exist or not active",
+  "detailErrors": []
+}
