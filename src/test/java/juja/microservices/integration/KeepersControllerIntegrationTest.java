@@ -24,6 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 /**
  * @author Dmitriy Lyashenko
+ * @author Vadim Dyachenko
  */
 @RunWith(SpringRunner.class)
 public class KeepersControllerIntegrationTest extends BaseIntegrationTest {
@@ -189,13 +190,33 @@ public class KeepersControllerIntegrationTest extends BaseIntegrationTest {
     @UsingDataSet(locations = "/datasets/getKeeperDirections.json")
     public void getDirectionsAndReturnJson() throws Exception {
         String expected = "[\"First active direction\",\"Second active direction\"]";
-        String uuid="0000c9999";
-        mockMvc.perform(get(keepersGetDirectionsUrl+uuid)
+        String uuid = "0000c9999";
+        mockMvc.perform(get(keepersGetDirectionsUrl + uuid)
                 .contentType(APPLICATION_JSON_UTF8))
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
 
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get(keepersGetDirectionsUrl+uuid)
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get(keepersGetDirectionsUrl + uuid)
+                .contentType(APPLICATION_JSON_UTF8))
+                .andReturn();
+
+        String content = result.getResponse().getContentAsString();
+
+        assertEquals(expected, content);
+    }
+
+    @Test
+    @UsingDataSet(locations = "/datasets/getActiveKeepers.json")
+    public void getActiveKeepers() throws Exception {
+        String expected = "[{\"uuid\":\"1111a9999\",\"directions\":[\"First direction\"]}," +
+                "{\"uuid\":\"0000c9999\",\"directions\":[\"First direction\",\"Second direction\"]}]";
+
+        mockMvc.perform(get(keepersGetActiveKeepersUrl)
+                .contentType(APPLICATION_JSON_UTF8))
+                .andExpect(content().contentType(APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk());
+
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get(keepersGetActiveKeepersUrl)
                 .contentType(APPLICATION_JSON_UTF8))
                 .andReturn();
 

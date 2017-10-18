@@ -5,6 +5,5 @@
   "developerMessage": "Exception - KeeperDirectionActiveException",
   "exceptionMessage": "Keeper with uuid 'asdqwe' already keeps direction 'teams' and he is active",
   "detailErrors": [
-
   ]
 }

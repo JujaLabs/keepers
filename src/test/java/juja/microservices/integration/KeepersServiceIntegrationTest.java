@@ -2,6 +2,7 @@ package juja.microservices.integration;
 
 import com.lordofthejars.nosqlunit.annotation.UsingDataSet;
 import juja.microservices.keepers.dao.KeepersRepository;
+import juja.microservices.keepers.entity.ActiveKeeperDTO;
 import juja.microservices.keepers.entity.Keeper;
 import juja.microservices.keepers.entity.KeeperRequest;
 import juja.microservices.keepers.exception.KeeperAccessException;
@@ -15,16 +16,17 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Dmitriy Lyashenko
+ * @author Vadim Dyachenko
  */
 @RunWith(SpringRunner.class)
 public class KeepersServiceIntegrationTest extends BaseIntegrationTest {
@@ -83,41 +85,47 @@ public class KeepersServiceIntegrationTest extends BaseIntegrationTest {
     @Test
     @UsingDataSet(locations = "/datasets/oneKeeperInDB.json")
     public void addKeeper() {
-        service.addKeeper(new KeeperRequest("asdqwe", "123qwe", "teams"));
-        String result = repository.findOneByUUId("asdqwe").getUuid();
-        String result2 = repository.findOneByUUId("123qwe").getUuid();
+        service.addKeeper(new KeeperRequest("asdqwe", "00000", "codenjoy"));
 
-        assertNotNull(result);
-        assertNotNull(result2);
+        Keeper keeper = repository.findOneActive("00000");
+
+        assertNotNull(keeper);
+        assertEquals("asdqwe", keeper.getFrom());
+        assertEquals("00000", keeper.getUuid());
+        assertEquals("codenjoy", keeper.getDirection());
     }
 
     @Test
     @UsingDataSet(locations = "/datasets/getKeeperDirections.json")
     public void shouldReturnDirections() {
-        List<String> expectedList = Arrays.asList("First active direction", "Second active direction");
+        List<String> expected = Arrays.asList("First active direction", "Second active direction");
 
-        List<Keeper> keepers = repository.getDirections("0000c9999");
-        List<String> actualList = new ArrayList<>();
-        for (Keeper keeper : keepers) {
-            actualList.add(keeper.getDirection());
-        }
+        List<String> actual = service.getDirections("0000c9999");
 
-        assertEquals(expectedList, actualList);
-    }
-
-    @Test
-    @UsingDataSet(locations = "/datasets/getKeeperDirections.json")
-    public void shouldReturnCorrectSize() {
-        List<Keeper> actualList = repository.getDirections("0000c9999");
-
-        assertEquals(2, actualList.size());
+        assertNotNull(actual);
+        assertEquals(expected, actual);
     }
 
     @Test
     @UsingDataSet(locations = "/datasets/getKeeperDirections.json")
     public void shouldReturnEmptyList() {
-        List<Keeper> actualList = repository.getDirections("1111a9999");
+        List<String> actual = service.getDirections("1111a9999");
 
-        assertEquals(0, actualList.size());
+        assertNotNull(actual);
+        assertTrue(actual.isEmpty());
+    }
+
+    @Test
+    @UsingDataSet(locations = "/datasets/getActiveKeepers.json")
+    public void getActiveKeepers() {
+
+        ActiveKeeperDTO firstKeeperDTO = new ActiveKeeperDTO("1111a9999", Arrays.asList("First direction"));
+        ActiveKeeperDTO secondKeeperDTO = new ActiveKeeperDTO("0000c9999", Arrays.asList("First direction", "Second direction"));
+
+        List<ActiveKeeperDTO> actual = service.getActiveKeepers();
+
+        assertNotNull(actual);
+        assertTrue(actual.contains(firstKeeperDTO));
+        assertTrue(actual.contains(secondKeeperDTO));
     }
 }

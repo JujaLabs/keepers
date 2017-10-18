@@ -14,9 +14,6 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.inject.Inject;
-import java.time.LocalDateTime;
-import java.time.Month;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -36,7 +33,7 @@ import static org.mockito.Mockito.when;
 public class KeepersRepositoryTest extends KeeperAbstractTest {
 
     @Value("${spring.data.mongodb.collection}")
-    private String mongoCollectionName;
+    private String collectionName;
 
     @Inject
     private KeepersRepository repository;
@@ -53,7 +50,7 @@ public class KeepersRepositoryTest extends KeeperAbstractTest {
 
         assertEquals("uuid", actual);
         verify(mongoTemplate).save(argThat(new KeeperMatcher("uuid", "uuid", "from",
-                "direction", false)), eq(mongoCollectionName));
+                "direction", false)), eq(collectionName));
         verifyNoMoreInteractions(mongoTemplate);
     }
 
@@ -61,21 +58,10 @@ public class KeepersRepositoryTest extends KeeperAbstractTest {
     public void findOneActiveTest() {
         Keeper keeper = createKeeper().withId("uuid").isActive(true).create();
         when(mongoTemplate.findOne(new Query(Criteria.where("uuid").is("uuid"))
-                .addCriteria(Criteria.where("isActive").is(true)), Keeper.class, mongoCollectionName))
+                .addCriteria(Criteria.where("isActive").is(true)), Keeper.class, collectionName))
                 .thenReturn(keeper);
 
         assertEquals(keeper, repository.findOneActive("uuid"));
-    }
-
-    @Test
-    public void findOneById() {
-        Date startDate = Date.from(LocalDateTime.of(2017, Month.APRIL, 1, 12, 0).atZone(ZoneId.systemDefault()).toInstant());
-        Keeper keeper = new Keeper("123qwe", "asdqwe", "teams", startDate);
-
-        when(mongoTemplate.findOne(new Query(Criteria.where("uuid").is("456rty")), Keeper.class, mongoCollectionName))
-                .thenReturn(keeper);
-
-        assertEquals(keeper, repository.findOneByUUId("456rty"));
     }
 
     @Test
@@ -88,7 +74,7 @@ public class KeepersRepositoryTest extends KeeperAbstractTest {
         listActiveKeepers.add(activeKeeper2);
         listActiveKeepers.add(activeKeeper3);
 
-        when(mongoTemplate.find(new Query(Criteria.where("isActive").is(true)), Keeper.class, mongoCollectionName))
+        when(mongoTemplate.find(new Query(Criteria.where("isActive").is(true)), Keeper.class, collectionName))
                 .thenReturn(listActiveKeepers);
 
         assertEquals(listActiveKeepers, repository.getActiveKeepers());

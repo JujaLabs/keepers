@@ -5,6 +5,5 @@
   "developerMessage": "Exception - KeeperAccessException",
   "exceptionMessage": "Request 'add keeper' rejected. User 'asdqwe' tried to add new keeper, but he is not an active keeper",
   "detailErrors": [
-
   ]
 }

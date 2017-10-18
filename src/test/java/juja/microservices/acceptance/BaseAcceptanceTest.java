@@ -12,8 +12,10 @@ import org.junit.Rule;
 import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
+
 import java.io.IOException;
 import java.io.Reader;
+
 import static com.lordofthejars.nosqlunit.mongodb.MongoDbConfigurationBuilder.mongoDb;
 import static io.restassured.RestAssured.given;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
@@ -21,6 +23,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 /**
  * @author Danil Kuznetsov
  * @author Dmitriy Lyashenko
+ * @author Vadim Dyachenko
  */
 @SpringBootTest(webEnvironment = RANDOM_PORT, classes = {Keepers.class})
 @DirtiesContext
@@ -93,6 +96,8 @@ public class BaseAcceptanceTest {
             response = specification.post(url);
         } else if (HttpMethod.GET == method) {
             response = specification.get(url);
+        } else if (HttpMethod.PUT == method) {
+            response = specification.put(url);
         } else {
             throw new RuntimeException("Unsupported HttpMethod in getResponse()");
         }
