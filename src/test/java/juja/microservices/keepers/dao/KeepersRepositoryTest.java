@@ -14,18 +14,15 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
 
 /**
+ * @author Vadim Dyachenko
  * @author Dmitriy Lyashenko
  */
 @RunWith(SpringRunner.class)
@@ -56,28 +53,37 @@ public class KeepersRepositoryTest extends KeeperAbstractTest {
 
     @Test
     public void findOneActiveTest() {
-        Keeper keeper = createKeeper().withId("uuid").isActive(true).create();
-        when(mongoTemplate.findOne(new Query(Criteria.where("uuid").is("uuid"))
-                .addCriteria(Criteria.where("isActive").is(true)), Keeper.class, collectionName))
-                .thenReturn(keeper);
+        repository.findOneActive("uuid");
 
-        assertEquals(keeper, repository.findOneActive("uuid"));
+        verify(mongoTemplate).findOne(new Query(Criteria.where("uuid").is("uuid"))
+                .addCriteria(Criteria.where("isActive").is(true)), Keeper.class, collectionName);
+        verifyNoMoreInteractions(mongoTemplate);
     }
 
     @Test
     public void getActiveKeepers() {
-        List<Keeper> listActiveKeepers = new ArrayList<>();
-        Keeper activeKeeper1 = new Keeper("uuidFrom1", "uuidTo1", "teems", new Date());
-        Keeper activeKeeper2 = new Keeper("uuidFrom2", "uuidTo1", "sqlcmd", new Date());
-        Keeper activeKeeper3 = new Keeper("uuidFrom1", "uuidTo2", "sqlcmd", new Date());
-        listActiveKeepers.add(activeKeeper1);
-        listActiveKeepers.add(activeKeeper2);
-        listActiveKeepers.add(activeKeeper3);
+        repository.getActiveKeepers();
 
-        when(mongoTemplate.find(new Query(Criteria.where("isActive").is(true)), Keeper.class, collectionName))
-                .thenReturn(listActiveKeepers);
+        verify(mongoTemplate).find(new Query(Criteria.where("isActive").is(true)), Keeper.class, collectionName);
+        verifyNoMoreInteractions(mongoTemplate);
+    }
 
-        assertEquals(listActiveKeepers, repository.getActiveKeepers());
+    @Test
+    public void getDirections() {
+        repository.getDirections("uuid");
 
+        verify(mongoTemplate).find(new Query(
+                Criteria.where("uuid").is("uuid").and("isActive").is(true)), Keeper.class, collectionName);
+        verifyNoMoreInteractions(mongoTemplate);
+    }
+
+    @Test
+    public void findOneByUUIdAndDirectionIsActive() {
+        repository.findOneByUUIdAndDirectionIsActive("uuid", "direction");
+
+        verify(mongoTemplate).findOne(new Query(Criteria.where("uuid").is("uuid"))
+                .addCriteria(Criteria.where("direction").is("direction"))
+                .addCriteria(Criteria.where("isActive").is(true)), Keeper.class, collectionName);
+        verifyNoMoreInteractions(mongoTemplate);
     }
 }
