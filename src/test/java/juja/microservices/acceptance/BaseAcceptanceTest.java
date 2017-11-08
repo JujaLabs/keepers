@@ -25,7 +25,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
  * @author Dmitriy Lyashenko
  * @author Vadim Dyachenko
  */
-@SpringBootTest(webEnvironment = RANDOM_PORT, classes = {Keepers.class})
+@SpringBootTest(webEnvironment = RANDOM_PORT, classes = {Keepers.class}, properties =  {"eureka.client.enabled=false"})
 @DirtiesContext
 public class BaseAcceptanceTest {
 
