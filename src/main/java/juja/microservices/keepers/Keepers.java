@@ -5,6 +5,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
@@ -24,6 +25,7 @@ import java.util.List;
  * @author Dmitriy Roy
  */
 @SpringBootApplication
+@EnableEurekaClient
 public class Keepers {
     public static void main(String[] args) {
         SpringApplication.run(Keepers.class, args);
