@@ -6,7 +6,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -29,17 +28,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 public class KeepersControllerIntegrationTest extends BaseIntegrationTest {
 
-    private static final String JSON_CONTENT_REQ = "{\"from\":\"asdqwe\",\"uuid\":\"max\", \"direction\":\"SomeDirection\"}";
     @Rule
     public final ExpectedException exception = ExpectedException.none();
-    @Value("${keepers.endpoint.addKeeper}")
-    private String keepersAddKeeperUrl;
-    @Value("${keepers.endpoint.deactivateKeeper}")
-    private String keepersDeactivateKeeperUrl;
-    @Value("${keepers.endpoint.getDirections}")
-    private String keepersGetDirectionsUrl;
-    @Value("${keepers.endpoint.getActiveKeepers}")
-    private String keepersGetActiveKeepersUrl;
+
+    private final String JSON_CONTENT_REQ = "{\"from\":\"asdqwe\",\"uuid\":\"max\", \"direction\":\"SomeDirection\"}";
+    private final String keepersAddKeeperUrl = "/v1/keepers";
+    private final String keepersDeactivateKeeperUrl = "/v1/keepers";
+    private final String keepersGetDirectionsUrl = "/v1/keepers/";
+    private final String keepersGetActiveKeepersUrl = "/v1/keepers";
 
     private MockMvc mockMvc;
 

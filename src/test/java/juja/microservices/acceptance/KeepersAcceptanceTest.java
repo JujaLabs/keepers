@@ -7,7 +7,6 @@ import net.javacrumbs.jsonunit.core.Option;
 import org.eclipse.jetty.http.HttpMethod;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
@@ -21,19 +20,11 @@ import static net.javacrumbs.jsonunit.fluent.JsonFluentAssert.assertThatJson;
  */
 @RunWith(SpringRunner.class)
 public class KeepersAcceptanceTest extends BaseAcceptanceTest {
+    private final String keepersAddKeeperUrl = "/v1/keepers";
+    private final String keepersDeactivateKeeperUrl = "/v1/keepers";
+    private final String keepersGetDirectionsUrl = "/v1/keepers/";
+    private final String keepersGetActiveKeepersUrl = "/v1/keepers";
 
-    @Value("${keepers.rest.api.version}")
-    private String keepersRestApiVersion;
-    @Value("${keepers.baseURL}")
-    private String keepersBaseUrl;
-    @Value("${keepers.endpoint.addKeeper}")
-    private String keepersAddKeeperUrl;
-    @Value("${keepers.endpoint.deactivateKeeper}")
-    private String keepersDeactivateKeeperUrl;
-    @Value("${keepers.endpoint.getDirections}")
-    private String keepersGetDirectionsUrl;
-    @Value("${keepers.endpoint.getActiveKeepers}")
-    private String keepersGetActiveKeepersUrl;
 
     @Test
     @UsingDataSet(locations = "/datasets/initEmptyDb.json", loadStrategy = LoadStrategyEnum.CLEAN_INSERT)

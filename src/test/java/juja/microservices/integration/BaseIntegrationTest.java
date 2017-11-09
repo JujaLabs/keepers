@@ -18,7 +18,7 @@ import static juja.microservices.integration.KeepersTestConfig.TEST_DATABASE_NAM
 /**
  * @author danil.kuznetsov
  */
-@SpringBootTest(classes = {KeepersTestConfig.class, Keepers.class})
+@SpringBootTest(classes = {KeepersTestConfig.class, Keepers.class}, properties =  {"eureka.client.enabled=false"})
 public class BaseIntegrationTest {
 
     @Rule

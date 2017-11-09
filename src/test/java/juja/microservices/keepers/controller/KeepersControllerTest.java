@@ -47,14 +47,11 @@ public class KeepersControllerTest {
     private KeepersService service;
     @Inject
     private KeepersController controller;
-    @Value("${keepers.endpoint.addKeeper}")
-    private String keepersAddKeeperUrl;
-    @Value("${keepers.endpoint.deactivateKeeper}")
-    private String keepersDeactivateKeeperUrl;
-    @Value("${keepers.endpoint.getDirections}")
-    private String keepersGetDirectionsUrl;
-    @Value("${keepers.endpoint.getActiveKeepers}")
-    private String keepersGetActiveKeepersUrl;
+
+    private final String keepersAddKeeperUrl = "/v1/keepers";
+    private final String keepersDeactivateKeeperUrl = "/v1/keepers";
+    private final String keepersGetDirectionsUrl = "/v1/keepers/";
+    private final String keepersGetActiveKeepersUrl = "/v1/keepers";
 
     @Test
     public void deactivateKeeperBadRequestTest() throws Exception {

@@ -37,7 +37,7 @@ public class KeepersController {
     @Inject
     private KeepersService keepersService;
 
-    @PostMapping(value = "${keepers.endpoint.addKeeper}", consumes = "application/json")
+    @PostMapping(value = "/v1/keepers", consumes = "application/json")
     @ApiOperation(
             value = "Add new keeper",
             notes = "This method add new keeper"
@@ -54,7 +54,7 @@ public class KeepersController {
         return ResponseEntity.ok(result);
     }
 
-    @PutMapping(value = "${keepers.endpoint.deactivateKeeper}", consumes = "application/json")
+    @PutMapping(value = "/v1/keepers", consumes = "application/json")
     @ApiOperation(
             value = "Makes keeper inactive",
             notes = "This method makes keeper inactive"
@@ -71,7 +71,7 @@ public class KeepersController {
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping(value = "${keepers.endpoint.getDirections}" + "/{uuid}")
+    @GetMapping(value = "/v1/keepers/{uuid}")
     @ApiOperation(
             value = "Get a list of all directions of active keeper",
             notes = "This method returns a list of all directions of active keeper"
@@ -87,7 +87,7 @@ public class KeepersController {
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping(value = "${keepers.endpoint.getActiveKeepers}")
+    @GetMapping(value = "/v1/keepers")
     @ApiOperation(
             value = "Get all active keepers",
             notes = "This method have to get all active keepers"
