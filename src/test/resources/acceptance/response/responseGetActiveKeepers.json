@@ -1,0 +1,15 @@
+[
+  {
+    "uuid": "1111a9999",
+    "directions": [
+      "First direction"
+    ]
+  },
+  {
+    "uuid": "0000c9999",
+    "directions": [
+      "First direction",
+      "Second direction"
+    ]
+  }
+]

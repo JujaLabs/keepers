@@ -12,11 +12,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.web.context.WebApplicationContext;
 
 import javax.inject.Inject;
-import static juja.microservices.integration.KeepersTestConfig.TEST_DATABASE_NAME;
-/**
- * @author Vadim Dyachenko
- */
 
+import static juja.microservices.integration.KeepersTestConfig.TEST_DATABASE_NAME;
+
+/**
+ * @author danil.kuznetsov
+ */
 @SpringBootTest(classes = {KeepersTestConfig.class, Keepers.class})
 public class BaseIntegrationTest {
 

@@ -8,29 +8,29 @@ buildscript {
     }
 }
 
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
 
-group = 'ua.com.juja'
-version = '1.0-SNAPSHOT'
+group = 'juja'
 
 jar {
-    baseName = "keepers-service"
+    baseName = "keepers"
     version = "0.1.0"
 }
 
-description = "keepers-services"
+description = "keepers"
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
+
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
-}
-
-repositories {
-    mavenCentral()
-    mavenLocal()
 }
 
 test.testLogging {
@@ -40,8 +40,8 @@ test.testLogging {
 }
 
 test {
-    filter{
-        includeTestsMatching "juja.microservices.keepers-service.*"
+    filter {
+        includeTestsMatching "juja.microservices.keepers.*"
     }
     afterTest { desc, result ->
         println "Executing test ${desc.name} [${desc.className}] with result: ${result.resultType}"
